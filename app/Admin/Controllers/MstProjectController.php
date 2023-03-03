@@ -342,4 +342,23 @@ class MstProjectController extends AdminController
         admin_success('Processed updated successfully, project ' . $data->lop_site_id . ' berhasil di- Supervisikan');
         return redirect()->back();
     }
+
+    public function submitDropProject(Request $request)
+    {
+        $validatedData = $request->validate(
+            [
+                'status_project' => 'required'
+            ],
+            [
+                'status_project' => 'status project tidak boleh kosong.'
+            ]
+        );
+        $id = $request->id;
+        $data = MstProject::findOrFail($id);
+        $data->status_project = 'DROP';
+        $data->save();
+
+        admin_success('Processed Drop successfully, project ' . $data->lop_site_id . ' berhasil di- DROP');
+        return redirect('ped-panel/mst-projects');
+    }
 }

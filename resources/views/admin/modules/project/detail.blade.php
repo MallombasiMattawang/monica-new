@@ -348,9 +348,16 @@
                 <h3 class="box-title">Tindak Lanjut Project</h3>
             </div>
             <div class="box-body bg-gray text-center">
+                @if($data->status_project != 'DROP')
                 <a href="{{ url('/ped-panel/mst-projects/' . $data->id . '/edit') }}" class="btn btn-default "><i class="fa fa-edit"></i> <br> Edit Project</a>
                 <a href="#" class="btn btn-danger " data-toggle="modal" data-target="#modal-drop"><i class="fa fa-stop"></i> <br> Drop Project</a>
                 <a href="#" class="btn btn-success " data-toggle="modal" data-target="#modal-start-finish"><i class="fa fa-play"></i> <br> Start Project</a>
+                @else
+                <a href="#" class="btn btn-app" data-toggle="modal" data-target="#modal-usulan"><i class="fa fa-repeat"></i>Usulkan Kembali</a>
+                <a href="#" class="btn btn-app" data-toggle="modal" data-target="#modal-pulihkan"><i class="fa fa-refresh"></i>Pulihkan Supervisi</a>
+
+                @endif
+
 
             </div>
         </div>
@@ -421,6 +428,8 @@
 
 <form action="{{url('ped-panel/submit-drop-project')}}" method="POST" onsubmit="disableSubmitButton()">
     @csrf
+    <input type="hidden" name="id" value="{{$data->id}}">
+    <input type="hidden" name="status_project" value="DROP">
     <div class="modal modal-danger fade" id="modal-drop">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -430,7 +439,63 @@
                     <h4 class="modal-title">Drop Project</h4>
                 </div>
                 <div class="modal-body">
-                   <p>Anda ingin melakukan DROP Project ini <b> {{ $data->lop_site_id }} </b>?</p>
+                    <p>Anda ingin melakukan DROP Project ini <b> {{ $data->lop_site_id }} </b>?</p>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                    <button type="submit" id="submit-button" class="btn btn-primary">YES</button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</form>
+
+<form action="{{url('ped-panel/submit-usulan-project')}}" method="POST" onsubmit="disableSubmitButton()">
+    @csrf
+    <input type="hidden" name="id" value="{{$data->id}}">
+    <input type="hidden" name="status_project" value="USULAN">
+    <div class="modal modal-warning fade" id="modal-usulan">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">Usulkan Ulang Project</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Anda ingin melakukan Pengusulan kembali Project ini <b> {{ $data->lop_site_id }} </b>?</p>
+                    <p>Tindakan ini akan mereset kembali project ini menjadi <b>USULAN</b> dan menghapus semua Basline, Plan, Supervisi, Inventory, Administrasi yang berjalan</p>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                    <button type="submit" id="submit-button" class="btn btn-primary">YES</button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</form>
+
+<form action="{{url('ped-panel/submit-pulihkan-project')}}" method="POST" onsubmit="disableSubmitButton()">
+    @csrf
+    <input type="hidden" name="id" value="{{$data->id}}">
+    <input type="hidden" name="status_project" value="USULAN">
+    <div class="modal modal-primary fade" id="modal-pulihkan">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">Pulihkan KembaliProject</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Anda ingin melakukan Pulihkan kembali Project ini <b> {{ $data->lop_site_id }} </b>?</p>
+                    <p>Tindakan ini akan memulihkan kembali project ini menjadi <b>STATUS TERAKHIR DI TABEL SAP</b> dan Mengembalikan akses pengguna untuk Basline, Plan, Supervisi, Inventory, Administrasi yang berjalan</p>
 
                 </div>
                 <div class="modal-footer">

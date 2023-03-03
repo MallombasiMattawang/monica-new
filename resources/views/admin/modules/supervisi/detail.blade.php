@@ -1,8 +1,11 @@
 <div class="row">
-  <div class="col-md-6">
+    <div class="col-md-6">
         <div class="box box-solid">
             <div class="box-header with-border">
                 <h3 class="box-title">Detail Supervisi</h3>
+                <div class="box-tools pull-right">
+                    <a href="{{ url('/ped-panel/tran-supervisis') }}" class="btn btn-default"><i class="fa fa-arrow-left"></i> Back </a>
+                </div>
             </div>
             <div class="box-body no-padding">
                 <div class="nav-tabs-custom">
@@ -211,7 +214,7 @@
 
             </div>
             <!-- /.box-body -->
-             <div class="box-footer">
+            <div class="box-footer">
                 <div class="box-tools pull-right">
                     <div class="btn-group">
                         <button type="button" class="btn btn-success">Action Supervisi</button>
@@ -223,7 +226,7 @@
                             <li><a href="{{url('ped-panel/form-baseline/'.$data->id)}}">Baseline Activity</a></li>
                         </ul>
                     </div>
-                    
+
                 </div>
             </div>
         </div>
@@ -850,7 +853,7 @@
         <!-- /. box -->
     </div>
 
-  
+
     <!-- /.col -->
     {{-- <div class="col-md-3">
         <div class="box box-solid">

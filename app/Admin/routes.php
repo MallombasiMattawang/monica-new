@@ -42,6 +42,9 @@ Route::group([
     /**Submit start-finish dan status project */
     $router->post('submit-play-project', 'MstProjectController@submitPlayProject');  
 
+    /**drop project */
+    $router->post('submit-drop-project', 'MstProjectController@submitDropProject');  
+
      /**Import File SAP */
      $router->get('form-import-sap', 'MstSapController@formImport');
      $router->post('submit-import-sap', 'MstSapController@submitImport');  

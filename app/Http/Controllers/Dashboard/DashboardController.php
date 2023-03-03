@@ -34,7 +34,7 @@ class DashboardController extends Controller
     public function index()
     {
         $insight = FALSE;
-        $pageTitle  = "Dashboard ". getUser()->name;      
+        $pageTitle  = "Selamat Datang <br> ". getUser()->name;      
         $breadcrumb = [
             getUser()->name
         ];
