@@ -1,0 +1,230 @@
+@media (min-width: 992px){
+    .sticky-lg-top{
+        z-index: 999999;
+    }
+}
+
+.btn-close{
+    background-color: #fff0 !important;
+}
+
+.card-scroll{
+    height: 280px;
+    overflow: scroll;
+    overflow-x: auto;
+}
+
+ table.dataTable.nowrap td {
+    font-size: 14px !important;
+}
+
+
+div.dataTables_wrapper div.dataTables_info{
+    font-size: 10px !important;
+}
+
+.avio .body-header .menu-link .btn-link {
+    font-size: 15px !important;
+}
+
+.avio .body-header .menu-link .dropdown {
+    margin: 0rem !important;
+}
+
+
+.avio .body-header .menu-link .dropdown > .dropdown-menu {
+    /* transform: translate(0, 30px) !important; */
+}
+
+.no-gutters{
+    margin-right: 0;
+    margin-left: 0;
+}
+
+.side-top {
+    padding: 21px 10px;
+    color: #fff;
+    background-color: #13579b;
+    border-bottom: solid 8px #10586e;
+    font-size: 12px;
+}
+
+.side-content {
+    background-color: #fff;
+    padding: 20px;
+    font-size: 13px;
+    min-height: 100vh;
+    height: 100vh;
+    margin-left: -15px;
+
+    margin-right: -15px;
+}
+
+.decor {
+    position: fixed;
+    right: 0;
+}
+
+/* @media only screen and (min-width: 1620px){ */
+    .avio .body-header, .avio .page-body, .avio .page-footer, .avio .page-header, .avio .page-search {
+        padding: 0px 20px !important;
+    }
+/* } */
+
+.breadcrumb{
+    margin-top:1.5rem !important;
+}
+ .card {
+            background-color: var(--card-color);
+            border-radius: 1.1rem !important;
+            /* border: 0px solid transparent !important; */
+            border:1px solid #00000014 !important;
+        }
+
+        .hidden {
+            display: none ;
+        }
+
+        .loader-overlay {
+            position: fixed;
+            width: 100%;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.5);
+            top: 0;
+            z-index: 1109;
+        }
+
+        .popup-spinner {
+            margin-top: 15%;
+            top: 0;
+            // position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1110;
+        }
+
+        .loader {
+            height: 4px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            background-color: #FFF;
+        }
+
+        .loader:before {
+            display: block;
+            position: absolute;
+            content: "";
+            left: -200px;
+            width: 200px;
+            height: 4px;
+            background-color: orange;
+            animation: loading 2s linear infinite;
+        }
+
+        @keyframes loading {
+            from {
+                left: -200px;
+                width: 30%;
+            }
+
+            50% {
+                width: 30%;
+            }
+
+            70% {
+                width: 70%;
+            }
+
+            80% {
+                left: 50%;
+            }
+
+            95% {
+                left: 120%;
+            }
+
+            to {
+                left: 100%;
+            }
+        }
+
+        .load-card {
+            border-radius: 1.1rem !important;
+            -ms-flex-align: center;
+            align-items: center;
+            background-color: #50acc880;
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-pack: center;
+            justify-content: center;
+            z-index: 50;
+
+            height: 100%;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 100%;
+
+        }
+
+
+
+.card .card-body, .card .card-footer, .card .card-header{
+    padding:1.3rem !important;
+}
+
+.bg-card-simple {
+    background-image: url('../img/bg/bg-card-simple.png');
+    background-position: right bottom;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.bg-card-default {
+    background-image: url('../img/bg/bg-card.png');
+    background-position: right bottom;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.bg-card-red {
+    background-image: url('../img/bg/bg-card-red.png');
+    background-position: right bottom;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.bg-card-yellow {
+    background-image: url('../img/bg/bg-card-yellow.png');
+    background-position: right bottom;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+
+/* .dropdown-menu.mega-dropdown{ */
+/* width: 400px !important; */
+/* } */
+
+
+.ml-5{
+margin-left: 5px;
+}
+
+.mr-5{
+margin-right: 5px;
+}
+
+.pl-10{
+padding-left: 10px;
+}
+
+.ptx-5{
+padding-top:5px;
+}
+
+img{
+filter: none !important;
+}
