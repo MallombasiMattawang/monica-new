@@ -117,7 +117,7 @@ if (!function_exists('tgl_indo')) {
             $bulan      = get_bulan(substr($tgl, 5, 2));
             $tahun      = substr($tgl, 0, 4);
             // var_dump($tgl);
-            return $tanggal . ' ' . $bulan . ' ' . $tahun;
+            return $tanggal . ' ' . $bulan . ', ' . $tahun;
         }
     }
 }

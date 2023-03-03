@@ -49,8 +49,8 @@
     </div>
     <div class="row row-cols-xxl-4 row-cols-xl-4 row-cols-lg-3 row-cols-md-3 row-cols-sm-2 row-cols-1 g-2 mb-4 row-deck">
         <a href="{{route('project.index')}}">
-        <div class="col">
-            
+            <div class="col">
+
                 <div class="card">
                     <div class="card-body d-flex align-items-center p-xl-4 p-lg-3 p-2">
                         <div class="avatar lg rounded-circle no-thumbnail">
@@ -62,37 +62,40 @@
                         </div>
                     </div>
                 </div>
-            
 
-        </div>
+
+            </div>
         </a>
-        <div class="col">
-            <div class="card">
-                <div class="card-body d-flex align-items-center p-xl-4 p-lg-3 p-2">
-                    <div class="avatar lg rounded-circle no-thumbnail">
-                        <i class="fa fa-calendar-check-o fa-2x"></i>
-                    </div>
-                    <div class="flex-fill ms-3 text-truncate">
-                        <div class="text-muted">Kalender Planing</div>
-                        {{-- <div><span class="h6 fw-bold">14</span> <small class="text-muted">Vendor</small></div> --}}
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card">
-                <div class="card-body d-flex align-items-center p-xl-4 p-lg-3 p-2">
-                    <div class="avatar lg rounded-circle no-thumbnail">
-                        <i class="fa fa-tasks fa-2x"></i>
-                    </div>
-                    <div class="flex-fill ms-3 text-truncate">
-                        <div class="text-muted">Project Berjalan</div>
-                        <div><span class="h6 fw-bold">112</span> <small class="text-muted">Paket</small></div>
+        <a href="{{route('project.index')}}">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body d-flex align-items-center p-xl-4 p-lg-3 p-2">
+                        <div class="avatar lg rounded-circle no-thumbnail">
+                            <i class="fa fa-calendar-check-o fa-2x"></i>
+                        </div>
+                        <div class="flex-fill ms-3 text-truncate">
+                            <div class="text-muted">Kalender Planing</div>
+                            {{-- <div><span class="h6 fw-bold">14</span> <small class="text-muted">Vendor</small></div> --}}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-
+        </a>
+        <a href="{{route('supervisi.index')}}">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body d-flex align-items-center p-xl-4 p-lg-3 p-2">
+                        <div class="avatar lg rounded-circle no-thumbnail">
+                            <i class="fa fa-tasks fa-2x"></i>
+                        </div>
+                        <div class="flex-fill ms-3 text-truncate">
+                            <div class="text-muted">Project Berjalan</div>
+                            <div><span class="h6 fw-bold">112</span> <small class="text-muted">Paket</small></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
         <div class="col">
             <div class="card">
                 <div class="card-body d-flex align-items-center p-xl-4 p-lg-3 p-2">
