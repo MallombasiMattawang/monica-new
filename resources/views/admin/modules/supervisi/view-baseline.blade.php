@@ -1,9 +1,9 @@
 <section class="content">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-12">
             <div class="box box-default">
                 <div class="box-header">
-                    <h3 class="box-title"><i class="fa fa-tag"></i> Penentuan WASPANG dan TIM UT</h3>
+                    <h3 class="box-title"><i class="fa fa-tag"></i> WASPANG dan TIM UT</h3>
                 </div>
                 <div class="box-body">
                     @if ($errors->any())
@@ -27,7 +27,7 @@
                                             <option value=""></option>
                                             @foreach ($waspang as $d)
                                             <option value="{{ $d->id }}" {{ $supervisi->waspang_id == $d->id ? 'selected' : '' }}>
-                                                {{ $d->name }} / {{ $d->nik }} / {{ $d->phone }}
+                                               {{ $d->nik }} | {{ $d->name }}
                                             </option>
                                             @endforeach
 
@@ -42,7 +42,7 @@
                                             <option value=""></option>
                                             @foreach ($tim_ut as $d)
                                             <option value="{{ $d->id }}" {{ $supervisi->tim_ut_id == $d->id ? 'selected' : '' }}>
-                                                {{ $d->name }} / {{ $d->nik }} / {{ $d->phone }}
+                                                {{ $d->nik }} | {{ $d->name }}
                                             </option>
                                             @endforeach
                                         </select>
@@ -68,62 +68,58 @@
 
             </div>
             <div class="box box-default">
-                <div class="box-header">
-                    <h3 class="box-title"><i class="fa fa-plane"></i> Project Summary
-
-                </div>
-                <div class="box-body">
-                    <table class="table">
-                        <tr>
-                            <td width="200">LOP / SITE ID </td>
-                            <td width="10">:</td>
-                            <td>{{ $project->lop_site_id }}</td>
-                        </tr>
-                        <tr>
-                            <td width="200">STATUS PROJECT </td>
-                            <td>:</td>
-                            <td>
-                                {{ $project->status_project }}
-
-                            </td>
-                        </tr>
-                        <tr>
-                            <td width="200">WITEL </td>
-                            <td>:</td>
-                            <td>{{ $project->witel_id }}</td>
-                        </tr>
-                        <tr>
-                            <td width="200">MITRA </td>
-                            <td>:</td>
-                            <td>{{ $project->mitra_id }} </td>
-                        </tr>
-                        <tr>
-                            <td width="200">NDE PELIMPAHAN </td>
-                            <td>:</td>
-                            <td>{{ $project->nde_pelimpahan }} </td>
-                        </tr>
-
-                        <tr>
-                            <td width="200">NOMOR KONTRAK</td>
-                            <td>:</td>
-                            <td>{{ ($project->sap) ? $project->sap->kontrak : '-' }} </td>
-                        </tr>
-                        <tr>
-                            <td width="200">STATUS SAP </td>
-                            <td>:</td>
-                            <td>{{ ($project->sap) ? $project->sap->status_sap : '-' }} </td>
-                        </tr>
-                        <tr>
-                            <td width="200">START - FINISH PROJECT </td>
-                            <td>:</td>
-                            <td>{{ $project->start_date }} s.d {{ $project->end_date }}</td>
-                        </tr>
-
-                    </table>
-                </div>
-            </div>
+        <div class="box-header">
+            <h3 class="box-title"><i class="fa fa-plane"></i> Project Summary
+                </h3>
+            
         </div>
-        <div class="col-md-6">
+        <div class="box-body">
+            <table class="table">
+                <tr>
+                    <td width="200">LOP / SITE ID </td>
+                    <td width="10">:</td>
+                    <td>{{ $project->lop_site_id }}</td>
+                </tr>
+                <tr>
+                    <td width="200">STATUS PROJECT</td>
+                    <td>:</td>
+                    <td>
+                        {{ $project->status_project }}
+
+                    </td>
+                </tr>
+                <tr>
+                    <td width="200">WITEL </td>
+                    <td>:</td>
+                    <td>{{ $project->witel_id }}</td>
+                </tr>
+                <tr>
+                    <td width="200">MITRA </td>
+                    <td>:</td>
+                    <td> <b>{{ $project->mitra_id }} </b> | <b>{{ $project->mitra->nama_mitra }} </b> </td>
+                </tr>
+               
+                <tr>
+                    <td width="200">NOMOR KONTRAK</td>
+                    <td>:</td>
+                    <td>{{ ($project->sap) ? $project->sap->kontrak : '-' }} </td>
+                </tr>
+                <tr>
+                    <td width="200">STATUS SAP </td>
+                    <td>:</td>
+                    <td>{{ ($project->sap) ? $project->sap->status_sap : '-' }} </td>
+                </tr>
+                <tr>
+                    <td width="200">START - FINISH PROJECT </td>
+                    <td>:</td>
+                    <td>{{ $project->start_date }} s.d {{ $project->end_date }}</td>
+                </tr>
+
+            </table>
+        </div>
+    </div>
+        </div>
+        <div class="col-md-12">
 
             <div class="box box-warning">
                 <div class="box-header with-border">

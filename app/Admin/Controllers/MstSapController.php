@@ -295,6 +295,12 @@ class MstSapController extends AdminController
             admin_error('Processed import gagal, Format excel tidak sesuai');
         }
 
+        // Hapus file Excel
+        $file_path = public_path('/uploads/temp_import/' . $nama_file);
+        if (file_exists($file_path)) {
+            unlink($file_path);
+        }
+
         return redirect()->back();
     }
 }

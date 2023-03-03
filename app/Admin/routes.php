@@ -54,12 +54,12 @@ Route::group([
       $router->get('add-waspang', 'TranSupervisiController@addWaspang');
       $router->get('add-ut', 'TranSupervisiController@addUt');
 
-      /**Create Baseline */
+      /**Create & update Baseline */
       $router->get('form-baseline/{id}', 'TranSupervisiController@formBaseline');
       $router->post('create-baseline', 'TranSupervisiController@createBaseline');
-
-
       $router->post('update-baseline', 'TranSupervisiController@updateBaseline');
+
+
       $router->post('plan-baseline', 'TranSupervisiController@baseLineActivityPlan');
       $router->post('acc-project', 'TranSupervisiController@accProcject');
       $router->post('plan-project', 'TranSupervisiController@submitPlan');

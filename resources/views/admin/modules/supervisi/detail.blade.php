@@ -3,20 +3,6 @@
         <div class="box box-solid">
             <div class="box-header with-border">
                 <h3 class="box-title">Detail Supervisi</h3>
-
-                <div class="box-tools">
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-success">Action</button>
-                        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                            <span class="caret"></span>
-                            <span class="sr-only">Toggle Dropdown</span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="{{url('ped-panel/form-baseline/'.$data->id)}}">Baseline Activity</a></li>
-                        </ul>
-                    </div>
-                    
-                </div>
             </div>
             <div class="box-body no-padding">
                 <div class="nav-tabs-custom">
@@ -225,6 +211,21 @@
 
             </div>
             <!-- /.box-body -->
+             <div class="box-footer">
+                <div class="box-tools pull-right">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-success">Action Supervisi</button>
+                        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="{{url('ped-panel/form-baseline/'.$data->id)}}">Baseline Activity</a></li>
+                        </ul>
+                    </div>
+                    
+                </div>
+            </div>
         </div>
         <!-- /. box -->
 

@@ -216,20 +216,23 @@ class TranSupervisiController extends AdminController
   public function formBaseline($id)
   {
     return Admin::content(function (Content $content) use ($id) {
-      $content->header('TABEL SUPERVISI');
-      $content->description('Baseline Activity');
-      $content->breadcrumb(
-        ['text' => 'Supervisi', 'url' => 'tran-supervisis'],
-        ['text' => 'Baseline Activity']
-      );
+     
       $project = MstProject::where("id", $id)->first();
       if ($project->status_project == 'USULAN' || $project->status_project == 'DROP') {
         return abort(404);
       }
+      $supervisi = TranSupervisi::where("project_id", $id)->first();
+      $content->header('TABEL SUPERVISI');
+      $content->description('Baseline Activity');
+      $content->breadcrumb(
+        ['text' => 'Supervisi', 'url' => 'tran-supervisis'],
+        ['text' => $project->lop_site_id, 'url' => 'tran-supervisis/'. $supervisi->id .''],
+        ['text' => 'Baseline Activity']
+      );
       $checkBaseline = TranBaseline::where("project_id", $id)->exists();
       if ($checkBaseline == 1) {
         $lists = TranBaseline::where("project_id", $id)->get();
-        $supervisi = TranSupervisi::where("project_id", $id)->first();
+        
         $waspang = User::where('role', '=',  'waspang')->get();
         $tim_ut = User::where('role', '=',  'tim_ut')->get();
         $countBase = TranBaseline::where("project_id", $id)->where('bobot', '>=', '1')->count();
@@ -326,19 +329,15 @@ class TranSupervisiController extends AdminController
   public function updateBaseline(Request $request)
   {
     $request->validate([
-
       'waspang_id' =>  'required',
       'tim_ut_id' =>  'required',
     ]);
-
     TranSupervisi::where("project_id", $request->project_id)
       ->update([
         'waspang_id' =>  $request->waspang_id,
         'tim_ut_id' =>  $request->tim_ut_id,
         'task' =>  'PENGISIAN PLAN BY MITRA'
       ]);
-
-
     admin_success('Baseline Activity Project Updated');
     admin_toastr('Baseline Activity Project Updated', 'success');
     return back();
