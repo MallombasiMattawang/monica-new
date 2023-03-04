@@ -16,7 +16,7 @@ Route::controller(SupervisiController::class)
 
                  /** Actual Activity */
                  Route::get('/actual-activity/{id}/{slug}', 'actualActivity')->name('supervisi.actual');
-                 Route::post('/actual-activity/add-date', 'planActivityAddDate')->name('supervisi.plan.adddate');
+                 Route::get('/actual-activity/form-actual/{id}/{slug}', 'actualActivityForm')->name('supervisi.actual.form');
                  Route::post('/actual-activity/submit-plan', 'planActivitySubmit')->name('supervisi.plan.submit');
                
             });

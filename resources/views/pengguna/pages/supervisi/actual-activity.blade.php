@@ -148,7 +148,7 @@
                             
                             @if ($list->category_id == 001 || $list->category_id == 002)
                             @if ($list->actual_status == 'belum' || $list->actual_task == null || $list->actual_task == 'REJECTED')
-                            <a href="{{ $list->actual_task == 'NEED APPROVED' ? '#' : url('ped-panel/add-actual?id=' . $list->id) }}" {{-- {{ $list->actual_task == 'NEED APPROVED' ? 'disabled' : '' }} --}} class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;&nbsp;
+                            <a href="{{ $list->actual_task == 'NEED APPROVED' ? '#' : route('supervisi.actual.form',  [$list->id, Str::slug($list->list_activity)])  }}" {{-- {{ $list->actual_task == 'NEED APPROVED' ? 'disabled' : '' }} --}} class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;&nbsp;
                                 Add Actual
                             </a>
                             @else
@@ -160,7 +160,7 @@
                             {{-- @if ($list->category_id == 002)
                                                 @if ($list->actual_status == 'belum' || $list->actual_task == null || $list->actual_task == 'REJECTED')
                                                     @if ($cek_last_preparing->actual_finish)
-                                                        <a href="{{ $list->actual_task == 'NEED APPROVED' ? '#' : url('ped-panel/add-actual?id=' . $list->id) }}" {{ $list->actual_task == 'NEED APPROVED' ? 'disabled'  : '' }}
+                                                        <a href="{{ $list->actual_task == 'NEED APPROVED' ? '#' : route('supervisi.actual.form',  [$list->id, Str::slug($list->list_activity)])  }}" {{ $list->actual_task == 'NEED APPROVED' ? 'disabled'  : '' }}
                             class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;&nbsp;
                             Add Actual
                             </a>
@@ -173,12 +173,12 @@
                             @endif --}}
                             @if ($list->category_id == 003)
                             @if ($list->actual_status == 'belum' || $list->actual_task == null || $list->actual_task == 'REJECTED')
-                            @if ($cek_all_delivery == $cek_all_delivery_finish && $list->activity_id < 20) <a href="{{ $list->actual_task == 'NEED APPROVED' ? '#' : url('ped-panel/add-actual?id=' . $list->id) }}" {{ $list->actual_task == 'NEED APPROVED' ? 'disabled' : '' }} class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;&nbsp;
+                            @if ($cek_all_delivery == $cek_all_delivery_finish && $list->activity_id < 20) <a href="{{ $list->actual_task == 'NEED APPROVED' ? '#' : route('supervisi.actual.form',  [$list->id, Str::slug($list->list_activity)])  }}" {{ $list->actual_task == 'NEED APPROVED' ? 'disabled' : '' }} class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;&nbsp;
                                 Add Actual
                                 </a>
                                 @endif
                                 @if ($cek_all_installasi == $cek_all_installasi_finish && $list->activity_id == 20)
-                                <a href="{{ $list->actual_task == 'NEED APPROVED' ? '#' : url('ped-panel/add-actual?id=' . $list->id) }}" {{ $list->actual_task == 'NEED APPROVED' ? 'disabled' : '' }} class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;&nbsp;
+                                <a href="{{ $list->actual_task == 'NEED APPROVED' ? '#' : route('supervisi.actual.form',  [$list->id, Str::slug($list->list_activity)])  }}" {{ $list->actual_task == 'NEED APPROVED' ? 'disabled' : '' }} class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;&nbsp;
                                     Add Actual
                                 </a>
                                 @endif
@@ -191,7 +191,7 @@
                                 @if ($list->category_id == 004)
                                 @if ($list->actual_status == 'belum' || $list->actual_task == null || $list->actual_task == 'REJECTED')
                                 @if ($cek_commisioning_tes == 1 && $list->activity_id == 21)
-                                <a href="{{ $list->actual_task == 'NEED APPROVED' ? '#' : url('ped-panel/add-actual?id=' . $list->id) }}" {{ $list->actual_task == 'NEED APPROVED' ? 'disabled' : '' }} class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;&nbsp;
+                                <a href="{{ $list->actual_task == 'NEED APPROVED' ? '#' : route('supervisi.actual.form',  [$list->id, Str::slug($list->list_activity)])  }}" {{ $list->actual_task == 'NEED APPROVED' ? 'disabled' : '' }} class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;&nbsp;
                                     Add Actual
                                 </a>
                                 @endif

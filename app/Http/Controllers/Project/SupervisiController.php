@@ -396,4 +396,19 @@ class SupervisiController extends Controller
             )
         );
     }
+
+    public function actualActivityForm($id, $slug)
+    {
+        $baseline = TranBaseline::findOrFail($id);
+
+        $pageTitle  = $baseline->list_activity;
+        $breadcrumb = [
+            'Form Actual',
+            $baseline->project->lop_site_id
+        ];
+        return view(
+            'pengguna.pages.supervisi.form-actual',
+            compact('pageTitle', 'baseline', 'breadcrumb')
+        );
+    } 
 }
