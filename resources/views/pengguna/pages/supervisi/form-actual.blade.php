@@ -31,7 +31,20 @@
                         <h6 class="card-title mb-0"><i class="fa fa-edit"></i> Form Pengisian Actual Activity</h6>
                     </div>
                     <div class="card-body">
-                        <form class="row g-3">
+                        @if ($errors->any())
+                        <div class="col-md-12">
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                        @endif
+                        <form class="row g-3" action="{{route('supervisi.actual.adddate')}}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <input type="hidden" name="baseline_id" value="{{$baseline->id}}">
                             <div class="col-6">
                                 <label class="form-label">Volume Kontrak </label>
                                 <input type="text" class="form-control" name="volume_kontrak" value="{{$baseline->volume}}" readonly>
@@ -54,7 +67,7 @@
                             </div>
                             <div class="col-6">
                                 <label class="form-label">Volume Sebelumnya </label>
-                                <input type="text" class="form-control" name="satuan" value="" readonly>
+                                <input type="text" class="form-control" name="actual_volume_old" value="{{$actual_volume_old}}" readonly>
                             </div>
                             <div class="col-12">
                                 <label class="form-check-label me-3">Status Actual:<sup class="text-danger">*</sup></label>
@@ -69,7 +82,7 @@
                             </div>
                             <div class="col-12">
                                 <label class="form-label">Evident<sup class="text-danger">*</sup></label>
-                                <input class="form-control" type="file" id="actual_evident" name="actual_evident">
+                                <input class="form-control" type="file" id="actual_evident" name="file">
                             </div>
 
                             <div class="col-12">

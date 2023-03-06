@@ -63,7 +63,7 @@
                                 </div>
                                 <div class="alert alert-success" role="alert">
                                     <h6 class="alert-heading">Project Task !</h6>
-                                    <hr>
+                                   
                                     <p class="mb-0">{{ ucwords($profil->task)}}</p>
                                 </div>
                                 <div class="row g-3 row-deck">

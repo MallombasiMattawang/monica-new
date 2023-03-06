@@ -1,9 +1,30 @@
-<div class="col-12">
+
+<div class="row">
+    <div class="col-6">
     <div class="card mb-3">
         <div class="card-body">
-            <div class="d-flex justify-content-between">
+            <div class="d-flex justify-content-between text-danger">
                 <div>
-                    <h5 class="mb-0">Actual Activity</h5>
+                    <h5 class="mb-0">Progress Plan</h5>
+
+                </div>
+                <div class="text-end">
+                    <h3 class="mb-0"> {{ (int) $progress_plan }} %</h3>
+                    <small class="info">of 100%</small>
+                </div>
+            </div>
+            <div class="progress mt-3" style="height: 2px;">
+                <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100" style="width: {{ (int) $progress_plan }}%;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-6">
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="d-flex justify-content-between text-success">
+                <div>
+                    <h5 class="mb-0">Progress Actual</h5>
 
                 </div>
                 <div class="text-end">
@@ -16,7 +37,10 @@
             </div>
         </div>
     </div>
+</div>
+</div>
 
+<div class="col-12">
     <div class="card">
         <div class="card-body">
             <div class="table-responsive">
@@ -140,12 +164,12 @@
                             @else
                             <span class="label label-danger">{{ $list->actual_task }}</span>
                             @endif
-                            
+
                         </td>
 
 
                         <td class="text-center">
-                            
+
                             @if ($list->category_id == 001 || $list->category_id == 002)
                             @if ($list->actual_status == 'belum' || $list->actual_task == null || $list->actual_task == 'REJECTED')
                             <a href="{{ $list->actual_task == 'NEED APPROVED' ? '#' : route('supervisi.actual.form',  [$list->id, Str::slug($list->list_activity)])  }}" {{-- {{ $list->actual_task == 'NEED APPROVED' ? 'disabled' : '' }} --}} class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;&nbsp;
@@ -155,7 +179,7 @@
                             <a href="{{ url('ped-panel/log-generate?log=' . $list->id) }}" class="btn btn-info"><i class="fa fa-search"></i>&nbsp;&nbsp;
 
                             </a>
-                           
+
                             @endif
                             {{-- @if ($list->category_id == 002)
                                                 @if ($list->actual_status == 'belum' || $list->actual_task == null || $list->actual_task == 'REJECTED')
