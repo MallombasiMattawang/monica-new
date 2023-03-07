@@ -25,6 +25,11 @@
 <!-- Start:: main page body area -->
 <div class="page-body page-layout-1">
     <div class="container-fluid">
+        @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+        @endif
         <div class="row">
             <div class="col-12 mb-2">
                 <div class="project-list d-flex flex-nowrap align-items-start">
@@ -32,7 +37,7 @@
                         <ul class="nav nav-tabs menu-list list-unstyled mb-0 border-0">
                             <li class="nav-item"><a class="nav-link active" href="#" data-bs-toggle="tab" data-bs-target="#pd_overview" role="tab">Overview</a></li>
                             <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#plan_activity" role="tab">Plan Activity</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#pd_files" role="tab">Actual Activity</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#actual_activity" role="tab">Actual Activity</a></li>
                             <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#pd_activity" role="tab">Inventory</a></li>
                             <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#pd_settings" role="tab">Administrasi</a></li>
                             <li class="divider mt-4 py-2 border-top text-uppercase text-muted"><small>Project Cost</small></li>
@@ -63,7 +68,7 @@
                                 </div>
                                 <div class="alert alert-success" role="alert">
                                     <h6 class="alert-heading">Project Task !</h6>
-                                   
+
                                     <p class="mb-0">{{ ucwords($profil->task)}}</p>
                                 </div>
                                 <div class="row g-3 row-deck">
@@ -281,7 +286,7 @@
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="plan_activity" role="tabpanel">
-                            <div class="d-flex justify-content-between p-3 bg-card rounded-4 mb-3">
+                                <div class="d-flex justify-content-between p-3 bg-card rounded-4 mb-3">
                                     <h6 class="card-title mb-0"><a class="me-2 fa fa-arrow-circle-left" href="#" title="back"></a>Project Plan Activity</h6>
                                     <button class="btn btn-sm d-block d-lg-none btn-primary project-list-toggle" type="button"><i class="fa fa-bars"></i></button>
                                 </div>
@@ -291,8 +296,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="pd_files" role="tabpanel">
-                            <div class="d-flex justify-content-between p-3 bg-card rounded-4 mb-3">
+                            <div class="tab-pane fade" id="actual_activity" role="tabpanel">
+                                <div class="d-flex justify-content-between p-3 bg-card rounded-4 mb-3">
                                     <h6 class="card-title mb-0"><a class="me-2 fa fa-arrow-circle-left" href="#" title="back"></a>Project Actual Activity</h6>
                                     <button class="btn btn-sm d-block d-lg-none btn-primary project-list-toggle" type="button"><i class="fa fa-bars"></i></button>
                                 </div>
@@ -523,7 +528,7 @@
             }
         });
 
-         $.ajax({
+        $.ajax({
             url: "{{ route('supervisi.actual', [$profil->id, Str::slug($profil->project_name)]) }}"
             , success: function(result) {
                 $('#container_actual').html(result);

@@ -45,6 +45,7 @@
                         <form class="row g-3" action="{{route('supervisi.actual.adddate')}}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" name="baseline_id" value="{{$baseline->id}}">
+                            <input type="hidden" name="activity_id" value="{{$baseline->activity_id}}">
                             <div class="col-6">
                                 <label class="form-label">Volume Kontrak </label>
                                 <input type="text" class="form-control" name="volume_kontrak" value="{{$baseline->volume}}" readonly>
@@ -63,7 +64,7 @@
                             </div>
                             <div class="col-6">
                                 <label class="form-label">Volume Actual <sup class="text-danger">*</sup></label>
-                                <input type="number" class="form-control" name="volume_actual" value="">
+                                <input type="number" class="form-control" name="actual_volume" value="">
                             </div>
                             <div class="col-6">
                                 <label class="form-label">Volume Sebelumnya </label>
@@ -76,7 +77,7 @@
                                     <label class="form-check-label" for="actual_status1">Belum</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="actual_status" id="actual_status2" value="selesai" checked>
+                                    <input class="form-check-input" type="radio" name="actual_status" id="actual_status2" value="selesai">
                                     <label class="form-check-label" for="actual_status2">Selesai</label>
                                 </div>
                             </div>
