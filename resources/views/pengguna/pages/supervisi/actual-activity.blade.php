@@ -33,7 +33,7 @@
                         </div>
                     </div>
                     <div class="progress mt-3" style="height: 2px;">
-                        <div class="progress-bar bg-success" role="progressbar" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100" style="width: {{ (int) $supervisi->progress_actual }}%;"></div>
+                        <div class="progress-bar bg-success" role="progressbar" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100" style="width: {{ $sum_selesai + $sum_belum }}%;"></div>
                     </div>
                 </div>
             </div>
