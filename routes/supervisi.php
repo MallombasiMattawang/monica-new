@@ -24,9 +24,9 @@ Route::controller(PlanController::class)
 Route::controller(ActualController::class)
     ->prefix('supervisi')
     ->group(function () {
-
         /** Actual Activity */
         Route::get('/actual-activity/{id}/{slug}', 'actualActivity')->name('supervisi.actual');
         Route::get('/actual-activity/form-actual/{id}/{slug}', 'actualActivityForm')->name('supervisi.actual.form');
         Route::post('/actual-activity/add-actual', 'actualActivityAddDate')->name('supervisi.actual.adddate');
+        Route::get('/actual-activity/log-actual/{id}/{slug}', 'actualActivityLog')->name('supervisi.actual.log');
     });

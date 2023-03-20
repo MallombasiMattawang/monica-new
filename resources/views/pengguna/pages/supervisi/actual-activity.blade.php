@@ -143,7 +143,7 @@
                                         Add Actual
                                     </a>
                                 @else
-                                    <a href="{{ url('ped-panel/log-generate?log=' . $list->id) }}" class="btn btn-info"><i class="fa fa-search"></i> </a>
+                                    <a href="{{ route('supervisi.actual.log',  [$list->id, Str::slug($list->list_activity)])  }}" class="btn btn-info"><i class="fa fa-search"></i> </a>
                                 @endif
                             @endif
                             @if ($list->category_id == 003)
@@ -156,7 +156,7 @@
                                         </a>
                                     @endif
                                 @else
-                                    <a href="{{ url('ped-panel/log-generate?log=' . $list->id) }}" class="btn btn-info"><i class="fa fa-search"></i></a>
+                                    <a href="{{ route('supervisi.actual.log',  [$list->id, Str::slug($list->list_activity)])  }}" class="btn btn-info"><i class="fa fa-search"></i></a>
                                 @endif
                              @endif
 

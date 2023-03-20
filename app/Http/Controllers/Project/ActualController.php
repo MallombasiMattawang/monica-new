@@ -108,6 +108,20 @@ class ActualController extends Controller
         );
     }
 
+    public function actualActivityLog($id, $slug)
+    {
+        $baseline = TranBaseline::findOrFail($id);
+        $pageTitle  = $baseline->list_activity;
+        $breadcrumb = [
+            'Log Actual',
+            $baseline->project->lop_site_id
+        ];
+        return view(
+            'pengguna.pages.supervisi.log-actual',
+            compact('pageTitle', 'baseline', 'breadcrumb')
+        );
+    } 
+
     public function actualActivityForm($id, $slug)
     {
         $baseline = TranBaseline::findOrFail($id);
@@ -249,52 +263,7 @@ class ActualController extends Controller
             $actual_task = 'NEED APPROVED TIM UT';
         } else {
             $actual_task = '';
-        }
-
-        // //SIMPAN KE LOG ACTUAL
-        // $logActual = LogActual::create([
-        //     'project_id' => $baseline->project_id,
-        //     'tran_baseline_id' => $baseline->id,
-        //     'actual_volume' => $request->actual_volume,
-        //     'actual_progress' =>  $actual_progress,
-        //     'actual_evident' => $filepath,
-        //     'actual_status' => $actual_status,
-        //     'actual_message' => $request->actual_message,
-        //     'progress_bobot' => $progress_bobot,
-        //     'actual_start' => $actual_start,
-        //     'actual_finish' => $actual_finish,
-        //     'actual_durasi' => $actual_durasi,
-        // ]);
-        // $logActual->save();
-        // $actual_id = $logActual->id;
-        // // UPDATE ACTUAL DI TRANSBASELINE    
-        // TranBaseline::where("id", $baseline->id)
-        //     ->update([
-        //         'actual_status' => $actual_status,
-        //         'actual_start' => $actual_start,
-        //         'actual_finish' => $actual_finish,
-        //         'actual_task' =>  $actual_task,
-        //         'actual_progress' =>  $actual_progress,
-        //         'actual_volume' =>  $actual_volume,
-        //         'actual_durasi' => $actual_durasi,
-        //         'actual_message' => $actual_message,
-
-        //     ]);
-
-        // //UPDATE SUPERVISI
-        // $today = date('Y-m-d');
-        // $plan_finish_const = $baseline->plan_start;
-        // $sumPlanBobot = 0;
-        // if ($plan_finish_const <= $today) {
-        //     $sumPlanBobot = TranBaseline::where("project_id", $baseline->project_id)->where('activity_id', '<=', $request->activity_id)->sum('bobot');
-        // }
-        // TranSupervisi::where("project_id", $baseline->project_id)
-        //     ->update([
-        //         'status_const' => $status_const,
-        //         'status_doc' => $status_doc,
-        //         'progress_plan' => $sumPlanBobot,
-        //         'remarks' => $actual_message
-        //     ]);
+        }     
 
         try {
             DB::beginTransaction();
@@ -334,11 +303,14 @@ class ActualController extends Controller
             if ($plan_finish_const <= $today) {
                 $sumPlanBobot = TranBaseline::where("project_id", $baseline->project_id)->where('activity_id', '<=', $request->activity_id)->sum('bobot');
             }
+            $sum_selesai = TranBaseline::where("project_id", $baseline->project_id)->where("actual_progress", 100)->sum('bobot');
+            $sum_belum = TranBaseline::where("project_id", $baseline->project_id)->whereBetween('actual_progress', [1, 99])->sum('progress_bobot');
             TranSupervisi::where("project_id", $baseline->project_id)
                 ->update([
                     'status_const' => $status_const,
                     'status_doc' => $status_doc,
                     'progress_plan' => $sumPlanBobot,
+                    'progress_actual' =>  $sum_selesai + $sum_belum,
                     'remarks' => $actual_message
                 ]);
 
