@@ -51,9 +51,8 @@
                             <form class="row g-2" action="{{ route('masuk') }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="role" value="{{ $role }}">
-                                <div class="text-center">
+                                <div class="text-center" style="margin-top: -70px;">
                                     <img src="{{ asset('img/telkom_indonesia_logo.png') }}" width="150px" alt="">
-
                                 </div>
                                 <div class="mb-2">
                                     <h5 class="color-900">Dashboard PED </h5>
