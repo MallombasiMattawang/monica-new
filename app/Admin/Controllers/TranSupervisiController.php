@@ -115,7 +115,7 @@ class TranSupervisiController extends AdminController
       $form->action('add-ut');
       $form->method('get');
       $form->hidden('id')->default($id);
-      $form->select('waspang_id', 'Pilih TIM UT')->options(
+      $form->select('tim_ut_id', 'Pilih TIM UT')->options(
         User::selectRaw('CONCAT(nik, " | ", name) as full_name, id')->where('role', 'tim_ut')
           ->pluck('full_name', 'id')
       );

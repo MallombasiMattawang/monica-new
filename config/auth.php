@@ -40,9 +40,9 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
-        'satker' => [
+        'waspang' => [
             'driver' => 'session',
-            'provider' => 'satker',
+            'provider' => 'waspang',
         ],
         'mitra' => [
             'driver' => 'session',
@@ -73,9 +73,9 @@ return [
             'model' => App\Models\User::class,
         ],
 
-        'satker' => [
+        'waspang' => [
             'driver' => 'eloquent',
-            'model' => App\Models\MstSatker::class,
+            'model' => App\Models\User::class,
         ],
 
         'mitra' => [

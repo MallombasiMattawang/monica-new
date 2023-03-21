@@ -121,7 +121,7 @@
                         <td class=" text-center">{{ $list->volume }} </td>
                         <td class=" text-center"> {{ $list->satuan }} </td>
                         <td class="text-center"> {{ $list->actual_start ? $list->actual_volume : '' }} </td>
-                        <td class=" text-center">{{ $list->actual_start ? Round($list->actual_progress, 1) . '%' : '' }}</td>
+                        <td class=" text-center">{{ $list->actual_start ? Round((int)$list->actual_progress, 1) . '%' : '' }}</td>
                         <td class="text-center"> {{ $list->actual_durasi }} </td>
                         <td class="text-center"> {{ $list->actual_start ? tgl_indo($list->actual_start) : '' }}</td>
                         <td class="text-center"> {{ $list->actual_finish ? tgl_indo($list->actual_finish) : '' }} </td>
@@ -156,9 +156,53 @@
                                         </a>
                                     @endif
                                 @else
-                                    <a href="{{ route('supervisi.actual.log',  [$list->id, Str::slug($list->list_activity)])  }}" class="btn btn-info"><i class="fa fa-search"></i></a>
+                                    @if (activeGuard() == 'waspang')
+                                        @php
+                                            $log = App\Models\LogActual::where('tran_baseline_id', $list->id)
+                                                ->whereNull('approval_waspang')
+                                                ->count();
+                                        @endphp
+                                        @if ($log > 0 && $list->activity_id == 20)
+                                        <a href="{{ route('supervisi.actual.log',  [$list->id, Str::slug($list->list_activity)])  }}" class="btn btn-warning"><i class="fa fa-edit"></i></a>        
+                                        @else
+                                            <a href="{{ route('supervisi.actual.log',  [$list->id, Str::slug($list->list_activity)])  }}" class="btn btn-info"><i class="fa fa-search"></i></a>        
+                                        @endif                                   
+                                    @endif
                                 @endif
                              @endif
+                             @if ($list->category_id == 004)
+                                @if ($list->actual_status == 'belum' || $list->actual_task == null || $list->actual_task == 'REJECTED')
+                                    @if ($cek_commisioning_tes == 1 && $list->activity_id == 21)
+                                        <a href="{{ $list->actual_task == 'NEED APPROVED' ? '#' : url('ped-panel/add-actual?id=' . $list->id) }}"
+                                            {{ $list->actual_task == 'NEED APPROVED' ? 'disabled' : '' }}
+                                            class="btn btn-primary"><i
+                                                class="fa fa-plus"></i>&nbsp;&nbsp;
+                                            Add Actual
+                                        </a>
+                                    @endif
+                                    @if ($cek_ut == 1 && $list->activity_id == 22)
+                                        <a href="{{ url('ped-panel/administrasi-generate?id=' . $list->project_id) }}"
+                                            class="btn btn-warning"><i
+                                                class="fa fa-file-o"></i>&nbsp;&nbsp;
+                                            Administration Activity
+                                        </a>
+                                    @endif
+                                    @if ($cek_rekon == 1 && $list->activity_id == 23)
+                                        <a href="{{ url('ped-panel/administrasi-generate?id=' . $list->project_id) }}"
+                                            class="btn btn-warning"><i
+                                                class="fa fa-file-o"></i>&nbsp;&nbsp;
+                                            Administration Activity
+                                        </a>
+                                    @endif
+                                @else
+                                    <a href="{{ url('ped-panel/log-generate?log=' . $list->id) }}"
+                                        class="btn btn-info"><i
+                                            class="fa fa-search"></i>&nbsp;&nbsp;
+
+                                    </a>
+                                @endif
+                            @endif
+                            
 
                            
 

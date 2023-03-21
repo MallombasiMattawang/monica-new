@@ -19,6 +19,7 @@ class LogActual extends Model
         'actual_status',
         'actual_evident',
         'actual_message',
+        'actual_kendala',
         'approval_waspang',
         'approval_tim_ut',
         'approval_message',

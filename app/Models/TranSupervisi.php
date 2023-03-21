@@ -29,6 +29,7 @@ class TranSupervisi extends Model
         'real_homepass',
         'status_const',
         'remarks',
+        'kendala',
         'progress_const',
         'tgl_selesai_ct',
         'tgl_selesai_ut',

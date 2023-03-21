@@ -15,12 +15,22 @@ class PlanController extends Controller
 {
     public function planActivity($id, $slug)
     {
-        $mitra_id =  getUser()->id;
-        $check = TranSupervisi::where("id", $id)->where('mitra_id', $mitra_id)->exists();
+        $user_id =  getUser()->id;
+        if (activeGuard() == 'waspang') {
+            $user = "waspang_id = $user_id ";
+        } else if (activeGuard() == 'tim_ut') {
+            $user = "tim_ut_id = $user_id ";
+        } else {
+            $user = "mitra_id = $user_id ";
+        }
+
+        $check = TranSupervisi::whereRaw("$user")->exists();
         if ($check == 0) {
             return abort(404);
         }
-        $supervisi = TranSupervisi::where("id", $id)->where('mitra_id', $mitra_id)->first();
+        $supervisi =  TranSupervisi::whereRaw("$user")->first();
+       
+
         $lists = TranBaseline::where("project_id", $supervisi->project_id)->get();
         $countBase = TranBaseline::where("project_id", $supervisi->project_id)->where('bobot', '>=', '1')->count();
         $sumBase = TranBaseline::where("project_id", $supervisi->project_id)->where('bobot', '>=', '1')->sum('bobot');

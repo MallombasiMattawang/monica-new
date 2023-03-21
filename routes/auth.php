@@ -42,7 +42,7 @@ Route::middleware('guest')->group(function () {
     //             ->name('password.update');
 });
 
-Route::middleware('auth:web,satker,mitra')->group(function () {
+Route::middleware('auth:web,waspang,mitra')->group(function () {
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
     // Route::get('verify-email', [EmailVerificationPromptController::class, '__invoke'])

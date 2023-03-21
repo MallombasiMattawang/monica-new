@@ -22,7 +22,7 @@ Route::middleware('guest')->group(function () {
 Route::get('/', [DashboardController::class, 'welcome'])->name('welcome');
 Route::get('/info', [DashboardController::class, 'info'])->name('info');
 
-Route::middleware('auth:web,satker,mitra')->group(function () {
+Route::middleware('auth:web,waspang,mitra')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
    
     /**

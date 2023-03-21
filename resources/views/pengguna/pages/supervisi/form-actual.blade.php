@@ -86,9 +86,13 @@
                                 <input class="form-control" type="file" id="actual_evident" name="file">
                             </div>
 
-                            <div class="col-12">
+                            <div class="col-md-6">
                                 <label for="actual_message" class="form-label">Remarks<sup class="text-danger">*</sup></label>
                                 <textarea name="actual_message" cols="30" rows="5" class="form-control"></textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="actual_message" class="form-label">Kendala</label>
+                                <textarea name="actual_kendala" cols="30" rows="5" class="form-control"></textarea>
                             </div>
 
 

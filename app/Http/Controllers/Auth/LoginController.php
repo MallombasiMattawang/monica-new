@@ -48,7 +48,7 @@ class LoginController extends Controller
                 'password' => $request->password
             ];
 
-        }elseif ($role == "satker") {
+        }elseif ($role == "waspang") {
 
             $credentials = [
                 'username' => $request->email,

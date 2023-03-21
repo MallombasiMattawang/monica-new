@@ -13,54 +13,62 @@ use Illuminate\Support\Str;
 
 class SupervisiController extends Controller
 {
-    public function index(Request $request)
-    {
+  public function index(Request $request)
+  {
 
-        //middlewareCheck(['web','mitra']);
+    middlewareCheck(['web', 'mitra', 'waspang']);
 
-        $insight = TRUE;
-        // $insightsupervisi = supervisi::whereIn('id', [82, 22, 54, 55, 65, 66,328,148])->orderBy('jenjang', 'ASC')->get();
-        $insightsupervisi = "";
+    $insight = TRUE;
+   
+    $insightsupervisi = "";
 
-        $pageTitle  = "Supervisi";
-        $breadcrumb = [
-            'Data Project',
-            'Supervisi'
-        ];
+    $pageTitle  = 'Supervisi ' . activeGuard() . '';
+    $breadcrumb = [
+      'Data Project',
+      'Supervisi'
+    ];
 
-        $where = '';
+    $where = '';
 
-        $keyword = request()->input('keyword');
-        if (!empty($keyword)) {
-            $where .= "AND project_name LIKE '%$keyword%' ";
-        }
+    $keyword = request()->input('keyword');
+    if (!empty($keyword)) {
+      $where .= "AND project_name LIKE '%$keyword%' ";
+    }
 
-        $skip  = $request->input('skip');
-        $take  = "20";
-
-        $mitra_id =  getUser()->id;
-        $results = TranSupervisi::whereRaw("mitra_id = '$mitra_id'  $where")
-            ->skip($skip)
-            ->take($take)
-            ->orderBy('id', 'DESC')
-            ->get();
+    $skip  = $request->input('skip');
+    $take  = "20";
 
 
+    $user_id =  getUser()->id;
+    if (activeGuard() == 'waspang') {
+      $user = "waspang_id = $user_id ";
+    } else if (activeGuard() == 'tim_ut') {
+      $user = "tim_ut_id = $user_id ";
+    } else {
+      $user = "mitra_id = $user_id ";
+    }
 
-        // return $results;
+    $results = TranSupervisi::whereRaw("$user $where")
+      ->skip($skip)
+      ->take($take)
+      ->orderBy('id', 'DESC')
+      ->get();
 
-        $response = '';
-        if ($request->ajax()) {
 
-            $id = 1 + $skip;
 
-            foreach ($results as $supervisi) {
+    // return $results;
 
-                // $bg = ($supervisi->jenjang == "SMP") ? "bg-card-yellow" : "bg-card-red";
-                $status_const = ($supervisi->status_const) ? "$supervisi->status_const" : "BELUM ADA";
-                $bg = '';
-                $ssStatus = '';
-                $response .= '
+    $response = '';
+    if ($request->ajax()) {
+
+      $id = 1 + $skip;
+
+      foreach ($results as $supervisi) {
+
+        $status_const = ($supervisi->status_const) ? "$supervisi->status_const" : "BELUM ADA";
+        $bg = '';
+        $ssStatus = '';
+        $response .= '
                  <div class="col-md-4 hello" id="' . $id++ . '">
                  <div class="card">
                  <div class="card-body">
@@ -92,32 +100,32 @@ class SupervisiController extends Controller
                </div>
                 </div>
                 ';
-            }
+      }
 
 
 
-            return $response;
-        }
-
-
-        return view(
-            'pengguna.pages.supervisi.index',
-            compact('pageTitle', 'breadcrumb', 'insight', 'insightsupervisi')
-        );
+      return $response;
     }
 
-    public function detail($id, $slug)
-    {
-        $profil = TranSupervisi::findOrFail($id);
 
-        $pageTitle  = $profil->project_name;
-        $breadcrumb = [
-            'Supervisi',
-            'Detail'
-        ];
-        return view(
-            'pengguna.pages.supervisi.detail',
-            compact('pageTitle', 'profil', 'breadcrumb')
-        );
-    }
+    return view(
+      'pengguna.pages.supervisi.index',
+      compact('pageTitle', 'breadcrumb', 'insight', 'insightsupervisi')
+    );
+  }
+
+  public function detail($id, $slug)
+  {
+    $profil = TranSupervisi::findOrFail($id);
+
+    $pageTitle  = $profil->project_name;
+    $breadcrumb = [
+      'Supervisi',
+      'Detail'
+    ];
+    return view(
+      'pengguna.pages.supervisi.detail',
+      compact('pageTitle', 'profil', 'breadcrumb')
+    );
+  }
 }

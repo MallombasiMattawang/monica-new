@@ -65,10 +65,10 @@ class AuthenticatedSessionController extends Controller
                         'password' => $request->password
                     ];
 
-        }elseif ($role == "sekolah") {
+        }elseif ($role == "mitra") {
 
             $credentials = [
-                'npsn' => $request->email,
+                'username' => $request->email,
                 'password' => $request->password
             ];
 
