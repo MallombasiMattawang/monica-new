@@ -44,6 +44,10 @@ return [
             'driver' => 'session',
             'provider' => 'waspang',
         ],
+        'tim-ut' => [
+            'driver' => 'session',
+            'provider' => 'tim-ut',
+        ],
         'mitra' => [
             'driver' => 'session',
             'provider' => 'mitra',
@@ -74,6 +78,10 @@ return [
         ],
 
         'waspang' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class,
+        ],
+        'tim-ut' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],

@@ -16,7 +16,7 @@ class SupervisiController extends Controller
   public function index(Request $request)
   {
 
-    middlewareCheck(['web', 'mitra', 'waspang']);
+    middlewareCheck(['web', 'mitra', 'waspang', 'tim-ut']);
 
     $insight = TRUE;
    
@@ -42,7 +42,7 @@ class SupervisiController extends Controller
     $user_id =  getUser()->id;
     if (activeGuard() == 'waspang') {
       $user = "waspang_id = $user_id ";
-    } else if (activeGuard() == 'tim_ut') {
+    } else if (activeGuard() == 'tim-ut') {
       $user = "tim_ut_id = $user_id ";
     } else {
       $user = "mitra_id = $user_id ";

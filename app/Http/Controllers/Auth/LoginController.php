@@ -42,9 +42,9 @@ class LoginController extends Controller
         $role = $request->role;
 
 
-        if($role == "users") {
+        if($role == "tim-ut") {
             $credentials = [
-                'email' => $request->email,
+                'username' => $request->email,
                 'password' => $request->password
             ];
 

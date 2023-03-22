@@ -66,17 +66,22 @@
                                 <label for="actual_message" class="form-label">Kendala </label>
                                 <textarea cols="30" rows="5" class="form-control" readonly>{{ $log->actual_kendala }}</textarea>
                             </div>
+                            @if ($baseline->activity_id == 20)
+                            <div class="col-md-6">
+                                <label class="form-label">Status Approval </label>
+                                <input type="text" class="form-control" value="{{ $log->approval_waspang }}" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="actual_message" class="form-label">Catatan Waspang </label>
+                                <textarea cols="30" rows="5" class="form-control" readonly>{{ $log->approval_message }}</textarea>
+                            </div>
+                            @endif
                             <div class="text-center p-5">
                                 <img src="/uploads/{{ $log->actual_evident}}" onerror="this.onerror=null; this.src='/img/no-data.svg';" class="w120" />
                                 <br><br>
                                 <a href="/uploads/{{ $log->actual_evident}}" target="_blank" class="btn btn-primary border lift">Download Evident</a>
                             </div>
-                            @if (activeGuard() == 'waspang' && $baseline->activity_id == 20)
-                            <div class="col-12 text-end">
-                                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#reject">Reject</button>
-                                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approve">Approve</button>
-                            </div>
-                            @endif
+                          
 
                         </div>
 
@@ -84,14 +89,19 @@
                 </div>
             </div> <!-- timeline item end  -->
             @endforeach
-
+            @if (activeGuard() == 'waspang' && $baseline->activity_id == 20)
+            <div class="col-12 text-end">
+                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#reject">Reject</button>
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approve">Approve</button>
+            </div>
+            @endif
 
 
         </div>
     </div>
 </div>
 {{-- Modal Rejetc --}}
-<div class="modal modal-danger fade" id="reject">
+<div class="modal fade" id="reject">
     <form action="{{route('supervisi.actual.approve')}}" method="POST">
         @csrf
         <input type="hidden" name="baseline_id" value="{{$baseline->id}}">
@@ -99,16 +109,20 @@
         <input type="hidden" name="approval_waspang" value="REJECTED">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header bg-danger">
                     <h5 class="modal-title" id="exampleModalLiveLabel">Reject Actual</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <p>Yakin untuk Reject report ini ?</p>
+                    <div class="col-md-12">
+                        <label for="actual_message" class="form-label">Catatan Verifikator </label>
+                        <textarea cols="30" rows="5" class="form-control" name="approval_message"></textarea>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="submit" class="btn btn-primary submit-button">Save changes</button>
                 </div>
             </div>
         </div>
@@ -117,19 +131,27 @@
 </div>
 {{-- Modal Approve --}}
 <div class="modal fade" id="approve">
-    <form action="">
+    <form action="{{route('supervisi.actual.approve')}}" method="POST">
+        @csrf
+        <input type="hidden" name="baseline_id" value="{{$baseline->id}}">
+        <input type="hidden" name="activity_id" value="{{$baseline->activity_id}}">
+        <input type="hidden" name="approval_waspang" value="APPROVED">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header bg-success">
                     <h5 class="modal-title" id="exampleModalLiveLabel">Approve Actual</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Woohoo, you're reading this text in a modal!</p>
+                    <p>Yakin untuk Approve report ini ?</p>
+                    <div class="col-md-12">
+                        <label for="actual_message" class="form-label">Catatan Verifikator </label>
+                        <textarea cols="30" rows="5" class="form-control" name="approval_message"></textarea>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="submit" class="btn btn-primary submit-button">Save changes</button>
                 </div>
             </div>
         </div>
