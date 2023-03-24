@@ -40,21 +40,21 @@
                             <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#actual_activity" role="tab">Actual Activity</a></li>
                             <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#pd_activity" role="tab">Inventory</a></li>
                             <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#pd_settings" role="tab">Administrasi</a></li>
-                            <li class="divider mt-4 py-2 border-top text-uppercase text-muted"><small>Project Cost</small></li>
-                            <li>
+                            {{-- <li class="divider mt-4 py-2 border-top text-uppercase text-muted"><small>Project Cost</small></li> --}}
+                            {{-- <li>
                                 <h2 class="fw-normal">$8,890</h2>
                                 <div class="mt-3">
                                     <div class="mb-0 fw-bold">22 Feb 2022</div>
                                     <small class="text-muted">Due Date</small>
                                 </div>
-                            </li>
-                            <li class="divider mt-4 py-2 border-top text-uppercase text-muted"><small>Clients Detail</small></li>
+                            </li> --}}
+                            <li class="divider mt-4 py-2 border-top text-uppercase text-muted"><small>Waspang</small></li>
                             <li>
                                 <div class="circle">
-                                    <img class="avatar xl rounded-circle img-thumbnail" src="./assets/img/xs/avatar1.jpg" alt="">
+                                    <img class="avatar xl rounded-circle img-thumbnail" src="{{ asset('img/xs/avatar9.jpg.png') }}" alt="">
                                 </div>
                                 <h6 class="mt-3 mb-0">Michelle Green</h6>
-                                <span>jason-porter@info.com</span>
+                                <span>mchelle-green@info.com</span>
                                 <button class="btn btn-outline-secondary btn-sm mt-3">Message</button>
                             </li>
                         </ul>

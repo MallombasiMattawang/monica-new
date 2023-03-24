@@ -164,13 +164,15 @@
                                         @endphp
                                         @if ($log > 0 && $list->activity_id == 20)
                                             <a href="{{ route('supervisi.actual.log',  [$list->id, Str::slug($list->list_activity)])  }}" class="btn btn-warning"><i class="fa fa-edit"></i></a>        
-                                        @else
-                                            <a href="{{ route('supervisi.actual.log',  [$list->id, Str::slug($list->list_activity)])  }}" class="btn btn-info"><i class="fa fa-search"></i></a>        
+                                        {{-- @else
+                                            <a href="{{ route('supervisi.actual.log',  [$list->id, Str::slug($list->list_activity)])  }}" class="btn btn-info"><i class="fa fa-search"></i></a>         --}}
                                         @endif                                   
                                     @endif
+                                    <a href="{{ route('supervisi.actual.log',  [$list->id, Str::slug($list->list_activity)])  }}" class="btn btn-info"><i class="fa fa-search"></i></a>        
                                 @endif
                              @endif
                              @if ($list->category_id == 004)
+                             
                                 @if (($list->actual_status == 'belum' || $list->actual_task == null || $list->actual_task == 'REJECTED') && (activeGuard() == 'mitra'))
                                     @if ($cek_commisioning_tes == 1 && $list->activity_id == 21)
                                         <a href="{{ route('supervisi.actual.form',  [$list->id, Str::slug($list->list_activity)])  }}" class="btn btn-primary"><i class="fa fa-plus"></i></a>
@@ -190,11 +192,7 @@
                                         </a>
                                     @endif
                                 @else
-                                    {{-- <a href="{{ url('ped-panel/log-generate?log=' . $list->id) }}"
-                                        class="btn btn-info"><i
-                                            class="fa fa-search"></i>&nbsp;&nbsp;
-
-                                    </a> --}}
+                                <a href="{{ route('supervisi.actual.log',  [$list->id, Str::slug($list->list_activity)])  }}"  class="btn {{ activeGuard() == 'tim-ut' ? 'btn-warning' : 'btn-info' }} "><i class="fa fa-search"></i> </a>        
                                 @endif
                             @endif
                             

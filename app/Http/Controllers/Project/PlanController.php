@@ -24,11 +24,11 @@ class PlanController extends Controller
             $user = "mitra_id = $user_id ";
         }
 
-        $check = TranSupervisi::whereRaw("$user")->exists();
+        $check = TranSupervisi::whereRaw("$user AND id = $id")->exists();
         if ($check == 0) {
             return abort(404);
         }
-        $supervisi =  TranSupervisi::whereRaw("$user")->first();
+        $supervisi =  TranSupervisi::whereRaw("$user AND id = $id")->first();
        
 
         $lists = TranBaseline::where("project_id", $supervisi->project_id)->get();

@@ -66,6 +66,8 @@ class SupervisiController extends Controller
       foreach ($results as $supervisi) {
 
         $status_const = ($supervisi->status_const) ? "$supervisi->status_const" : "BELUM ADA";
+        $today = date('Y-m-d');
+        $progress_plan = TranBaseline::where("project_id", $supervisi->project_id)->whereBetween('plan_finish', [$supervisi->supervisi_project->start_date,  $today])->sum('bobot');
         $bg = '';
         $ssStatus = '';
         $response .= '
@@ -82,9 +84,9 @@ class SupervisiController extends Controller
                      <span class="badge bg-warning">' . $status_const . ' </span>
                      
                    </div>
-                   <label class="small d-flex justify-content-between">Progress Plan ' . $supervisi->progress_plan . '% <span class="text-custom">100%</span></label>
+                   <label class="small d-flex justify-content-between">Progress Plan ' . $progress_plan . '% <span class="text-custom">100%</span></label>
                    <div class="progress mt-1" style="height: 3px;">
-                     <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100" style="width: ' . $supervisi->progress_plan . '%;"></div>
+                     <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100" style="width: ' . $progress_plan . '%;"></div>
                    </div>
                    <br>
                    <label class="small d-flex justify-content-between">Progress Actual ' . $supervisi->progress_actual . '% <span class="text-custom">100%</span></label>
