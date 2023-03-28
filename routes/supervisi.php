@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Project\ActualController;
+use App\Http\Controllers\Project\AdministrasiController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Project\SupervisiController;
 use App\Http\Controllers\Project\PlanController;
@@ -31,4 +32,16 @@ Route::controller(ActualController::class)
         Route::post('/actual-activity/approve-waspang', 'actualActivityWaspang')->name('supervisi.actual.waspang');
         Route::post('/actual-activity/approve-ut', 'actualActivityUt')->name('supervisi.actual.ut');
         Route::get('/actual-activity/log-actual/{id}/{slug}', 'actualActivityLog')->name('supervisi.actual.log');
+    });
+
+Route::controller(AdministrasiController::class)
+    ->prefix('supervisi')
+    ->group(function () {
+        /** Administrasi Activity */
+        Route::get('/administrasi-activity/{id}/{slug}', 'administrasiActivity')->name('supervisi.administrasi');
+        Route::get('/administrasi-activity/form-administrasi/{id}/{cat}', 'administrasiActivityForm')->name('supervisi.administrasi.form');
+        Route::post('/administrasi-docToWitel', 'docToWitel')->name('supervisi.docToWitel');
+        Route::post('/administrasi-docToRegional', 'docToRegional')->name('supervisi.docToRegional');
+        Route::post('/administrasi-verifikasi-internal', 'verifikasiInternal')->name('supervisi.verifikasiInternal');
+        Route::post('/administrasi-ba-rekon', 'docBaRekon')->name('supervisi.docBaRekon');
     });

@@ -178,14 +178,14 @@
                                         <a href="{{ route('supervisi.actual.form',  [$list->id, Str::slug($list->list_activity)])  }}" class="btn btn-primary"><i class="fa fa-plus"></i></a>
                                     @endif
                                     @if ($cek_ut == 1 && $list->activity_id == 22)
-                                        <a href="{{ url('ped-panel/administrasi-generate?id=' . $list->project_id) }}"
+                                        <a href="{{ route('supervisi.administrasi',  [$list->id, Str::slug($list->list_activity)])  }}"
                                             class="btn btn-warning"><i
                                                 class="fa fa-file-o"></i>&nbsp;&nbsp;
                                             Administration Activity
                                         </a>
                                     @endif
                                     @if ($cek_rekon == 1 && $list->activity_id == 23)
-                                        <a href="{{ url('ped-panel/administrasi-generate?id=' . $list->project_id) }}"
+                                        <a href="{{ route('supervisi.administrasi',  [$list->id, Str::slug($list->list_activity)])  }}"
                                             class="btn btn-warning"><i
                                                 class="fa fa-file-o"></i>&nbsp;&nbsp;
                                             Administration Activity

@@ -347,8 +347,6 @@ class ActualController extends Controller
 
 
         $supervisi = TranSupervisi::where("project_id", $baseline->project_id)->first();
-
-
         return redirect()->route('supervisi.detail', [$supervisi->id, Str::slug($supervisi->project_name)])->with(['success' => 'Update Actual #' . $baseline->list_activity . ' Berhasil']);
     }
 

@@ -38,8 +38,9 @@
                             <li class="nav-item"><a class="nav-link active" href="#" data-bs-toggle="tab" data-bs-target="#pd_overview" role="tab">Overview</a></li>
                             <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#plan_activity" role="tab">Plan Activity</a></li>
                             <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#actual_activity" role="tab">Actual Activity</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#administrasi_activity" role="tab">Administrasi Actual</a></li>
                             <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#pd_activity" role="tab">Inventory</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#pd_settings" role="tab">Administrasi</a></li>
+                            
                             {{-- <li class="divider mt-4 py-2 border-top text-uppercase text-muted"><small>Project Cost</small></li> --}}
                             {{-- <li>
                                 <h2 class="fw-normal">$8,890</h2>
@@ -307,135 +308,16 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="pd_activity" role="tabpanel">
+                            <div class="tab-pane fade" id="administrasi_activity" role="tabpanel">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h6 class="card-title mb-0">Project Activity</h6>
+                                        <h6 class="card-title mb-0">Administrasi Activity</h6>
                                         <button class="btn btn-sm d-block d-lg-none btn-primary project-list-toggle" type="button"><i class="fa fa-bars"></i></button>
                                     </div>
-                                    <div class="card-body">
-                                        <div class="timeline-item ti-danger ms-2">
-                                            <div class="d-flex">
-                                                <img class="avatar sm rounded-circle" src="./assets/img/xs/avatar1.jpg" alt="">
-                                                <div class="flex-fill ms-3">
-                                                    <div class="mb-1 fs-6">Gerald Vaughn changed the status to QA on <a href="#" class="avio-link text_bg2">MA-86</a> - Retargeting Ads</div>
-                                                    <span class="d-flex text-muted small">New Dashboard Design - 9:24PM by <a class="ms-2" href="#" title=""><strong>You</strong></a> </span>
-                                                    <div class="card mt-3 p-3"> I’ve prepared all sizes for you. Can you take a look tonight so we can prepare my final invoice? </div>
-                                                </div>
-                                            </div>
-                                        </div> <!-- timeline item end  -->
-                                        <div class="timeline-item ti-danger ms-2">
-                                            <div class="d-flex">
-                                                <img class="avatar sm rounded-circle" src="./assets/img/xs/avatar1.jpg" alt="">
-                                                <div class="flex-fill ms-3">
-                                                    <div class="mb-1 fs-6">3 new screen design added: on <a href="#" class="avio-link text_bg2">MA-86</a></div>
-                                                    <span class="d-flex text-muted small">New added - 9:24PM by <a class="ms-2" href="#" title=""><strong>You</strong></a> </span>
-                                                    <div class="card mt-3 p-3">
-                                                        <div class="row g-1">
-                                                            <div class="col-lg-3 col-md-4 col-sm-6">
-                                                                <div class="card img-effect one text-center">
-                                                                    <img src="./assets/img/gallery/1.jpg" alt="img hover">
-                                                                    <div>
-                                                                        <h2 class="fs-4">Chat App</h2>
-                                                                        <p>Sadie never took her eyes off me. She had a dark soul.</p>
-                                                                        <a href="app-chat.html" title="">View more</a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-lg-3 col-md-4 col-sm-6">
-                                                                <div class="card img-effect one text-center">
-                                                                    <img src="./assets/img/gallery/2.jpg" alt="img hover">
-                                                                    <div>
-                                                                        <h2 class="fs-4">Todo App</h2>
-                                                                        <p>Sadie never took her eyes off me. She had a dark soul.</p>
-                                                                        <a href="app-todo.html" title="">View more</a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-lg-3 col-md-4 col-sm-6">
-                                                                <div class="card img-effect one text-center">
-                                                                    <img src="./assets/img/gallery/5.jpg" alt="img hover">
-                                                                    <div>
-                                                                        <h2 class="fs-4">File Manager</h2>
-                                                                        <p>Sadie never took her eyes off me. She had a dark soul.</p>
-                                                                        <a href="app-file-manager.html" title="">View more</a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div> <!-- timeline item end  -->
-                                        <div class="timeline-item ti-success ms-2">
-                                            <div class="d-flex">
-                                                <img class="avatar sm rounded-circle" src="./assets/img/xs/avatar1.jpg" alt="">
-                                                <div class="flex-fill ms-3">
-                                                    <div class="mb-1">Clients share with new documentation file</div>
-                                                    <span class="d-flex text-muted small">New file - 11:30AM by <a class="ms-2" href="#" title=""><strong>You</strong></a> </span>
-                                                    <div class="card mt-3 p-3">
-                                                        <a href="#" class="d-inline-flex align-items-center py-2">
-                                                            <div class="avatar rounded-circle no-thumbnail"><i class="fa fa-file-pdf-o text-danger"></i></div>
-                                                            <div class="flex-fill ms-3 text-truncate">
-                                                                <p class="mb-0 color-800">new layout for admin pages</p>
-                                                                <small class="text-muted">.pdf, 5.3 MB</small>
-                                                            </div>
-                                                        </a>
-                                                        <a href="#" class="d-inline-flex align-items-center py-2">
-                                                            <div class="avatar rounded-circle no-thumbnail"><i class="fa fa-file-zip-o"></i></div>
-                                                            <div class="flex-fill ms-3 text-truncate">
-                                                                <p class="mb-0 color-800 lh-sm">Brand Photography</p>
-                                                                <small class="text-muted">.zip, 30.5 MB</small>
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div> <!-- timeline item end  -->
-                                        <div class="timeline-item ti-primary ms-2">
-                                            <div class="d-flex">
-                                                <img class="avatar sm rounded-circle" src="./assets/img/xs/avatar1.jpg" alt="">
-                                                <div class="flex-fill ms-3">
-                                                    <div class="mb-1">Create new module development team for <a href="#" class="avio-link text_bg2">MA-86</a> stocks for our Instagram channel</div>
-                                                    <span class="d-flex text-muted small">ReactJs, Nodejs - 7:58AM by <a class="ms-2" href="#" title=""><strong>You</strong></a> </span>
-                                                    <div class="card p-3 mt-3"> What do you think about these? Should I continue in this style? </div>
-                                                    <div class="project-members mt-3">
-                                                        <label class="me-3">Team :</label>
-                                                        <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="ReactJs"><img class="avatar xs rounded-circle" src="./assets/img/xs/avatar3.jpg" alt="friend"> </a>
-                                                        <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="NodeJs"><img class="avatar xs rounded-circle" src="./assets/img/xs/avatar1.jpg" alt="friend"> </a>
-                                                        <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="ReactJs"><img class="avatar xs rounded-circle" src="./assets/img/xs/avatar7.jpg" alt="friend"> </a>
-                                                        <a href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="ReactJs"><img class="avatar xs rounded-circle" src="./assets/img/xs/avatar9.jpg" alt="friend"> </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div> <!-- timeline item end  -->
-                                        <div class="timeline-item ti-warning ms-2">
-                                            <div class="d-flex">
-                                                <img class="avatar sm rounded-circle" src="./assets/img/xs/avatar4.jpg" alt="">
-                                                <div class="flex-fill ms-3">
-                                                    <div class="mb-1">update new source code on GitHub <strong>MA-78 - Retargeting React Webapp</strong></div>
-                                                    <span class="d-flex text-muted small">New Dashboard Design - 9:24PM by <a class="ms-2" href="#" title=""><strong>Chris</strong></a> </span>
-                                                    <div class="alert alert-success rounded mt-3 mb-0 rounded-4"> I’ve prepared all sizes for you. Can you take a look tonight so we can prepare my final invoice? </div>
-                                                </div>
-                                            </div>
-                                        </div> <!-- timeline item end  -->
-                                        <div class="timeline-item ti-info ms-2">
-                                            <div class="d-flex">
-                                                <img class="avatar sm rounded-circle" src="./assets/img/xs/avatar2.jpg" alt="">
-                                                <div class="flex-fill ms-3">
-                                                    <div class="mb-1 fs-6">Task <a href="#" class="avio-link text_bg2">#1425</a> merged with <a href="#" class="avio-link text_bg2">#25836</a> in Avio Admin Dashboard project:</div>
-                                                    <span class="d-flex text-muted small">Updates for Jason Carroll - 7:12PM by <a class="ms-2" href="#" title=""><strong>Orlando</strong></a> </span>
-                                                    <div class="card mt-3 p-3">
-                                                        <p>Both task merged and latest code push on GitHub</p>
-                                                        <ul class="mb-0">
-                                                            <li>Responsive design issue fix and testing all device-width</li>
-                                                            <li>Profile page create</li>
-                                                            <li>Login page text changes</li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div> <!-- timeline item end  -->
+                                    <div class="row g-2">
+                                        <div class="col-md-12">
+                                            <div id="container_administrasi"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -532,6 +414,13 @@
             url: "{{ route('supervisi.actual', [$profil->id, Str::slug($profil->project_name)]) }}"
             , success: function(result) {
                 $('#container_actual').html(result);
+            }
+        });
+
+        $.ajax({
+            url: "{{ route('supervisi.administrasi', [$profil->id, Str::slug($profil->project_name)]) }}"
+            , success: function(result) {
+                $('#container_administrasi').html(result);
             }
         });
     });

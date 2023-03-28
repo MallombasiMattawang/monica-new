@@ -54,7 +54,7 @@ class MstProjectController extends AdminController
         $grid->fixColumns(3, -1);
 
         if (Admin::user()->inRoles(['witel'])) {
-            $grid->model()->where('witel_id', '=', Admin::user()->name);
+            $grid->model()->where('witel_id', '=', Admin::user()->username);
         }
 
         $grid->tools(function ($tools) {
