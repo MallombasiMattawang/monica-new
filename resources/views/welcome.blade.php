@@ -136,24 +136,7 @@
                                 </div>
                             </div> <!-- .Card End -->
                         </div>
-                        <div class="col">
-                            <div class="card text-center">
-
-                                <div class="card-body d-flex align-items-center justify-content-between flex-column">
-                                    <div class="me-auto ms-auto py-4">
-                                        <img class="avatar rounded m-1 lift" src="{{ asset('img/xs/avatar7.jpg.png') }}" data-bs-toggle="tooltip" data-placement="top" title="" alt="" data-bs-original-title="Avatar Name" aria-label="Avatar Name">
-                                        <img class="avatar rounded m-1 lift" src="{{ asset('img/xs/avatar3.jpg.png') }}" data-bs-toggle="tooltip" data-placement="top" title="" alt="" data-bs-original-title="Avatar Name" aria-label="Avatar Name">
-
-                                    </div>
-                                    <div class="mt-2">
-                                        <h6 class="mb-0">S.D.I</h6>
-                                        <small class="text-muted">126 SDI</small>
-                                        <hr>
-                                        <a href="{{ route('login', ['sdi']) }}" class="btn btn-primary " title="">Login now</a>
-                                    </div>
-                                </div>
-                            </div> <!-- .Card End -->
-                        </div>
+                       
 
 
                     </div>

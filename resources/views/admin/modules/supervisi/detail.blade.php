@@ -205,8 +205,7 @@
                             </table>
                         </div>
                         <div class="tab-pane" id="kurva">
-
-                            ss
+                            <canvas id="line_target_real" style="width: 100%;"></canvas>
                         </div>
                     </div>
                     <!-- /.tab-content -->
@@ -931,3 +930,105 @@
 
 <!-- /.col -->
 </div>
+
+<script>
+    $(function() {
+
+        var dateLabel = [],
+            planData = [],
+            actualData = []
+
+        window.chartColors = {
+            red: 'rgb(255, 99, 132)',
+            orange: 'rgb(255, 159, 64)',
+            yellow: 'rgb(255, 205, 86)',
+            green: 'rgb(75, 192, 192)',
+            blue: 'rgb(54, 162, 235)',
+            purple: 'rgb(153, 102, 255)',
+            grey: 'rgb(201, 203, 207)'
+        };
+
+        async function dummyChart() {
+            await getDummyData()
+
+            var config = {
+                type: 'line',
+                data: {
+                    labels: dateLabel,
+                    datasets: [{
+                            label: 'Bobot Plan',
+                            backgroundColor: window.chartColors.red,
+                            borderColor: window.chartColors.red,
+                            data: planData,
+                            fill: false,
+                        },
+                        {
+                            label: 'Bobot Real',
+                            backgroundColor: window.chartColors.green,
+                            borderColor: window.chartColors.green,
+                            data: actualData,
+                            fill: false,
+                        },
+
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    title: {
+                        display: true,
+                        text: 'Grafik Plan VS Grafik REAL'
+                    },
+                    tooltips: {
+                        mode: 'index',
+                        intersect: true,
+                    },
+                    hover: {
+                        mode: 'nearest',
+                        intersect: true
+                    },
+                    scales: {
+                        scaleShowValues: true,
+                        xAxes: [{
+                            ticks: {
+                                autoSkip: true
+                            }
+                        }],
+                        
+                        yAxes: [{
+                            display: true,
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Value'
+                            }
+                        }]
+                    }
+                }
+            };
+
+            var ctx = document.getElementById('line_target_real').getContext('2d');
+            new Chart(ctx, config);
+        }
+
+        dummyChart()
+
+        //Fetch Data from API
+
+        async function getDummyData() {
+            const apiUrl = "{{ url('/ped-panel/api/kurva_s/'.$supervisi->project_id) }}"
+
+            const response = await fetch(apiUrl)
+            const barChatData = await response.json()
+
+            const actual = barChatData.data.map((x) => x.bobot_real)
+           // console.log(salary)
+            const plan = barChatData.data.map((x) => x.bobot_plan)
+            const date = barChatData.data.map((x) => x.date)
+
+            actualData = actual
+            planData = plan
+            dateLabel = date
+
+        }
+
+    });
+</script>

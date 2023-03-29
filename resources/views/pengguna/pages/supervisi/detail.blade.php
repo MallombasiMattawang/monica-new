@@ -124,7 +124,7 @@
                                                 </div>
                                             </div>
                                             <div class="card-body">
-                                                <div id="apex-wc-9"></div>
+                                                <canvas id="line_target_real" style="width: 100%;"></canvas>
                                             </div>
                                         </div> <!-- .card end -->
                                     </div>
@@ -425,101 +425,106 @@
     });
 
 </script>
-<!-- Plugin Js -->
-<script src="./assets/js/bundle/apexcharts.bundle.js"></script>
-<!-- Jquery Page Js -->
 <script>
-    $('.project-list .project-list-toggle').on('click', function() {
-        $('.project-list .order-1').toggleClass('open');
-    });
-    // Apex-wc-11
-    var apexwc12 = {
-        chart: {
-            height: 260
-            , type: 'donut'
-        , }
-        , labels: ['Active', 'Completed', 'Overdue', 'Yet to start']
-        , dataLabels: {
-            enabled: false
-        , }
-        , legend: {
-            position: 'bottom', // left, right, top, bottom
-            horizontalAlign: 'center', // left, right, top, bottom
-        }
-        , colors: ['var(--chart-color1)', 'var(--chart-color2)', 'var(--chart-color3)', 'var(--chart-color4)']
-        , series: [44, 55, 41, 17]
-        , responsive: [{
-            breakpoint: 420
-            , options: {
-                chart: {
-                    width: 200
-                }
-                , legend: {
-                    position: 'bottom'
-                }
-            }
-        }]
-    }
-    new ApexCharts(document.querySelector("#apex-wc-12"), apexwc12).render();
-    // Apex-wc-9
-    var apexwc9 = {
-        series: [{
-            name: "Complete"
-            , data: [45, 52, 38, 24, 33, 26, 21, 20, 6, 8, 15, 10]
-        }, {
-            name: "Incomplete"
-            , data: [87, 57, 74, 99, 75, 38, 62, 47, 82, 56, 45, 47]
-        }]
-        , chart: {
-            height: 280
-            , type: 'line', // line, bar, area
-            toolbar: {
-                show: false
-            , }
-            , zoom: {
-                enabled: false
-            }
-        , }
-        , colors: ['var(--chart-color1)', 'var(--chart-color5)', ]
-        , dataLabels: {
-            enabled: false
-        }
-        , stroke: {
-            width: [2, 2]
-            , curve: 'smooth', // straight, smooth
-            dashArray: [0, 5]
-        }
-        , legend: {
-            tooltipHoverFormatter: function(val, opts) {
-                return val + ' - ' + opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] + ''
-            }
-        }
-        , markers: {
-            size: 0
-            , hover: {
-                sizeOffset: 6
-            }
-        }
-        , xaxis: {
-            categories: ['Jan', 'Feb', 'March', 'Apr', 'May', 'Jun', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
-        , }
-        , tooltip: {
-            y: [{
-                title: {
-                    formatter: function(val) {
-                        return val + " (Tasks)"
-                    }
-                }
-            }, {
-                title: {
-                    formatter: function(val) {
-                        return val + " (Tasks)"
-                    }
-                }
-            }]
-        }
-    , };
-    new ApexCharts(document.querySelector("#apex-wc-9"), apexwc9).render();
+    $(function() {
 
+        var dateLabel = [],
+            planData = [],
+            actualData = []
+
+        window.chartColors = {
+            red: 'rgb(255, 99, 132)',
+            orange: 'rgb(255, 159, 64)',
+            yellow: 'rgb(255, 205, 86)',
+            green: 'rgb(75, 192, 192)',
+            blue: 'rgb(54, 162, 235)',
+            purple: 'rgb(153, 102, 255)',
+            grey: 'rgb(201, 203, 207)'
+        };
+
+        async function dummyChart() {
+            await getDummyData()
+
+            var config = {
+                type: 'line',
+                data: {
+                    labels: dateLabel,
+                    datasets: [{
+                            label: 'Bobot Plan',
+                            backgroundColor: window.chartColors.red,
+                            borderColor: window.chartColors.red,
+                            data: planData,
+                            fill: false,
+                        },
+                        {
+                            label: 'Bobot Real',
+                            backgroundColor: window.chartColors.green,
+                            borderColor: window.chartColors.green,
+                            data: actualData,
+                            fill: false,
+                        },
+
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    title: {
+                        display: true,
+                        text: 'Grafik Plan VS Grafik REAL'
+                    },
+                    tooltips: {
+                        mode: 'index',
+                        intersect: true,
+                    },
+                    hover: {
+                        mode: 'nearest',
+                        intersect: true
+                    },
+                    scales: {
+                        scaleShowValues: true,
+                        xAxes: [{
+                            ticks: {
+                                autoSkip: true
+                            }
+                        }],
+                        
+                        yAxes: [{
+                            display: true,
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Value'
+                            }
+                        }]
+                    }
+                }
+            };
+
+            var ctx = document.getElementById('line_target_real').getContext('2d');
+            new Chart(ctx, config);
+        }
+
+        dummyChart()
+
+        //Fetch Data from API
+
+        async function getDummyData() {
+            const apiUrl = "{{ url('/ped-panel/api/kurva_s/'.$profil->project_id) }}"
+
+            const response = await fetch(apiUrl)
+            const barChatData = await response.json()
+
+            const actual = barChatData.data.map((x) => x.bobot_real)
+           // console.log(salary)
+            const plan = barChatData.data.map((x) => x.bobot_plan)
+            const date = barChatData.data.map((x) => x.date)
+
+            actualData = actual
+            planData = plan
+            dateLabel = date
+
+        }
+
+    });
 </script>
+<script src="{{ asset('vendor/laravel-admin-ext/chartjs/Chart.bundle.min.js') }}"></script>
 @endpush

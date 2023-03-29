@@ -46,3 +46,4 @@ app('view')->prependNamespace('admin', resource_path('views/admin'));
 
 Admin::css('/css/myadmin.css');
 Admin::js('/js/myadmin.js');
+Admin::js('/vendor/laravel-admin-ext/chartjs/Chart.bundle.min.js');

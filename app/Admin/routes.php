@@ -91,4 +91,7 @@ Route::group([
 
       /**SUPERVISI VIEW */
       $router->get('list-supervisis', 'ViewSupervisiController@list');
+
+      /**Kurva S */
+      $router->get('api/kurva_s/{id?}', 'TranSupervisiController@kurvaS');
 });
