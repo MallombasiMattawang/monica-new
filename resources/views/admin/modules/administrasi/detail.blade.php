@@ -13,40 +13,46 @@
     <div class="col-md-6">
         <div class="box">
             <div class="box-body">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>NO</th>
-                            <th>Tgl</th>
-                            <th>Activity</th>
-                            <th>Remarks</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td></td>
-                            <td>Pembuatan Dokumen</td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td></td>
-                            <td>Pengiriman Dokumen ke WITEL</td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td></td>
-                            <td>Verifikasi WITEL</td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <ul class="timeline">
+
+                    <li class="time-label">
+                        <span class="bg-red">
+                           TIMELINE
+                        </span>
+                    </li>
+                    @forelse ($log_administrasi as $log)
+                    <li>
+                        <i class="fa fa-envelope bg-blue"></i>
+                        <div class="timeline-item">
+                            <span class="time"><i class="fa fa-clock-o"></i> {{ tgl_indo($log->created_at) }}</span>
+                            <h3 class="timeline-header">Status Dokumen <a href="#">{{ $log->status_doc }}</a> <br> Posisi Dokumen <a href="#">{{ $log->posisi_doc }}</a> </h3>
+                            <div class="timeline-body">
+                                Remarks : <br>
+                                {{ $log->remarks }} <br><br>
+                                Catatan Verifikator : <br>
+                                {{ $log->catatan_verifikator }}
+                            </div>
+                            <div class="timeline-footer">
+                                @if ($log->file_doc)
+                                <a href="/uploads/{{ $log->file_doc }}" target="_blank" class="btn btn-primary btn-xs">Download</a>
+                                @endif
+                               
+                                <a class="btn btn-warning btn-xs">{{ $log->status_verfy }}</a>
+                            </div>
+                        </div>
+                    </li>
+                    
+                    @empty
+    
+                    @endforelse
+
+                   
+
+                    <li>
+                        <i class="fa fa-clock-o bg-gray"></i>
+                    </li>
+                </ul>
+                
             </div>
         </div>
 
@@ -58,28 +64,28 @@
             </div>
             <div class="box-body text-center">
                 @if($administrasi->posisi_doc == 'WITEL')
-                    @if($administrasi->status_doc == 'VERIFIKASI DOKUMEN')
-                        <a href="#" class="btn btn-danger " data-toggle="modal" data-target="#modal-reject-witel"><i class="fa fa-close"></i> <br> Reject Dokumen</a>
-                        <a href="#" class="btn btn-success " data-toggle="modal" data-target="#modal-approve-witel"><i class="fa fa-check"></i> <br> Approve Dokumen</a>
-                    @endif
-                    @if($administrasi->status_doc == 'PROSES TANDA TANGAN WITEL')
-                        <a href="#" class="btn btn-primary " data-toggle="modal" data-target="#modal-ttd-witel"><i class="fa fa-500px"></i> <br> TTD Dokumen</a>
-                    @endif  
+                @if($administrasi->status_doc == 'VERIFIKASI DOKUMEN')
+                <a href="#" class="btn btn-danger " data-toggle="modal" data-target="#modal-reject-witel"><i class="fa fa-close"></i> <br> Reject Dokumen</a>
+                <a href="#" class="btn btn-success " data-toggle="modal" data-target="#modal-approve-witel"><i class="fa fa-check"></i> <br> Approve Dokumen</a>
+                @endif
+                @if($administrasi->status_doc == 'PROSES TANDA TANGAN WITEL')
+                <a href="#" class="btn btn-primary " data-toggle="modal" data-target="#modal-ttd-witel"><i class="fa fa-500px"></i> <br> TTD Dokumen</a>
+                @endif
                 @endif
 
                 @if($administrasi->posisi_doc == 'TELKOM REGIONAL')
-                    @if($administrasi->status_doc == 'VERIFIKASI DOKUMEN')
-                        <a href="#" class="btn btn-danger " data-toggle="modal" data-target="#modal-reject-regional"><i class="fa fa-close"></i> <br> Reject Dokumen</a>
-                        <a href="#" class="btn btn-success " data-toggle="modal" data-target="#modal-approve-regional"><i class="fa fa-check"></i> <br> Approve Dokumen</a>
-                    @endif
-                    @if($administrasi->status_ba_rekon == 'VERIFIKASI TELKOM REGIONAL')
-                        <a href="#" class="btn btn-danger " data-toggle="modal" data-target="#modal-reject-ba"><i class="fa fa-close"></i> <br> Reject Ba Rekon</a>
-                        <a href="#" class="btn btn-success " data-toggle="modal" data-target="#modal-approve-ba"><i class="fa fa-check"></i> <br> Approve BA Rekon</a>
-                    @endif
-                    @if($administrasi->status_doc == 'PROSES TANDA TANGAN TELKOM REGIONAL')
-                        <a href="#" class="btn btn-primary " data-toggle="modal" data-target="#modal-ttd-regional"><i class="fa fa-500px"></i> <br> TTD Dokumen</a>
-                    @endif  
-                 @endif
+                @if($administrasi->status_doc == 'VERIFIKASI DOKUMEN')
+                <a href="#" class="btn btn-danger " data-toggle="modal" data-target="#modal-reject-regional"><i class="fa fa-close"></i> <br> Reject Dokumen</a>
+                <a href="#" class="btn btn-success " data-toggle="modal" data-target="#modal-approve-regional"><i class="fa fa-check"></i> <br> Approve Dokumen</a>
+                @endif
+                @if($administrasi->status_ba_rekon == 'VERIFIKASI TELKOM REGIONAL')
+                <a href="#" class="btn btn-danger " data-toggle="modal" data-target="#modal-reject-ba"><i class="fa fa-close"></i> <br> Reject Ba Rekon</a>
+                <a href="#" class="btn btn-success " data-toggle="modal" data-target="#modal-approve-ba"><i class="fa fa-check"></i> <br> Approve BA Rekon</a>
+                @endif
+                @if($administrasi->status_doc == 'PROSES TANDA TANGAN TELKOM REGIONAL')
+                <a href="#" class="btn btn-primary " data-toggle="modal" data-target="#modal-ttd-regional"><i class="fa fa-500px"></i> <br> TTD Dokumen</a>
+                @endif
+                @endif
 
 
             </div>
@@ -146,7 +152,7 @@
     </div>
 </form>
 
-<form action="{{ url('/ped-panel/ttd-administrasi-witel') }}" method="POST" enctype="multipart/form-data"  onsubmit="disableSubmitButton()">
+<form action="{{ url('/ped-panel/ttd-administrasi-witel') }}" method="POST" enctype="multipart/form-data" onsubmit="disableSubmitButton()">
     @csrf
     <input type="hidden" name="id" value="{{$administrasi->id}}">
     <div class="modal fade modal-primary" id="modal-ttd-witel">
@@ -238,7 +244,7 @@
     </div>
 </form>
 
-<form action="{{ url('/ped-panel/ttd-administrasi-regional') }}" method="POST" enctype="multipart/form-data"  onsubmit="disableSubmitButton()">
+<form action="{{ url('/ped-panel/ttd-administrasi-regional') }}" method="POST" enctype="multipart/form-data" onsubmit="disableSubmitButton()">
     @csrf
     <input type="hidden" name="id" value="{{$administrasi->id}}">
     <div class="modal fade modal-primary" id="modal-ttd-regional">

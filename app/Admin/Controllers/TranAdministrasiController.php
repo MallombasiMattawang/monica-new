@@ -55,9 +55,11 @@ class TranAdministrasiController extends AdminController
     protected function detail($id)
     {
         $administrasi = TranAdministrasi::findOrFail($id);
+        $log_administrasi = LogAdministrasi::where('tran_administrasi_id', $administrasi->id)->get();
 
         return view('admin.modules.administrasi.detail', [
             'administrasi' => $administrasi,
+            'log_administrasi' => $log_administrasi
         ]);
     }
 

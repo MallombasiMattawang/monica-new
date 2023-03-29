@@ -122,6 +122,20 @@ if (!function_exists('tgl_indo')) {
     }
 }
 
+if (!function_exists('selisih_hari')) {
+    function selisih_hari($tgl_1, $tgl_2)
+    {
+        $tgl1 = strtotime($tgl_1); 
+        $tgl2 = strtotime($tgl_2); 
+        
+        $jarak = $tgl2 - $tgl1;
+        
+        $hari = $jarak / 60 / 60 / 24;
+
+        return $hari . ' Hari';
+    }
+}
+
 if (!function_exists('get_bulan')) {
     function get_bulan($bln)
     {

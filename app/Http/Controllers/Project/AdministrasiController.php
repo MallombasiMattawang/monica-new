@@ -33,7 +33,7 @@ class AdministrasiController extends Controller
         $lists = TranBaseline::where("project_id", $supervisi->project_id)->whereIn('activity_id', [22, 23])->get();
         $baseline = TranBaseline::where('project_id', $supervisi->project_id)->where('activity_id', 22)->first();
         $administrasi = TranAdministrasi::where('project_id', $supervisi->project_id)->first();
-        //$log_administrasi = LogAdministrasi::where('TranAdministrasi', $administrasi->id)->where('activity_id', 22)->first();
+        $log_administrasi = LogAdministrasi::where('tran_administrasi_id', $administrasi->id)->get();
 
         return view(
             'pengguna.pages.supervisi.administrasi-activity',
@@ -41,7 +41,8 @@ class AdministrasiController extends Controller
                 'pageTitle',
                 'lists',
                 'baseline',
-                'administrasi'
+                'administrasi',
+                'log_administrasi'
             )
         );
     }

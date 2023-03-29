@@ -309,17 +309,16 @@
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="administrasi_activity" role="tabpanel">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h6 class="card-title mb-0">Administrasi Activity</h6>
-                                        <button class="btn btn-sm d-block d-lg-none btn-primary project-list-toggle" type="button"><i class="fa fa-bars"></i></button>
-                                    </div>
-                                    <div class="row g-2">
-                                        <div class="col-md-12">
-                                            <div id="container_administrasi"></div>
-                                        </div>
+                                <div class="d-flex justify-content-between p-3 bg-card rounded-4 mb-3">
+                                    <h6 class="card-title mb-0"><a class="me-2 fa fa-arrow-circle-left" href="#" title="back"></a>Administrasi Activity</h6>
+                                    <button class="btn btn-sm d-block d-lg-none btn-primary project-list-toggle" type="button"><i class="fa fa-bars"></i></button>
+                                </div>
+                                <div class="row g-2">
+                                    <div class="col-md-12">
+                                        <div id="container_administrasi"></div>
                                     </div>
                                 </div>
+                               
                             </div>
                             <div class="tab-pane fade" id="pd_settings" role="tabpanel">
                                 <div class="card">

@@ -19,6 +19,7 @@ Route::group([
 
     /**Route tabel master */
     $router->resource('mst-witels', MstWitelController::class);
+    $router->resource('mst-sdi', MstSdiController::class);
     $router->resource('mst-mitras', MstMitraController::class);
     $router->resource('mst-projects', MstProjectController::class);
     $router->resource('mst-saps', MstSapController::class);
@@ -82,4 +83,12 @@ Route::group([
      /**Approval BA Rekon telkom regional */
      $router->post('approve-administrasi-ba', 'TranAdministrasiController@approveBa');
      $router->post('reject-administrasi-ba', 'TranAdministrasiController@rejectBa');
+
+     /**iNVENTORY */
+     $router->post('generate-odp{id?}', 'TranInventoryController@generateOdp');
+
+     $router->resource('view-supervisis', ViewSupervisiController::class);
+
+      /**SUPERVISI VIEW */
+      $router->get('list-supervisis', 'ViewSupervisiController@list');
 });

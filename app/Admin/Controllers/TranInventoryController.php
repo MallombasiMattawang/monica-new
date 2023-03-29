@@ -164,7 +164,7 @@ class TranInventoryController extends AdminController
         //$data = MstProject::findOrFail($id);
         $supervisi = TranSupervisi::where('id', $id)->first();
         $listOdp = TranOdp::where('supervisi_id', $id)->get();
-        return view('admin.modul_inventory.generate-odp', [
+        return view('admin.modules.inventory.generate-odp', [
             'listOdp' => $listOdp,
             'supervisi' => $supervisi,
             'kode_odp' => $kode_odp,

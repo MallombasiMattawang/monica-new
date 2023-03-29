@@ -1,105 +1,60 @@
 <div class="col-12">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header" style="margin-bottom: -40px">
+                    <h6 class="mb-0">Progress Dokumen</h6>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <div class="my-3">
+                                <div class="mb-0 fw-bold">{{ $administrasi->posisi_doc }}</div>
+                                <small class="text-muted">Posisi Dokumen</small>
+                            </div>
+                            <div>
+                                <div class="mb-0 fw-bold">{{ $administrasi->status_verfy }}</div>
+                                <small class="text-muted">Progress Dokumen</small>
+                            </div>
+                        </div>
 
-    <div class="card">
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="myDataTable table table-hover">
-                    <tr>
-                        <th rowspan="2" class="text-center bg-light disabled "> List
-                            Activity </th>
-                        <th colspan="3" class="text-center bg-light-warning">BASELINE
-                        </th>
+                        <div class="text-end">
+                            <div class="my-3">
+                                <div class="mb-0 fw-bold">{{ $administrasi->status_doc }}</div>
+                                <small class="text-muted">Status Dokumen</small>
+                            </div>
 
-                        <th colspan="3" class="text-center bg-light-info">
-                            PROGRESS
-                            ACTUAL
-                        </th>
-                        <th colspan="3" class="text-center bg-light-success">
-                            ACTUAL
-                        </th>
-                    </tr>
-                    <tr>
-                        <th class="bg-light-warning text-center">Bobot</th>
-                        <th class="bg-light-warning text-center">Volume</th>
-                        <th class="bg-light-warning text-center">Satuan</th>
-                        <th class="bg-light-info text-center"> Volume</th>
-                        <th class="bg-light-info text-center"> Progress</th>
-                        <th class="bg-light-info text-center"> Durasi</th>
-                        <th class="bg-light-success text-center"> Start</th>
-                        <th class="bg-light-success text-center"> Finish</th>
-                        <th class="bg-light-success text-center"> Status</th>
-                    </tr>
-                    @php
-                    $n = 0;
-                    @endphp
-                    @foreach ($lists as $list)
-                    @php
-                    $n++;
-                    @endphp
-                    <tr>
-                        <td class=""> {{ $list->list_activity }} <br> </td>
-                        <td class="text-center"> {{ $list->bobot }}</td>
-                        <td class=" text-center">{{ $list->volume }} </td>
-                        <td class=" text-center"> {{ $list->satuan }} </td>
-                        <td class="text-center"> {{ $list->actual_start ? $list->actual_volume : '' }} </td>
-                        <td class=" text-center">{{ $list->actual_start ? Round((int)$list->actual_progress, 1) . '%' : '' }}</td>
-                        <td class="text-center"> {{ $list->actual_durasi }} </td>
-                        <td class="text-center"> {{ $list->actual_start ? tgl_indo($list->actual_start) : '' }}</td>
-                        <td class="text-center"> {{ $list->actual_finish ? tgl_indo($list->actual_finish) : '' }} </td>
-                        <td class="text-center">
-                            @if ($list->actual_task == 'APPROVED')
-                            <span class="badge bg-success">{{ $list->actual_task }}</span>
-                            @elseif ($list->actual_task == 'NEED APPROVED')
-                            <span class="badge bg-info">{{ $list->actual_task }}</span>
-                            @elseif ($list->actual_task == 'NEED UPDATED')
-                            <span class="badge bg-warning">{{ $list->actual_task }}</span>
-                            @else
-                            <span class="badge bg-danger">{{ $list->actual_task }}</span>
-                            @endif
-                        </td>
-                    </tr>
-                    @endforeach
-                </table>
+                        </div>
+                    </div>
 
-                <table class="myDataTable table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Status Dokumen</th>
-                            <th>Progress Dokumen</th>
-                            <th>Status Verifikasi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>{{ $administrasi->status_doc }}</td>
-                            <td>{{ $administrasi->posisi_doc }}</td>
-                            <td>{{ $administrasi->status_verfy }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <table class="myDataTable table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Status Dokumen</th>
-                            <th>Progress Dokumen</th>
-                            <th>Status Verifikasi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>{{ $administrasi->status_doc }}</td>
-                            <td>{{ $administrasi->posisi_doc }}</td>
-                            <td>{{ $administrasi->status_verfy }}</td>
-                        </tr>
-                    </tbody>
-                </table>
+
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header" style="margin-bottom: -40px">
+                    <h6 class="mb-0">Progress BA Rekon</h6>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <div class="my-3">
+                                <div class="mb-0 fw-bold">{{ $administrasi->status_ba_rekon }}</div>
+                                <small class="text-muted">Status BA Rekon</small>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="card">
+    <div class="card mb-5">
         <div class="card-header">
-            <p>Task Administrasi</p>
+            <h6>Task Administrasi</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -107,51 +62,52 @@
                     <tr>
                         <th>No</th>
                         <th>Task</th>
-                        <th>Tanggal</th>
-                        <th>Keterangan</th>
                         <th>Action</th>
                     </tr>
                     <tr>
                         <td>1</td>
-                        <td>Pembuatan Dokumen</td>
-                        <td> {{ $baseline->actual_finish }}</td>
-                        <td>Pembuatan dokumen dimulai setelah pelaksanaan UT {{ $administrasi->posisi_doc }}</td>
+                        <td> <span class="fw-bold">Pembuatan Dokumen</span>
+                            <div>
+                                <span class="small text-muted me-2">Pembuatan dokumen dimulai setelah pelaksanaan UT</span>
+                            </div>
+                        </td>
                     </tr>
                     <tr>
                         <td>2</td>
-                        <td>Pengiriman Dokumen Ke Witel</td>
-                        <td></td>
-                        <td> 
-                            @if ($administrasi->posisi_doc == 'MITRA AREA')
-                                <p>Lakukan Pengiriman dokumen ke Witel jika pembuatan atau revisi dokumen selesai</p>
-                            @elseif($administrasi->posisi_doc == 'WITEL')
-                                <p><a href="http://" target="_blank" rel="noopener noreferrer">Dokumen</a> anda telah dikirim, mohon tunggu verifikasi dan TTD dari WITEL </p>
-                            @endif    
+                        <td> <span class="fw-bold">Pengiriman Dokumen Ke Witel</span>
+                            <div>
+                                <span class="small text-muted me-2">Lakukan Pengiriman dokumen ke Witel jika pembuatan atau revisi dokumen selesai</span>
+                            </div>
                         </td>
-                        
                         <td>
                             <a href="{{ route('supervisi.administrasi.form', [$baseline->id, 'docToWitel']) }}" class="btn btn-success {{ $administrasi->status_verfy == NULL || $administrasi->status_verfy == 'REJECTED WITEL'? '' : 'disabled' }} "> <i class="fa fa-upload"></i> Upload Doc </a>
                         </td>
                     </tr>
                     <tr>
                         <td>3</td>
-                        <td>Pengiriman Dok. Ke Regional</td>
-                        <td></td>
-                        <td></td>
+                        <td> <span class="fw-bold">Pengiriman Dokumen Ke Regional</span>
+                            <div>
+                                <span class="small text-muted me-2">Lakukan Pengiriman dokumen ke Regional setelah di tandatangani WITEL untuk dilakukan verifikasi internal</span>
+                            </div>
+                        </td>
                         <td><a href="{{ route('supervisi.administrasi.form', [$baseline->id, 'docToRegional']) }}" class="btn btn-success {{ $administrasi->status_verfy == 'PENANDATANGANAN WITEL' || $administrasi->status_verfy == 'REJECTED INTERNAL' || $administrasi->status_verfy == 'REJECTED TELKOM REGIONAL' ? '' : 'disabled' }}"> <i class="fa fa-upload"></i> Upload Doc </a></td>
                     </tr>
                     <tr>
                         <td>4</td>
-                        <td>Verifikasi Internal</td>
-                        <td></td>
-                        <td></td>
+                        <td> <span class="fw-bold">Verifikasi Internal</span>
+                            <div>
+                                <span class="small text-muted me-2">Lakukan verifikasi internal dan teruskan dokumen ke Telkom Regional</span>
+                            </div>
+                        </td>
                         <td><a href="{{ route('supervisi.administrasi.form', [$baseline->id, 'verifikasiInternal']) }}" class="btn btn-success {{ $administrasi->status_verfy == 'VERIFIKASI INTERNAL' ? '' : 'disabled' }}"> <i class="fa fa-check"></i> Verifikasi </a></td>
                     </tr>
                     <tr>
                         <td>5</td>
-                        <td>Pengiriman BA Rekonsiliasi</td>
-                        <td></td>
-                        <td></td>
+                        <td> <span class="fw-bold">Pengiriman BA Rekonsiliasi</span>
+                            <div>
+                                <span class="small text-muted me-2">Lakukan Pengiriman BA Rekon ke Regional setelah status dokumen OK dan ditandatangani TELKOM Regional</span>
+                            </div>
+                        </td>
                         <td><a href="{{ route('supervisi.administrasi.form', [$baseline->id, 'docBaRekon']) }}" class="btn btn-success {{ ($administrasi->status_doc == 'DOKUMEN OK') &&  ($administrasi->status_ba_rekon == NULL || $administrasi->status_ba_rekon == 'REJECTED') ? '' : 'disabled' }}"> <i class="fa fa-check"></i> Upload BA Rekon </a></td>
                     </tr>
 
@@ -160,6 +116,40 @@
         </div>
 
     </div>
+
+    <div class="card mb-5">
+        <div class="card-header">
+            <h6>Timeline Administrasi</h6>
+        </div>
+        <div class="card-body">
+            @forelse ($log_administrasi as $log)
+            <div class="timeline-item ti-danger ms-2">
+                <div class="d-flex">
+                    <img class="avatar sm rounded-circle" src="{{ asset('img/xs/avatar1.jpg.png') }}" alt="">
+                    <div class="flex-fill ms-3">
+                        <div class="mb-1">Status Dokumen <strong>{{ $log->status_doc }}</strong></div>
+                        <span class="d-flex text-muted mb-3 small">Dilakukan pada - {{ tgl_indo($log->created_at) }} Oleh <a class="ms-2" href="#" title=""><strong>{{ $log->posisi_doc }}</strong></a>, Progres : <strong>{{ $log->status_verfy }}</strong></span>
+                        <div class="card p-3">
+                            Remarks : <br>
+                            {{ $log->remarks }} <br><br>
+                            Catatan Verifikator : <br>
+                            {{ $log->catatan_verifikator }}
+                        </div>
+                        @if ($log->file_doc)
+                        <a href="/uploads/{{ $log->file_doc }}" target="_blank" class="btn btn-primary btn-xs">Download</a>
+                        @endif
+                    </div>
+                </div>
+            </div> <!-- timeline item end  -->
+            @empty
+
+            @endforelse
+
+        </div>
+
+    </div>
+
+
 </div>
 
 {{-- modal ro witel --}}
