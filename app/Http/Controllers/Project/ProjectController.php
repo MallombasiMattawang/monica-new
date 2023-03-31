@@ -89,4 +89,22 @@ class ProjectController extends Controller
 
             ->make(TRUE);
     }
+
+    public function detail($id, $slug)
+    {
+        $data = MstProject::findOrFail($id);
+        $pageTitle  = $data->project_name;
+        $breadcrumb = [
+          'Project',
+          'Detail'
+        ];
+        return view(
+          'pengguna.pages.project.detail',
+          compact(
+            'pageTitle',
+            'data',           
+            'breadcrumb'
+          )
+        );
+    }
 }

@@ -12,6 +12,7 @@ Route::controller(SupervisiController::class)
         Route::get('/index', 'index')->name('supervisi.index');
         Route::get('/json', 'jsonProject')->name('supervisi.json');
         Route::get('/detail/{id}/{slug}', 'detail')->name('supervisi.detail');
+        Route::get('/kurva_s/{id?}', 'kurvaS')->name('supervisi.kurvaS');
     });
 Route::controller(PlanController::class)
     ->prefix('supervisi')

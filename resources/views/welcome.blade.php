@@ -77,7 +77,7 @@
                 <div class="row g-xl-4 g-lg-3 g-2 row-deck">
                     <div class="row row-cols-xxl-4 row-cols-xl-3 row-cols-lg-2 row-cols-md-2 row-cols-sm-2 row-cols-1 g-2 mb-4 row-deck">
 
-                        
+
                         <div class="col">
                             <div class="card text-center">
 
@@ -92,9 +92,8 @@
                                     </div>
                                     <div class="mt-2">
                                         <h5 class="mb-0">Mitra Telkom </h5>
-                                        <small class="text-muted">16 Mitra</small>
                                         <hr>
-                                        <a href="{{ route('login', ['mitra']) }}" class="btn btn-primary " title="">Login now</a>
+                                        <a href="{{ route('login', ['mitra']) }}" class="btn btn-primary " title="">Login Mitra</a>
                                     </div>
                                 </div>
                             </div> <!-- .Card End -->
@@ -110,9 +109,8 @@
                                     </div>
                                     <div class="mt-2">
                                         <h5 class="mb-0">Waspang</h5>
-                                        <small class="text-muted">11 Waspang</small>
                                         <hr>
-                                        <a href="{{ route('login', ['waspang']) }}" class="btn btn-primary " title="">Login now</a>
+                                        <a href="{{ route('login', ['waspang']) }}" class="btn btn-primary " title="">Login Waspang</a>
                                     </div>
                                 </div>
                             </div> <!-- .Card End -->
@@ -129,14 +127,13 @@
                                     </div>
                                     <div class="mt-2">
                                         <h5 class="mb-0">Tim UT</h5>
-                                        <small class="text-muted">106 Tim UT</small>
                                         <hr>
-                                        <a href="{{ route('login', ['tim-ut']) }}" class="btn btn-primary " title="">Login now</a>
+                                        <a href="{{ route('login', ['tim-ut']) }}" class="btn btn-primary " title="">Login Tim UT</a>
                                     </div>
                                 </div>
                             </div> <!-- .Card End -->
                         </div>
-                       
+
 
 
                     </div>
@@ -147,19 +144,7 @@
             </div> <!-- .row end -->
         </div>
     </div>
-    <!-- Start:: footer link and more -->
-    {{-- <div class="page-footer bg-card mt-4">
-        <div class="container-fluid">
-            <footer class="d-flex flex-wrap justify-content-between align-items-center py-2">
-                <p class="col-md-5 mb-0 text-muted">© 2023 <a href="javascript:void(0)">Meja Kerja</a>. <span class="fa fa-heart text-danger"></span> by <a href="javascript:void(0)"> Awan </a></p>
-                <ul class="nav col-md-7 justify-content-end">
-                    <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">About</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Support</a></li>
-                </ul>
-            </footer>
-        </div>
-    </div> --}}
-
+   
 
     <!-- Modal: Setting -->
     <div class="modal fade" id="SettingsModal" tabindex="-1">
@@ -203,28 +188,6 @@
     </div>
 
     <script src="{{ asset('js/theme.js') }}"></script>
-
-    <script>
-        $(document).ready(function() {
-
-            $.ajax({
-                url: "#"
-                , method: "GET"
-                , beforeSend: function(response) {
-                    $('.loadBox').show();
-                }
-                , success: function(response) {
-                    $('.loadBox').hide();
-                    $('#web_aktif').html(response.web_aktif);
-                    $('#web_tidak_aktif').html(response.web_tidak_aktif);
-                    // $('#siswa').html(response.siswa);
-                }
-            });
-        });
-
-    </script>
-
-
 
 </body>
 

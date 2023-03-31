@@ -58,29 +58,14 @@
                         </div>
                         <div class="flex-fill ms-3 text-truncate">
                             <div class="text-muted">Daftar Project</div>
-                            <div><span class="h6 fw-bold">104</span> <small class="text-muted">Paket</small></div>
+                            <div><span class="h6 fw-bold">{{ $count_project->project }}</span> <small class="text-muted">Project</small></div>
                         </div>
                     </div>
                 </div>
 
 
             </div>
-        </a>
-        <a href="{{route('project.index')}}">
-            <div class="col">
-                <div class="card">
-                    <div class="card-body d-flex align-items-center p-xl-4 p-lg-3 p-2">
-                        <div class="avatar lg rounded-circle no-thumbnail">
-                            <i class="fa fa-calendar-check-o fa-2x"></i>
-                        </div>
-                        <div class="flex-fill ms-3 text-truncate">
-                            <div class="text-muted">Kalender Planing</div>
-                            {{-- <div><span class="h6 fw-bold">14</span> <small class="text-muted">Vendor</small></div> --}}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </a>
+        </a>       
         <a href="{{route('supervisi.index')}}">
             <div class="col">
                 <div class="card">
@@ -90,26 +75,13 @@
                         </div>
                         <div class="flex-fill ms-3 text-truncate">
                             <div class="text-muted">Project Berjalan</div>
-                            <div><span class="h6 fw-bold">112</span> <small class="text-muted">Paket</small></div>
+                            <div><span class="h6 fw-bold">{{ $count_supervisi }}</span> <small class="text-muted">Paket</small></div>
                         </div>
                     </div>
                 </div>
             </div>
         </a>
-        <div class="col">
-            <div class="card">
-                <div class="card-body d-flex align-items-center p-xl-4 p-lg-3 p-2">
-                    <div class="avatar lg rounded-circle no-thumbnail">
-                        <i class="fa fa-check fa-2x"></i>
-                    </div>
-                    <div class="flex-fill ms-3 text-truncate">
-                        <div class="text-muted">Project Selesai</div>
-                        <div><span class="h6 fw-bold">98</span> <small class="text-muted">paket</small></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+        
     </div>
 </div>
 @endsection

@@ -10,18 +10,7 @@
 
                 <div class="d-flex justify-content-between align-items-center">
                     <h1 class="h2 mb-md-0 text-white fw-light">{{ $pageTitle }} </h1>
-                    <div class="page-action">
-                        <a class="btn d-none d-sm-inline-flex bg-success rounded-pill text-white" href="" target="_blank" title="">
-                            <span class="me-1 d-none d-lg-inline-block"> Aktif : 10/123 </span>
-                        </a>
-
-                        <button class="btn d-none d-sm-inline-flex rounded-pill" data-bs-toggle="modal" data-bs-target="#create_project" type="button">
-                            <span class="me-1 d-none d-lg-inline-block"> <span class="iconify-inline" data-width="16" data-icon="fluent:add-28-regular"></span> Tambah Sekolah </span>
-                        </button>
-                        <a class="btn d-none d-sm-inline-flex bg-secondary rounded-pill text-dark" href="" target="_blank" title="">
-                            <span class="me-1 d-none d-lg-inline-block">Export</span>
-                        </a>
-                    </div>
+                  
                 </div>
             </div>
 

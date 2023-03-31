@@ -23,26 +23,35 @@
                     <div class="col-lg-8 d-none d-lg-flex ">
                         <div style="margin-top:70px;">
                             <div style="margin-right: 50px; margin-top:50px;">
-                                <div style="max-width: 25rem;">
-                                    <!-- List Checked -->
-                                    <ul class="list-unstyled mb-5">
-                                        <li class="mb-4">
-                                            
-                                            <span class="color-600">PT. Telkom (Devisi Regional Area VII Makassar)<br> Jl. A. P. Pettarani No.2, Gunung Sari, Rappocini, South Sulawesi</span>
-                                        </li>
-                                    </ul>
-                                    <div class="mb-2">
-                                        <a href="#" class="me-3 color-600">Home</a>
-                                        <a href="#" class="me-3 color-600">About Us</a>
-                                        <a href="#" class="me-3 color-600">FAQs</a>
-                                    </div>
-                                    <div>
-                                        <a href="#" class="me-3 color-400"><i class="fa fa-facebook-square fa-lg"></i></a>
-                                        <a href="#" class="me-3 color-400"><i class="fa fa-github-square fa-lg"></i></a>
-                                        <a href="#" class="me-3 color-400"><i class="fa fa-linkedin-square fa-lg"></i></a>
-                                        <a href="#" class="me-3 color-400"><i class="fa fa-twitter-square fa-lg"></i></a>
+                                <div class="blog-banner py-1">
+                                    <div class="">
+                                        <div class="row g-xl-4 g-3 row-deck">
+                                            <div class="col-12">
+                                                <div class="card overflow-hidden">
+                                                    <div class="carousel slide" data-bs-ride="carousel">
+                                                        <div class="carousel-indicators justify-content-start">
+                                                            <button type="button" data-bs-target="#blog_slider" data-bs-slide-to="0" class="" aria-label="Slide 1"></button>
+                                                            <button type="button" data-bs-target="#blog_slider" data-bs-slide-to="1" aria-label="Slide 2" class="active" aria-current="true"></button>
+                            
+                                                        </div>
+                                                        <div class="carousel-inner">
+                                                            <div class="thumb-overlay carousel-item active" style="height: 100%;">
+                                                                <img src="{{ asset('img/banner-1.png') }}" class="d-block w-100" alt="...">
+                            
+                                                            </div>
+                                                            <div class="thumb-overlay carousel-item" style="height: 100%;">
+                                                                <img src="{{ asset('img/banner-2.png') }}" class="d-block w-100" alt="...">
+                            
+                                                            </div>
+                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div> <!-- .row end -->
                                     </div>
                                 </div>
+                              
                             </div>
                         </div>
                     </div>
@@ -56,7 +65,7 @@
                                 </div>
                                 <div class="mb-2">
                                     <h5 class="color-900">Dashboard PED </h5>
-                                    <p class="color-900">Login {{$role}} - Telkom Regional 7 </p>
+                                    <p class="color-900">Login <strong>{{$role}}</strong> - Telkom Regional 7 </p>
                                 </div>
                                 @if (!empty($errors->all()))
                                 <div class="alert alert-danger mt-lg-2" role="alert">
