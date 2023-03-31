@@ -348,15 +348,20 @@
                 <h3 class="box-title">Tindak Lanjut Project</h3>
             </div>
             <div class="box-body bg-gray text-center">
-                @if($data->status_project != 'DROP')
+                {{-- Admin::user()->inRoles(['administrator']) --}}
+                @if ($data->status_project == 'USULAN')
                 <a href="{{ url('/ped-panel/mst-projects/' . $data->id . '/edit') }}" class="btn btn-default "><i class="fa fa-edit"></i> <br> Edit Project</a>
+                @endif
+                @if (Admin::user()->inRoles(['administrator']))
+                @if($data->status_project != 'DROP')
                 <a href="#" class="btn btn-danger " data-toggle="modal" data-target="#modal-drop"><i class="fa fa-stop"></i> <br> Drop Project</a>
                 <a href="#" class="btn btn-success " data-toggle="modal" data-target="#modal-start-finish"><i class="fa fa-play"></i> <br> Start Project</a>
                 @else
                 <a href="#" class="btn btn-app" data-toggle="modal" data-target="#modal-usulan"><i class="fa fa-repeat"></i>Usulkan Kembali</a>
                 <a href="#" class="btn btn-app" data-toggle="modal" data-target="#modal-pulihkan"><i class="fa fa-refresh"></i>Pulihkan Supervisi</a>
-
                 @endif
+                @endif
+
 
 
             </div>

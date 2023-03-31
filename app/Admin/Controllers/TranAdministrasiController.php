@@ -2,13 +2,15 @@
 
 namespace App\Admin\Controllers;
 
-use App\Models\LogAdministrasi;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Illuminate\Http\Request;
+use App\Models\LogAdministrasi;
+use Encore\Admin\Facades\Admin;
 use App\Models\TranAdministrasi;
 use Encore\Admin\Controllers\AdminController;
+
 
 class TranAdministrasiController extends AdminController
 {
@@ -27,6 +29,9 @@ class TranAdministrasiController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new TranAdministrasi());
+        if (Admin::user()->inRoles(['witel'])) {
+            $grid->model()->where('witel_id', '=', Admin::user()->username);
+        }
 
         $grid->column('id', __('Id'));
         $grid->column('witel.name', __('Witel'));

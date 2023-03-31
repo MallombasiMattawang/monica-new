@@ -51,7 +51,7 @@
             </div>
         </div>
     </div>
-
+    @if (activeGuard() == 'mitra')
     <div class="card mb-5">
         <div class="card-header">
             <h6>Task Administrasi</h6>
@@ -148,118 +148,120 @@
         </div>
 
     </div>
-
-
-</div>
-
-{{-- modal ro witel --}}
-<div class="modal fade" id="to_witel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <form method="post" action="{{ route('supervisi.docToWitel',  [$baseline->id, Str::slug($baseline->list_activity)]) }}">
-            @csrf
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Kirim Dokumen ke Witel</h5>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="docToWitel" class="form-label">Dokumen ke WITEL</label>
-                        <input class="form-control" type="file" id="docToWitel" name="docToWitel">
+    {{-- modal ro witel --}}
+    <div class="modal fade" id="to_witel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form method="post" action="{{ route('supervisi.docToWitel',  [$baseline->id, Str::slug($baseline->list_activity)]) }}">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Kirim Dokumen ke Witel</h5>
                     </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="docToWitel" class="form-label">Dokumen ke WITEL</label>
+                            <input class="form-control" type="file" id="docToWitel" name="docToWitel">
+                        </div>
 
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-
-                    <button type="submit" class="btn btn-primary submit-modal">Submit </button>
-
-
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-
-{{-- modal ro regional --}}
-<div class="modal fade" id="to_regional" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <form method="post" action="{{ route('supervisi.docToRegional', [$baseline->id, Str::slug($baseline->list_activity)]) }}">
-            @csrf
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Kirim Dokumen ke Regional</h5>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="docToRegional" class="form-label">Dokumen ke Regional</label>
-                        <input class="form-control" type="file" id="docToRegional" name="docToRegional">
                     </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-
-                    <button type="submit" class="btn btn-primary submit-modal">Submit </button>
+                        <button type="submit" class="btn btn-primary submit-modal">Submit </button>
 
 
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-
-{{-- modal verifikasi internal --}}
-<div class="modal fade" id="ver_internal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <form method="post" action="{{ route('supervisi.verifikasiInternal', [$baseline->id, Str::slug($baseline->list_activity)]) }}">
-            @csrf
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Verifikasi Internal</h5>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="verifikasiInternal" class="form-label">Verifikasi Internal</label>
-                        <input class="form-control" type="file" id="verifikasiInternal" name="verifikasiInternal">
                     </div>
-
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-
-                    <button type="submit" class="btn btn-primary submit-modal">Submit </button>
-
-
-                </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
-</div>
 
-{{-- modal ro regional --}}
-<div class="modal fade" id="to_ba_rekon" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <form method="post" action="{{ route('supervisi.docBaRekon', [$baseline->id, Str::slug($baseline->list_activity)]) }}">
-            @csrf
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Kirim BA Rekonsiliasi ke Regional</h5>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="docBaRekon" class="form-label">Dokumen BA Rekonsiliasi</label>
-                        <input class="form-control" type="file" id="docBaRekon" name="docBaRekon">
+    {{-- modal ro regional --}}
+    <div class="modal fade" id="to_regional" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form method="post" action="{{ route('supervisi.docToRegional', [$baseline->id, Str::slug($baseline->list_activity)]) }}">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Kirim Dokumen ke Regional</h5>
                     </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="docToRegional" class="form-label">Dokumen ke Regional</label>
+                            <input class="form-control" type="file" id="docToRegional" name="docToRegional">
+                        </div>
 
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                        <button type="submit" class="btn btn-primary submit-modal">Submit </button>
+
+
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-
-                    <button type="submit" class="btn btn-primary submit-modal">Submit </button>
-
-
-                </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
+
+    {{-- modal verifikasi internal --}}
+    <div class="modal fade" id="ver_internal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form method="post" action="{{ route('supervisi.verifikasiInternal', [$baseline->id, Str::slug($baseline->list_activity)]) }}">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Verifikasi Internal</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="verifikasiInternal" class="form-label">Verifikasi Internal</label>
+                            <input class="form-control" type="file" id="verifikasiInternal" name="verifikasiInternal">
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                        <button type="submit" class="btn btn-primary submit-modal">Submit </button>
+
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {{-- modal ro regional --}}
+    <div class="modal fade" id="to_ba_rekon" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form method="post" action="{{ route('supervisi.docBaRekon', [$baseline->id, Str::slug($baseline->list_activity)]) }}">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Kirim BA Rekonsiliasi ke Regional</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="docBaRekon" class="form-label">Dokumen BA Rekonsiliasi</label>
+                            <input class="form-control" type="file" id="docBaRekon" name="docBaRekon">
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                        <button type="submit" class="btn btn-primary submit-modal">Submit </button>
+
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @endif
+
+
+
 </div>

@@ -222,12 +222,10 @@ class ActualController extends Controller
             if ($cek_const_actual == $cek_const) {
                 $status_const = "MATERIAL DELIVERY ON SITE";
             }
-        } else if ($request->activity_id >= 10 && $request->activity_id <= 20) {
+        } else if ($request->activity_id >= 10 && $request->activity_id <= 18) {
             $status_const = 'INSTALASI';
-        } else if ($request->activity_id == 21) {
-            $status_const = 'SELESAI CT';
-        } else if ($request->activity_id == 22) {
-            $status_const = 'SELESAI UT';
+        } else if ($request->activity_id == 19) {
+            $status_const = 'INSTALL DONE';
         } else if ($request->activity_id == 23) {
             $status_const = 'REKON';
         } else {

@@ -276,6 +276,8 @@ class ProjectImport implements ToModel, WithStartRow, WithMultipleSheets, WithCa
         return [
             '1' => 'Tipe Project belum diisi',
             '2' => 'Tematik belum diisi',
+            '5.date' => 'Kolom Tanggal NDE harus bertipe tanggal',
+            '5.date_format' => 'Format Tgl NDE (yyyy-mm-dd) | Jika belum ada tanggal kosongkan kolom',
             // '3' => 'required',
             // '4' => 'required',
             // '5' => 'required',

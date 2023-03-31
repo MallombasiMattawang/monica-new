@@ -70,10 +70,18 @@ class SupervisiController extends Controller
         $today = date('Y-m-d');
         $progress_plan = TranBaseline::where("project_id", $supervisi->project_id)->whereBetween('plan_finish', [$supervisi->supervisi_project->start_date,  $today])->sum('bobot');
         $bg = '';
+        $blink = '';
+        if ($supervisi->status_const == 'INSTALL DONE' && activeGuard() == 'waspang') {
+          $bg = 'bg-light-success';
+          $blink = 'blink';
+        } elseif ($supervisi->status_const == 'SELESAI CT' && activeGuard() == 'tim-ut') {
+          $bg = 'bg-light-success';
+          $blink = 'blink';
+        }
         $ssStatus = '';
         $response .= '
                  <div class="col-md-4 hello" id="' . $id++ . '">
-                 <div class="card">
+                 <div class="card '.$bg.'">
                  <div class="card-body">
                    <h6 class="mb-1"><a href="' . route('supervisi.detail', [$supervisi->id, Str::slug($supervisi->project_name)]) . '" class="color-600">' . $supervisi->project_name . '</a></h6>
                    <p class="text-muted">WITEL : ' . $supervisi->supervisi_witel->name . '</p>
@@ -82,7 +90,7 @@ class SupervisiController extends Controller
                    <label class="me-2">Status :</label>
                      <span class="badge bg-success">' . $supervisi->supervisi_project->status_project . ' </span>
                      <label class="me-2">Const :</label>
-                     <span class="badge bg-warning">' . $status_const . ' </span>
+                     <span class="badge bg-warning '.$blink.'">' . $status_const . ' </span>
                      
                    </div>
                    <label class="small d-flex justify-content-between">Progress Plan ' . $progress_plan . '% <span class="text-custom">100%</span></label>

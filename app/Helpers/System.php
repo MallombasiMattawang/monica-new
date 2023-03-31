@@ -11,6 +11,7 @@ use App\Models\RefKualifikasiUsaha;
 use App\Models\RefMetodePengadaan;
 use App\Models\Sekolah;
 use App\Models\Siswa;
+use App\Models\TranSupervisi;
 use App\Models\User;
 use App\Models\WebProfil;
 use Illuminate\Support\Facades\Redirect;
@@ -50,11 +51,41 @@ function separator($output)
 }
 
 
-function getJenisPengadaan()
+function getNotifWaspang($waspang_id)
 {
-    $query = RefJenisPengadaan::select('id', 'jenis_pengadaan')->get();
+    $query = TranSupervisi::select('id', 'project_name', 'updated_at')
+        ->where('waspang_id', $waspang_id)
+        ->where('status_const', 'INSTALL DONE')        
+        ->limit('10')
+        ->get();
     return $query;
 }
+function countNotifWaspang($waspang_id)
+{
+    $query = TranSupervisi::where('waspang_id', $waspang_id)
+        ->where('status_const', 'INSTALL DONE')        
+        ->count();
+    return $query;
+}
+
+function getNotifUt($tim_ut_id)
+{
+    $query = TranSupervisi::select('id', 'project_name', 'updated_at')
+        ->where('tim_ut_id', $tim_ut_id)
+        ->where('status_const', 'SELESAI CT')        
+        ->limit('10')
+        ->get();
+    return $query;
+}
+function countNotifUt($tim_ut_id)
+{
+    $query = TranSupervisi::where('tim_ut_id', $tim_ut_id)
+        ->where('status_const', 'SELESAI CT')        
+        ->count();
+    return $query;
+}
+
+
 function getMetodePengadaan()
 {
     $query = RefMetodePengadaan::select('id', 'metode_pengadaan')->get();

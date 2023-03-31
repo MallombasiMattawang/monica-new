@@ -1,5 +1,18 @@
 @extends('pengguna.layouts.app')
+@push('styles')
+<style>
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  
+  .blink {
+    animation: blink 1s infinite;
+  }
+</style>
 
+@endpush
 @section('page_header')
 <div class="page-header pattern-bg">
     <div class="container-fluid">

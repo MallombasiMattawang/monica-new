@@ -55,8 +55,9 @@ class MstProjectController extends AdminController
 
         if (Admin::user()->inRoles(['witel'])) {
             $grid->model()->where('witel_id', '=', Admin::user()->username);
-        }
-
+            $grid->disableRowSelector();
+        }      
+        
         $grid->tools(function ($tools) {
             $tools->batch(function ($batch) {
                 if (\request('_scope_') == 'trashed') {
@@ -65,20 +66,24 @@ class MstProjectController extends AdminController
             });
             $tools->append('<a href="/ped-panel/form-import-project" class="btn btn-default btn-sm"><i class="fa fa-download"></i>  Import Project</a>');
         });
-
+        
         $grid->batchActions(function ($batch) {
-
             if (\request('_scope_') == 'trashed') {
                 $batch->add(new BatchRestore());
             }
         });
         $grid->actions(function ($actions) {
             $actions->disableEdit();
+            if ($actions->row->status_project != 'USULAN') {
+                $actions->disableDelete();
+            }
         });
         $grid->filter(function ($filter) {
             $filter->disableIdFilter();
-            // Range filter, call the model's `onlyTrashed` method to query the soft deleted data.
-            $filter->scope('trashed', 'Recycle Bin')->onlyTrashed();
+            if (Admin::user()->inRoles(['administrator'])) {
+                $filter->scope('trashed', 'Recycle Bin')->onlyTrashed();
+            }
+           
             $filter->column(1 / 2, function ($filter) {
                 $filter->like('lop_site_id', 'LOP / SITE ID');
                 $filter->in('status_project', 'STATUS PROJECT')->multipleSelect(['USULAN' => 'USULAN', 'DONE DRM' => 'DONE DRM', 'PELIMPAHAN' => 'PELIMPAHAN', 'PO' => 'PO/SP', 'DROP' => 'DROP']);
@@ -128,6 +133,8 @@ class MstProjectController extends AdminController
         return $grid;
     }
 
+
+
     /**
      * Make a show builder.
      *
@@ -163,6 +170,9 @@ class MstProjectController extends AdminController
     {
 
         $form = new Form(new MstProject());
+        $form->tools(function (Form\Tools $tools) {
+            $tools->disableDelete();
+        });
 
         $form->tab('Info', function (Form $form) {
             $form->hidden('id');
