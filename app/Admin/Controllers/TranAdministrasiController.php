@@ -100,6 +100,7 @@ class TranAdministrasiController extends AdminController
                 'task' => 'Verifikasi Dokumen di Witel Berhasil, mohon tunggu proses penandatanganan dokumen',
                 'status_doc' => 'PROSES TANDA TANGAN WITEL',
                 'posisi_doc' => 'WITEL',
+                'status_const' => 'REKON'
             ]);
 
         admin_success('Approval Witel Success!');
@@ -333,6 +334,7 @@ class TranAdministrasiController extends AdminController
             ->update([
                 'task' => 'Verifikasi BA REKON di T.Reg Berhasil, mohon tunggu proses BAST-1 selesai',
                 'tgl_rekon' => date('Y-m-d'),
+                'status_const' => 'SELESAI REKON',
                 'file_ba_rekon' => $baseline->file_ba_rekon,
             ]);
         TranBaseline::where("activity_id", 22)
