@@ -180,13 +180,21 @@
                                             Lanjutkan di menu Administration Activity
                                         </div>
                                     @endif
-                                    @if ($cek_rekon == 1 && $list->activity_id == 23)
-                                    <div class="btn bg-light-info">
-                                        Lanjutkan di menu Administration Activity
-                                    </div>
-                                    @endif
-                                @else
+                                   
+                                @elseif($list->activity_id == 21)
                                 <a href="{{ route('supervisi.actual.log',  [$list->id, Str::slug($list->list_activity)])  }}"  class="btn {{ activeGuard() == 'tim-ut' ? 'btn-warning' : 'btn-info' }} "><i class="fa {{ activeGuard() == 'tim-ut' && $list->activity_id == 21 ? 'fa-edit' : 'fa-search' }}"></i> </a>        
+                                @endif
+
+
+                                @if ($cek_rekon == 1 && $list->activity_id == 23)
+                                    @if ($list->actual_finish == null || $list->actual_finish == '')
+                                        <div class="btn bg-light-info">
+                                            Tanggal penerbitan BAST-1 belum terbit, mohon tunggu untuk upload Evident BAST-1 
+                                        </div>
+                                    @else
+                                    <a href="{{ route('supervisi.actual.form',  [$list->id, Str::slug($list->list_activity)])  }}" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+                                    @endif
+                                
                                 @endif
                             @endif
                             
