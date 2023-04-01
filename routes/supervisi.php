@@ -30,6 +30,7 @@ Route::controller(ActualController::class)
         Route::get('/actual-activity/{id}/{slug}', 'actualActivity')->name('supervisi.actual');
         Route::get('/actual-activity/form-actual/{id}/{slug}', 'actualActivityForm')->name('supervisi.actual.form');
         Route::post('/actual-activity/add-actual', 'actualActivityAddDate')->name('supervisi.actual.adddate');
+        Route::post('/actual-activity/add-bast', 'actualActivityAddBast')->name('supervisi.actual.addbast');
         Route::post('/actual-activity/approve-waspang', 'actualActivityWaspang')->name('supervisi.actual.waspang');
         Route::post('/actual-activity/approve-ut', 'actualActivityUt')->name('supervisi.actual.ut');
         Route::get('/actual-activity/log-actual/{id}/{slug}', 'actualActivityLog')->name('supervisi.actual.log');

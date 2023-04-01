@@ -333,6 +333,7 @@ class TranAdministrasiController extends AdminController
             ->update([
                 'task' => 'Verifikasi BA REKON di T.Reg Berhasil, mohon tunggu proses BAST-1 selesai',
                 'tgl_rekon' => date('Y-m-d'),
+                'file_ba_rekon' => $baseline->file_ba_rekon,
             ]);
         TranBaseline::where("activity_id", 22)
             ->update([

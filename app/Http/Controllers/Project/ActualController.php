@@ -144,6 +144,10 @@ class ActualController extends Controller
     {
         $baseline = TranBaseline::findOrFail($id);
         $actual_volume_old = 0;
+        $action = 'adddate';
+        if ($baseline->activity_id == 23) {
+            $action = 'addbast';
+        }
         if ($baseline->activity_id >= 1 && $baseline->activity_id <= 19) {
             $sumActualVolume =  $baseline->actual_volume;
         } else if ($baseline->activity_id == 20) {
@@ -153,6 +157,7 @@ class ActualController extends Controller
         } else {
             $sumActualVolume = 0;
         }
+
         $actual_volume_old = (int) $sumActualVolume;
 
         $pageTitle  = $baseline->list_activity;
@@ -162,7 +167,7 @@ class ActualController extends Controller
         ];
         return view(
             'pengguna.pages.supervisi.form-actual',
-            compact('pageTitle', 'baseline', 'actual_volume_old', 'breadcrumb')
+            compact('pageTitle', 'baseline', 'actual_volume_old', 'breadcrumb', 'action')
         );
     }
 
@@ -375,6 +380,45 @@ class ActualController extends Controller
         return redirect()->route('supervisi.detail', [$supervisi->id, Str::slug($supervisi->project_name)])->with(['success' => 'Update Actual #' . $baseline->list_activity . ' Berhasil']);
     }
 
+    public function actualActivityAddBast(Request $request)
+    {
+        $request->validate(
+            [
+                'file' => 'required|mimes:jpg,png,zip,rar,pdf,doc,docx,xlsx,csv,sql|max:25000',
+            ],
+            [
+                'file.required' => 'Evident tidak boleh kosong.',
+                'file.mimes' => 'Evident yang diizinkan masuk (jpg,png,zip,rar,pdf,doc,docx,xlsx,csv,sql).',
+                'file.max' => 'Ukuran Evident tidak boleh lebih dari 25 MB.',
+            ]
+        );
+        // menangkap file 
+        $file = $request->file('file');
+        // membuat nama file unik
+        $nama_file = now()->timestamp . '.' . $file->getClientOriginalExtension();
+        // upload ke folder public
+        $file->move('uploads/evident', $nama_file);
+        // File path
+        $filepath = 'evident/' . $nama_file;
+
+        $baseline = TranBaseline::where('id', $request->baseline_id)->first();
+        TranBaseline::where("id", $request->baseline_id)
+            ->update([
+                'actual_evident' => $filepath,
+                'actual_message' => $request->actual_message,
+                'actual_kendala' => $request->actual_kendala,
+            ]);
+        TranSupervisi::where("project_id", $baseline->project_id)
+            ->update([
+                'task' => 'SEMUA ACTUAL ACTIVITY SELESAI',
+                'file_doc_bast' => $filepath,
+                'remarks' => $request->actual_message,
+                'kendala' => $request->actual_kendala,
+            ]);
+        $supervisi = TranSupervisi::where("project_id", $baseline->project_id)->first();
+        return redirect()->route('supervisi.detail', [$supervisi->id, Str::slug($supervisi->project_name)])->with(['success' => 'Update Actual #' . $baseline->list_activity . ' Berhasil']);
+    }
+
     public function actualActivityWaspang(Request $request)
     {
         //initial variabel
@@ -517,9 +561,9 @@ class ActualController extends Controller
                     'tim_ut_by' => $user_id
                 ]);
             TranBaseline::where("activity_id", 22)
-                ->update([                    
+                ->update([
                     'actual_start' =>  date('Y-m-d'),
-                    
+
                 ]);
             //update dokumen di supervisi
             $actual_progress_const = 100 * $baseline->bobot / 100;

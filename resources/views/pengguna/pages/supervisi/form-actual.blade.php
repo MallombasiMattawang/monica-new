@@ -42,12 +42,15 @@
                             </div>
                         </div>
                         @endif
-                        <form class="row g-3" action="{{route('supervisi.actual.adddate')}}" method="POST" enctype="multipart/form-data">
+                        <form class="row g-3" action="{{route('supervisi.actual.'.$action.'')}}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" name="baseline_id" value="{{$baseline->id}}">
                             <input type="hidden" name="activity_id" value="{{$baseline->activity_id}}">
                             @if ($baseline->activity_id >= 20)
                             <input type="hidden" name="actual_status" value="selesai">
+                            @endif
+                            @if ($baseline->activity_id == 23)
+                            <input type="hidden" name="actual_volume" value="1">
                             @endif
                             <div class="col-6">
                                 <label class="form-label">Volume Kontrak </label>
@@ -65,6 +68,17 @@
                                 <label class="form-label">Plan Finish </label>
                                 <input type="text" class="form-control" name="plan_finish" value="{{tgl_indo($baseline->plan_finish)}}" readonly>
                             </div>
+                            @if ($baseline->activity_id == 23)
+                            <div class="col-6">
+                                <label class="form-label">Actual Start </label>
+                                <input type="text" class="form-control" name="actual_start" value="{{tgl_indo($baseline->actual_start)}}" readonly>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label">Actual Finish </label>
+                                <input type="text" class="form-control" name="actual_finish" value="{{tgl_indo($baseline->actual_finish)}}" readonly>
+                            </div>
+                            @endif
+                            @if ($baseline->activity_id < 23)
                             <div class="col-6">
                                 <label class="form-label">Volume Actual <sup class="text-danger">*</sup></label>
                                 <input type="number" class="form-control" name="actual_volume" value="">
@@ -73,6 +87,7 @@
                                 <label class="form-label">Volume Sebelumnya </label>
                                 <input type="text" class="form-control" name="actual_volume_old" value="{{$actual_volume_old}}" readonly>
                             </div>
+                            @endif
                             @if ($baseline->activity_id < 20)
                             <div class="col-12">
                                 <label class="form-check-label me-3">Status Actual:<sup class="text-danger">*</sup></label>
