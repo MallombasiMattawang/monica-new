@@ -213,6 +213,7 @@
 
             </div>
             <!-- /.box-body -->
+            @if ($data->status_project != 'DROP' )
             <div class="box-footer">
                 <div class="box-tools pull-right">
                     <div class="btn-group">
@@ -228,6 +229,8 @@
 
                 </div>
             </div>
+            @endif
+            
         </div>
         <!-- /. box -->
 

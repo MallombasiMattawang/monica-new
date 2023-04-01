@@ -31,6 +31,7 @@ use App\Models\MstWaspangUt;
 use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Controllers\AdminController;
 use App\Imports\ProjectImport;
+use App\Models\TranAdministrasi;
 use Maatwebsite\Excel\Facades\Excel;
 
 class MstProjectController extends AdminController
@@ -56,8 +57,8 @@ class MstProjectController extends AdminController
         if (Admin::user()->inRoles(['witel'])) {
             $grid->model()->where('witel_id', '=', Admin::user()->username);
             $grid->disableRowSelector();
-        }      
-        
+        }
+
         $grid->tools(function ($tools) {
             $tools->batch(function ($batch) {
                 if (\request('_scope_') == 'trashed') {
@@ -66,7 +67,7 @@ class MstProjectController extends AdminController
             });
             $tools->append('<a href="/ped-panel/form-import-project" class="btn btn-default btn-sm"><i class="fa fa-download"></i>  Import Project</a>');
         });
-        
+
         $grid->batchActions(function ($batch) {
             if (\request('_scope_') == 'trashed') {
                 $batch->add(new BatchRestore());
@@ -83,7 +84,7 @@ class MstProjectController extends AdminController
             if (Admin::user()->inRoles(['administrator'])) {
                 $filter->scope('trashed', 'Recycle Bin')->onlyTrashed();
             }
-           
+
             $filter->column(1 / 2, function ($filter) {
                 $filter->like('lop_site_id', 'LOP / SITE ID');
                 $filter->in('status_project', 'STATUS PROJECT')->multipleSelect(['USULAN' => 'USULAN', 'DONE DRM' => 'DONE DRM', 'PELIMPAHAN' => 'PELIMPAHAN', 'PO' => 'PO/SP', 'DROP' => 'DROP']);
@@ -309,7 +310,7 @@ class MstProjectController extends AdminController
 
     public function submitPlayProject(Request $request)
     {
-        $validatedData = $request->validate(
+        $request->validate(
             [
                 'status_project' => 'required',
                 'start_date' => 'required|date',
@@ -344,8 +345,29 @@ class MstProjectController extends AdminController
         } else {
             TranSupervisi::where("project_id", $id)
                 ->update([
+                    'project_name' => $data->lop_site_id,
+                    'mitra_id' => $data->mitra->id,
+                    'witel_id' =>  $data->witel->id,
+                    'task' => 'CREATE BASELINE',
                     'plan_nilai' => $data->rab_total,
                     'plan_port' => $data->odp_port,
+                ]);
+        }
+
+        //Administrasikan
+        $check = TranAdministrasi::where('project_id', '=', $id)->exists();
+        if ($check == 0) {
+            $administrasi = TranAdministrasi::create([
+                'witel_id' =>  $data->witel->id,
+                'project_id' => $id,
+                'mitra_id' => $data->mitra->id,
+            ]);
+            $administrasi->save();
+        } else {
+            TranAdministrasi::where("project_id", $id)
+                ->update([
+                    'witel_id' =>  $data->witel->id,
+                    'mitra_id' => $data->mitra->id,
                 ]);
         }
 
@@ -355,7 +377,7 @@ class MstProjectController extends AdminController
 
     public function submitDropProject(Request $request)
     {
-        $validatedData = $request->validate(
+        $request->validate(
             [
                 'status_project' => 'required'
             ],

@@ -59,6 +59,11 @@ class TranSupervisiController extends AdminController
     if (Admin::user()->inRoles(['witel'])) {
       $grid->model()->where('witel_id', '=', Admin::user()->id);
     }
+    $grid->rows(function (Grid\Row $row) {
+      if ($row->supervisi_project['status_project'] == 'DROP') {
+          $row->setAttributes(['style' => 'color:red;']);
+      }
+  });
     $grid->filter(function ($filter) {
       $filter->disableIdFilter();
       $filter->column(1 / 2, function ($filter) {
@@ -80,7 +85,7 @@ class TranSupervisiController extends AdminController
       $actions->disableDelete();
       //$actions->disableView();
 
-      if (Admin::user()->inRoles(['administrator', 'witel'])) {
+      if (Admin::user()->inRoles(['administrator', 'witel']) && $actions->row->supervisi_project['status_project'] != 'DROP') {
         if ($actions->row->getOriginal('task') == 'CREATE BASELINE') {
           $actions->add(new Baseline);
         } else {
@@ -96,6 +101,7 @@ class TranSupervisiController extends AdminController
     $grid->column('supervisi_project.sto_id', __('STO'));
     $grid->column('project_name', __('Project name'));
     $grid->column('supervisi_mitra.nama_mitra', __('Mitra'));
+    $grid->column('supervisi_project.status_project', __('STATUS PROJECT'));
     $grid->column('supervisi_sap.kontrak', __('NO. SP TELKOM'));
     $grid->column('supervisi_waspang.name')->modal('Waspang', function ($model) {
       $id = $model->id;
@@ -160,7 +166,7 @@ class TranSupervisiController extends AdminController
             background-color: #ffffd5;
           }
           .table td {
-            text-align: center;
+            #text-align: center;
           }'
 
 
@@ -265,6 +271,7 @@ class TranSupervisiController extends AdminController
         $countBase = 0;
         $countPlan = 0;
         $sumDurasi = 0;
+        $c=0;
         $content->body(view('admin.modules.supervisi.form-baseline', [
           'project' => $project,
           'deliveryKabel' => $deliveryKabel,
@@ -277,8 +284,8 @@ class TranSupervisiController extends AdminController
           'countPlan' => $countPlan,
           'sumDurasi' =>  $sumDurasi,
           'lists' => $lists,
-          'supervisi' => $supervisi
-
+          'supervisi' => $supervisi,
+          'c' => $c
         ]));
       } else {
         return abort(404);
