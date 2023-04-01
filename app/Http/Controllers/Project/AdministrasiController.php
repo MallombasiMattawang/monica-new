@@ -33,7 +33,7 @@ class AdministrasiController extends Controller
         $lists = TranBaseline::where("project_id", $supervisi->project_id)->whereIn('activity_id', [22, 23])->get();
         $baseline = TranBaseline::where('project_id', $supervisi->project_id)->where('activity_id', 22)->first();
         $administrasi = TranAdministrasi::where('project_id', $supervisi->project_id)->first();
-        $log_administrasi = LogAdministrasi::where('tran_administrasi_id', $administrasi->id)->get();
+        $log_administrasi = LogAdministrasi::where('tran_administrasi_id', $administrasi->id)->orderBy('id', 'desc')->get();
 
         return view(
             'pengguna.pages.supervisi.administrasi-activity',
@@ -122,6 +122,13 @@ class AdministrasiController extends Controller
                     'remarks' =>  $request->actual_message,
                     'status_verfy' =>  'VERIFIKASI WITEL'
                 ]);
+            // UPDATE ACTUAL DI SUPERIVSI    
+            TranSupervisi::where("project_id", $baseline->project_id)
+                ->update([
+                    'task' => 'Pengiriman Dokumen Berhasil, mohon tunggu dokumen di verifikasi dan di Tandatangani WITEL',
+                    'status_doc' => 'VERIFIKASI DOKUMEN',
+                    'posisi_doc' => 'WITEL',
+                ]);
 
             DB::commit();
         } catch (\Exception $e) {
@@ -179,6 +186,13 @@ class AdministrasiController extends Controller
                     'file_doc' => $filepath,
                     'remarks' =>  $request->actual_message,
                     'status_verfy' =>  'VERIFIKASI INTERNAL'
+                ]);
+            // UPDATE ACTUAL DI SUPERIVSI    
+            TranSupervisi::where("project_id", $baseline->project_id)
+                ->update([
+                    'task' => 'Pengiriman Dokumen Regional, mohon lakukan kembali Verifikasi Internal sebelum dokumen diteruskan ke Telkom Regional',
+                    'status_doc' => 'VERIFIKASI INTERNAL',
+                    'posisi_doc' => 'MITRA REGIONAL',
                 ]);
 
             DB::commit();
@@ -240,6 +254,13 @@ class AdministrasiController extends Controller
                     'catatan_verifikator' =>  $request->actual_message,
                     'status_verfy' => $status_verfy,
                 ]);
+            // UPDATE ACTUAL DI SUPERIVSI    
+            TranSupervisi::where("project_id", $baseline->project_id)
+                ->update([
+                    'task' => 'Status Verifikasi Dokumen ' . $status_verfy . ' posisi dokumen saat ini : ' . $posisi_doc . '',
+                    'status_doc' => $status_doc,
+                    'posisi_doc' => $posisi_doc,
+                ]);
 
             DB::commit();
         } catch (\Exception $e) {
@@ -277,7 +298,7 @@ class AdministrasiController extends Controller
         $administrasi = TranAdministrasi::where('project_id', $baseline->project_id)->first();
 
         try {
-            DB::beginTransaction();            
+            DB::beginTransaction();
             // UPDATE ACTUAL DI TRANSADMINISTRASI    
             TranAdministrasi::where("id", $administrasi->id)
                 ->update([
@@ -285,6 +306,12 @@ class AdministrasiController extends Controller
                     'remarks' =>  $request->actual_message,
                     'status_ba_rekon' =>  'VERIFIKASI TELKOM REGIONAL'
                 ]);
+            // UPDATE ACTUAL DI SUPERIVSI    
+            TranSupervisi::where("project_id", $baseline->project_id)
+                ->update([
+                    'task' => 'Pengiriman BA Rekon berhasil, mohon tunggu verifikasi dari TELKOM REGIONAL'
+                ]);
+
 
             DB::commit();
         } catch (\Exception $e) {

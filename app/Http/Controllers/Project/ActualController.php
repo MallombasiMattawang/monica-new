@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use App\Models\TranSupervisi;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\LogAdministrasi;
+use App\Models\TranAdministrasi;
 use Illuminate\Support\Facades\Validator;
 
 class ActualController extends Controller
@@ -54,6 +56,7 @@ class ActualController extends Controller
         $cek_all_delivery_finish = TranBaseline::select('actual_finish')
             ->where('project_id', $supervisi->project_id)
             ->whereNotNull('actual_finish')
+            ->where('actual_finish', '<>', '')
             ->whereBetween('activity_id', [3, 9])->count();
 
         $cek_all_installasi = TranBaseline::select('actual_finish')
@@ -123,8 +126,8 @@ class ActualController extends Controller
     public function actualActivityLog($id, $slug)
     {
         $baseline = TranBaseline::findOrFail($id);
-        //$log_cek = LogActual::where("tran_baseline_id", $id)->first();
-        $logs = LogActual::where("tran_baseline_id", $id)->get();
+        $supervisi = TranSupervisi::select('task')->where("project_id", $baseline->project_id)->first();
+        $logs = LogActual::where("tran_baseline_id", $id)->orderBy('id', 'desc')->get();
 
         $pageTitle  = $baseline->list_activity;
         $breadcrumb = [
@@ -133,7 +136,7 @@ class ActualController extends Controller
         ];
         return view(
             'pengguna.pages.supervisi.log-actual',
-            compact('pageTitle', 'baseline', 'logs', 'breadcrumb')
+            compact('pageTitle', 'baseline', 'supervisi', 'logs', 'breadcrumb')
         );
     }
 
@@ -165,7 +168,7 @@ class ActualController extends Controller
 
     public function actualActivityAddDate(Request $request)
     {
-        $validatedData = $request->validate(
+        $request->validate(
             [
                 'file' => 'required|mimes:jpg,png,zip,rar,pdf,doc,docx,xlsx,csv,sql|max:25000',
                 'actual_volume' => 'required',
@@ -193,6 +196,10 @@ class ActualController extends Controller
         $actual_status = $request->actual_status;
         $actual_message = $request->actual_message;
         $actual_kendala = $request->actual_kendala;
+        $actual_finish_verifikasi = null;
+        $actual_durasi_verifikasi = null;
+        $plan_golive = null;
+        $status_const = 'PREPARING';
 
         //DARI TABEL BASELINE
         $baseline = TranBaseline::findOrFail($request->baseline_id);
@@ -201,36 +208,14 @@ class ActualController extends Controller
         $actual_finish = null;
         $actual_durasi = null;
 
+
         //CARI TANGGAL START
         if ($baseline->actual_start) {
             $actual_start =  $baseline->actual_start;
         } else {
             $actual_start = date('Y-m-d');
         }
-        // CARI STATUS CONST
-        if ($request->activity_id >= 1 && $request->activity_id <= 2) {
-            $status_const = 'PREPARING';
-        } else if ($request->activity_id >= 3 && $request->activity_id <= 9) {
-            $status_const = 'MATERIAL DELIVERY';
-            $cek_const = TranBaseline::select('actual_start, actual_finish')
-                ->where('project_id', $baseline->project_id)
-                ->whereBetween('activity_id', [3, 9])->count();
-            $cek_const_actual = TranBaseline::select('actual_start, actual_finish')
-                ->where('project_id', $baseline->project_id)
-                ->whereNotNull('actual_start')
-                ->whereBetween('activity_id', [3, 9])->count();
-            if ($cek_const_actual == $cek_const) {
-                $status_const = "MATERIAL DELIVERY ON SITE";
-            }
-        } else if ($request->activity_id >= 10 && $request->activity_id <= 18) {
-            $status_const = 'INSTALASI';
-        } else if ($request->activity_id == 19) {
-            $status_const = 'INSTALL DONE';
-        } else if ($request->activity_id == 23) {
-            $status_const = 'REKON';
-        } else {
-            $status_const = '';
-        }
+
         //CARI STATUS DOC         
         if ($request->activity_id >= 1 && $request->activity_id <= 21) {
             $status_doc = 'KONSTRUKSI';
@@ -266,19 +251,23 @@ class ActualController extends Controller
         // ACTIVITY PREPARING - TERMINASI / JOINTING TIDAK VERIFIKASI WASPANG
         if ($request->activity_id >= 1 && $request->activity_id <= 19) {
             $actual_task = 'APPROVED';
+            $actual_finish_verifikasi = $actual_finish;
+            $actual_durasi_verifikasi = $actual_durasi;
             if ($actual_status == 'belum') {
                 $actual_task = 'NEED UPDATED';
+                $actual_finish_verifikasi = null;
+                $actual_durasi_verifikasi = null;
             }
         } else if ($request->activity_id == 20) {
             $actual_task = 'NEED APPROVED WASPANG';
-            $actual_finish_verifikasi = '';
-            $actual_durasi_verifikasi = '';
+            $actual_finish_verifikasi = null;
+            $actual_durasi_verifikasi = null;
         } else if ($request->activity_id == 21) {
             $actual_task = 'NEED APPROVED TIM UT';
-            $actual_finish_verifikasi = '';
-            $actual_durasi_verifikasi = '';
+            $actual_finish_verifikasi = null;
+            $actual_durasi_verifikasi = null;
         } else {
-            $actual_task = '';
+            $actual_task = null;
             $actual_finish_verifikasi = $actual_finish;
             $actual_durasi_verifikasi = $actual_durasi;
         }
@@ -316,8 +305,39 @@ class ActualController extends Controller
                     'actual_kendala' => $actual_kendala,
                 ]);
 
+            if (cek_commisioning_tes($baseline->project_id) == 1) {
+                $status_const = 'SELESAI CT';
+            }
+            if (cek_all_installasi($baseline->project_id) == cek_all_installasi_finish($baseline->project_id)) {
+                $status_const = 'INSTALL DONE';
+            }
+            if (cek_all_installasi($baseline->project_id) > cek_all_installasi_finish($baseline->project_id)) {
+                $status_const = 'INSTALASI';
+            }
+            if (cek_all_delivery($baseline->project_id) == cek_all_delivery_finish($baseline->project_id) && cek_all_installasi_finish($baseline->project_id) == 0) {
+                $status_const = 'MATERIAL DELIVERY ON SITE';
+            }
+            if (cek_all_delivery($baseline->project_id) > cek_all_delivery_finish($baseline->project_id)) {
+                $status_const = 'MATERIAL DELIVERY';
+            }
+            if (cek_all_delivery_finish($baseline->project_id) == 0) {
+                $status_const = 'PREPARING';
+            }
+
+
+            //     echo $status_const;
+            // die();
+
             //UPDATE SUPERVISI
+            $task = 'PROGRESS ' . $status_const;
+            if ($actual_task == 'NEED APPROVED WASPANG') {
+                $task = $actual_task;
+            }
+            if ($actual_task == 'NEED APPROVED TIM UT') {
+                $task = $actual_task;
+            }
             $today = date('Y-m-d');
+            $tambah_hari = 7;
             $plan_finish_const = $baseline->plan_start;
             $sumPlanBobot = 0;
             if ($plan_finish_const <= $today) {
@@ -325,13 +345,20 @@ class ActualController extends Controller
             }
             $sum_selesai = TranBaseline::where("project_id", $baseline->project_id)->where("actual_progress", 100)->sum('bobot');
             $sum_belum = TranBaseline::where("project_id", $baseline->project_id)->whereBetween('actual_progress', [1, 99])->sum('progress_bobot');
+
+            if ($status_const == 'INSTALL DONE') {
+                $plan_golive = date('Y-m-d', strtotime($today . ' + ' . $tambah_hari . ' days'));
+            }
             TranSupervisi::where("project_id", $baseline->project_id)
                 ->update([
                     'status_const' => $status_const,
                     'status_doc' => $status_doc,
                     'progress_plan' => $sumPlanBobot,
                     'progress_actual' =>  $sum_selesai + $sum_belum,
-                    'remarks' => $actual_message
+                    'remarks' => $actual_message,
+                    'kendala' => $actual_kendala,
+                    'task' => $task,
+                    'plan_golive' => $plan_golive
                 ]);
 
             DB::commit();
@@ -340,7 +367,7 @@ class ActualController extends Controller
             // melakukan sesuatu dengan error handling, seperti log atau memberikan pesan error ke user
             $supervisi = TranSupervisi::where("project_id", $baseline->project_id)->first();
 
-            return redirect()->route('supervisi.detail', [$supervisi->id, Str::slug($supervisi->project_name)])->with(['error' => 'Update Actual #' . $baseline->list_activity . ' Gagal']);
+            return redirect()->route('supervisi.detail', [$supervisi->id, Str::slug($supervisi->project_name)])->with(['error' => 'Update Actual #' . $baseline->list_activity . ' Gagal, Terjadi kesalahan sistem. Pesan error: ' . $e->getMessage()]);
         }
 
 
@@ -363,6 +390,7 @@ class ActualController extends Controller
         $progress_bobot = $log->progress_bobot;
         $actual_volume = $log->actual_volume;
         $baseline = TranBaseline::where('id', $baseline_id)->first();
+
         if ($approval_waspang == 'REJECTED') {
             LogActual::where("tran_baseline_id", $baseline_id)->where('approval_waspang', NULL)
                 ->update([
@@ -380,11 +408,15 @@ class ActualController extends Controller
                     'actual_task' =>  'REJECTED',
                     'waspang_by' => $user_id
                 ]);
+            TranSupervisi::where("project_id", $baseline->project_id)
+                ->update([
+                    'task' => 'Rejected Waspang, catatan: "' . $request->approval_message . '", silahkan laporkan kembali CT , '
+                ]);
         } else {
             $actual_finish = date('Y-m-d');
             $start = strtotime($baseline->actual_start);
             $finish = strtotime($actual_finish);
-      
+
             $jarak = $finish - $start;
             $actual_durasi = $jarak / 60 / 60 / 24;
             $actual_durasi = $actual_durasi + 1;
@@ -414,12 +446,11 @@ class ActualController extends Controller
                     'status_doc' => 'KONSTRUKSI',
                     'progress_const' => $actual_progress_const,
                     'tgl_selesai_ct' => date('Y-m-d'),
+                    'task' => 'Appoval Waspang, status: "SELESAI CT", silahkan melanjutkan Pelaksanaan UT, '
                 ]);
         }
         $supervisi = TranSupervisi::where("project_id", $baseline->project_id)->first();
         return redirect()->route('supervisi.detail', [$supervisi->id, Str::slug($supervisi->project_name)])->with(['success' => 'Update Actual #' . $baseline->list_activity . ' Berhasil']);
-
-       
     }
 
     public function actualActivityUt(Request $request)
@@ -437,6 +468,7 @@ class ActualController extends Controller
         $progress_bobot = $log->progress_bobot;
         $actual_volume = $log->actual_volume;
         $baseline = TranBaseline::where('id', $baseline_id)->first();
+        $administrasi = TranAdministrasi::where('project_id', $baseline->project_id)->first();
         if ($approval_tim_ut == 'REJECTED') {
             LogActual::where("tran_baseline_id", $baseline_id)->where('approval_tim_ut', NULL)
                 ->update([
@@ -454,11 +486,15 @@ class ActualController extends Controller
                     'actual_task' =>  'REJECTED',
                     'tim_ut_by' => $user_id
                 ]);
+            TranSupervisi::where("project_id", $baseline->project_id)
+                ->update([
+                    'task' => 'Rejected TIM UT, catatan: "' . $request->approval_message . '", silahkan laporkan kembali Pelaksanaan UT , '
+                ]);
         } else {
             $actual_finish = date('Y-m-d');
             $start = strtotime($baseline->actual_start);
             $finish = strtotime($actual_finish);
-      
+
             $jarak = $finish - $start;
             $actual_durasi = $jarak / 60 / 60 / 24;
             $actual_durasi = $actual_durasi + 1;
@@ -480,6 +516,11 @@ class ActualController extends Controller
                     'actual_task' =>  'APPROVED',
                     'tim_ut_by' => $user_id
                 ]);
+            TranBaseline::where("activity_id", 22)
+                ->update([                    
+                    'actual_start' =>  date('Y-m-d'),
+                    
+                ]);
             //update dokumen di supervisi
             $actual_progress_const = 100 * $baseline->bobot / 100;
             TranSupervisi::where("project_id", $baseline->project_id)
@@ -488,11 +529,21 @@ class ActualController extends Controller
                     'status_doc' => 'ADMINISTRASI',
                     'progress_const' => $actual_progress_const,
                     'tgl_selesai_ut' => date('Y-m-d'),
+                    'task' => 'Appoval TIM UT, status: "SELESAI UT", silahkan melanjutkan pembuatan dokumen administrasi '
                 ]);
+            TranAdministrasi::where("project_id", $baseline->project_id)
+                ->update([
+                    'status_doc' => 'PEMBUATAN DOKUMEN',
+                    'posisi_doc' => 'MITRA AREA'
+                ]);
+            //SIMPAN KE LOG ACTUAL
+            LogAdministrasi::create([
+                'tran_administrasi_id' => $administrasi->id,
+                'status_doc' => 'PEMBUATAN DOKUMEN',
+                'posisi_doc' => 'MITRA AREA',
+            ]);
         }
         $supervisi = TranSupervisi::where("project_id", $baseline->project_id)->first();
         return redirect()->route('supervisi.detail', [$supervisi->id, Str::slug($supervisi->project_name)])->with(['success' => 'Apprive Actual #' . $baseline->list_activity . ' Berhasil']);
-
-       
     }
 }

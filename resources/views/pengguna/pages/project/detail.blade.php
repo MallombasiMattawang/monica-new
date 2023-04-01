@@ -49,7 +49,7 @@
                             <div class="col-md-12">
                                 <div class="card mb-3">
                                     <div class="card-body">                                        
-                                        <table class="table align-middle card-table mb-0 myDataTable nowrap dataTable no-footer dtr-inline">
+                                        <table class="table">
                                             <tr>
                                                 <td>TIPE PROJECT</td>
                                                 <td> <b>{{ $data->tipe_project }} </b> </td>
@@ -149,7 +149,7 @@
                             <div class="col-md-12">
                                 <div class="card mb-3">
                                     <div class="card-body">                                        
-                                        <table class="table align-middle card-table mb-0 myDataTable nowrap dataTable no-footer dtr-inline">
+                                        <table class="table">
                                             
                                             <tr>
                                                 <td>FEEDER KU KAP 12</td>
@@ -206,7 +206,7 @@
                             <div class="col-md-12">
                                 <div class="card mb-3">
                                     <div class="card-body">                                        
-                                        <table class="table align-middle card-table mb-0 myDataTable nowrap dataTable no-footer dtr-inline">
+                                        <table class="table">
                                             
                                             <tr>
                                                 <td>DISTRIBUSI KU KAP 24 SCPT</td>
@@ -249,7 +249,7 @@
                             <div class="col-md-12">
                                 <div class="card mb-3">
                                     <div class="card-body">                                        
-                                        <table class="table align-middle card-table mb-0 myDataTable nowrap dataTable no-footer dtr-inline">
+                                        <table class="table">
                                             
                                             <tr>
                                                 <td>ODC 48</td>
@@ -292,7 +292,7 @@
                             <div class="col-md-12">
                                 <div class="card mb-3">
                                     <div class="card-body">                                        
-                                        <table class="table align-middle card-table mb-0 myDataTable nowrap dataTable no-footer dtr-inline">
+                                        <table class="table">
                                             
                                             <tr>
                                                 <td>ODP 8</td>

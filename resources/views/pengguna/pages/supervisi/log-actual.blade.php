@@ -10,7 +10,19 @@
 
                 <div class="d-flex justify-content-between align-items-center">
                     <h1 class="h2 mb-md-0 text-white fw-light">Activity: {{ $pageTitle }} </h1>
-                    <div class="page-action">
+                    <div class="page-action text-center">
+                        @if (activeGuard() == 'waspang' && $baseline->activity_id == 20 && $supervisi->task == 'NEED APPROVED WASPANG' )
+                        <div class="text-end">
+                            <button class="btn bg-danger" data-bs-toggle="modal" data-bs-target="#reject_waspang">Reject</button>
+                            <button class="btn bg-success" data-bs-toggle="modal" data-bs-target="#approve_waspang">Approve</button>
+                        </div>
+                        @endif
+                        @if (activeGuard() == 'tim-ut' && $baseline->activity_id == 21 && $supervisi->task == 'NEED APPROVED TIM UT')
+                        <div class="text-end">
+                            <button class="btn bg-danger" data-bs-toggle="modal" data-bs-target="#reject_ut">Reject</button>
+                            <button class="btn bg-success" data-bs-toggle="modal" data-bs-target="#approve_ut">Approve</button>
+                        </div>
+                        @endif
 
                     </div>
                 </div>
@@ -24,96 +36,96 @@
 @section('contents')
 <div class="page-body">
     <div class="container-fluid">
-        <div class="card p-md-4 p-2">
+        <div class="col-md-12">
+            <div class="col-md-6">
+                <div class="card p-md-4 p-2">
+                    @foreach ($logs as $log)
+                    <div class="timeline-item ti-info ms-2" style="display: inline;">
+                        <div class="d-flex">
+                            <img class="avatar sm rounded-circle" src="{{ asset('img/xs/avatar1.jpg.png') }}" alt="">
+                            <div class="flex-fill ms-3">
+                                <div class="row g-3">
+                                    <div class="table-responsive">
+                                        <table class="table no-footer dtr-inline">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Volume Kontrak</td>
+                                                    <td> <b>{{ $baseline->volume }} {{ $baseline->satuan }}</b> </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Waktu Dilaporkan</td>
+                                                    <td> <b>{{ $log->created_at }} </b> </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Waktu Dilaporkan</td>
+                                                    <td> <b>{{ $log->actual_volume }} {{ $baseline->satuan }}</b> </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Status Dilaporkan</td>
+                                                    <td> <b>{{ $log->actual_status }}</b> </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Remarks</td>
+                                                    <td> <b>{{ $log->actual_message }}</b> </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Kendala</td>
+                                                    <td> <b>{{ $log->kendala }}</b> </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Evident</td>
+                                                    <td>
+                                                        <p>
+                                                            <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapse_{{ $log->id }}" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                                               File Evident
+                                                            </a>
+                                                        </p>
+                                                        <div class="collapse" id="collapse_{{ $log->id }}">
+                                                            <img src="/uploads/{{ $log->actual_evident}}" onerror="this.onerror=null; this.src='/img/no-data.svg';" class="w120" />
+                                                            <br><br>
+                                                            <a href="/uploads/{{ $log->actual_evident}}" target="_blank" class="btn btn-primary border lift">Download Evident</a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                @if ($baseline->activity_id == 20)
+                                                <tr>
+                                                    <td>Approval Waspang</td>
+                                                    <td> <b>{{ $log->approval_waspang }}</b> </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Catatan Waspang</td>
+                                                    <td> <b>{{ $log->approval_message }}</b> </td>
+                                                </tr>
 
-            @foreach ($logs as $log)
-            <div class="timeline-item ti-info ms-2">
-                <div class="d-flex">
-                    <img class="avatar sm rounded-circle" src="{{ asset('img/xs/avatar1.jpg.png') }}" alt="">
-                    <div class="flex-fill ms-3">
-                        <div class="row g-3">
-                            <input type="hidden" name="baseline_id" value="{{$baseline->id}}">
-                            <input type="hidden" name="activity_id" value="{{$baseline->activity_id}}">
-                            <div class="col-6">
-                                <label class="form-label">Volume Kontrak </label>
-                                <input type="text" class="form-control" value="{{ $baseline->volume }}" readonly>
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label">Satuan </label>
-                                <input type="text" class="form-control" value="{{ $baseline->satuan }}" readonly>
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label">Volume Dilaporkan </label>
-                                <input type="text" class="form-control" value="{{ $log->actual_volume }}" readonly>
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label">Satuan </label>
-                                <input type="text" class="form-control" value="{{ $baseline->satuan }}" readonly>
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label">Status Actual </label>
-                                <input type="text" class="form-control" value="{{ $log->actual_status }}" readonly>
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label">Waktu Dilaporkan </label>
-                                <input type="text" class="form-control" value="{{ $log->created_at }}" readonly>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="actual_message" class="form-label">Remarks </label>
-                                <textarea cols="30" rows="5" class="form-control" readonly>{{ $log->actual_message }}</textarea>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="actual_message" class="form-label">Kendala </label>
-                                <textarea cols="30" rows="5" class="form-control" readonly>{{ $log->actual_kendala }}</textarea>
-                            </div>
-                            @if ($baseline->activity_id == 20)
-                            <div class="col-md-6">
-                                <label class="form-label">Status Approval </label>
-                                <input type="text" class="form-control" value="{{ $log->approval_waspang }}" readonly>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="actual_message" class="form-label">Catatan Waspang </label>
-                                <textarea cols="30" rows="5" class="form-control" readonly>{{ $log->approval_message }}</textarea>
-                            </div>
-                            @endif
-                            @if ($baseline->activity_id == 21)
-                            <div class="col-md-6">
-                                <label class="form-label">Status Approval </label>
-                                <input type="text" class="form-control" value="{{ $log->approval_tim_ut }}" readonly>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="actual_message" class="form-label">Catatan Tim UT </label>
-                                <textarea cols="30" rows="5" class="form-control" readonly>{{ $log->approval_message }}</textarea>
-                            </div>
-                            @endif
-                            <div class="text-center p-5">
-                                <img src="/uploads/{{ $log->actual_evident}}" onerror="this.onerror=null; this.src='/img/no-data.svg';" class="w120" />
-                                <br><br>
-                                <a href="/uploads/{{ $log->actual_evident}}" target="_blank" class="btn btn-primary border lift">Download Evident</a>
-                            </div>
-                          
+                                                @endif
+                                                @if ($baseline->activity_id == 21)
+                                                <tr>
+                                                    <td>Approval Waspang</td>
+                                                    <td> <b>{{ $log->approval_tim_ut }}</b> </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Catatan Waspang</td>
+                                                    <td> <b>{{ $log->approval_message }}</b> </td>
+                                                </tr>
+                                                @endif
+                                            </tbody>
+                                        </table>
+                                    </div>
 
+
+
+                                </div>
+
+                            </div>
                         </div>
-
-                    </div>
+                    </div> <!-- timeline item end  -->
+                    @endforeach
                 </div>
-            </div> <!-- timeline item end  -->
-            @endforeach
-            @if (activeGuard() == 'waspang' && $baseline->activity_id == 20 && $log->approval_waspang == null)
-                <div class="col-12 text-end">
-                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#reject_waspang">Reject</button>
-                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approve_waspang">Approve</button>
-                </div>
-            @endif
-            @if (activeGuard() == 'tim-ut' && $baseline->activity_id == 21 && $log->approval_tim_ut == null)
-            <div class="col-12 text-end">
-                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#reject_ut">Reject</button>
-                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approve_ut">Approve</button>
             </div>
-        @endif
-
 
         </div>
+
+
     </div>
 </div>
 {{-- Modal Rejetc waspang --}}
@@ -143,7 +155,7 @@
             </div>
         </div>
     </form>
-   
+
 </div>
 {{-- Modal Approve waspang --}}
 <div class="modal fade" id="approve_waspang">
@@ -201,7 +213,7 @@
             </div>
         </div>
     </form>
-   
+
 </div>
 {{-- Modal Approve tim-ut --}}
 <div class="modal fade" id="approve_ut">

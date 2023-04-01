@@ -63,7 +63,7 @@
                 <h3 class="box-title">Tindak Lanjut</h3>
             </div>
             <div class="box-body text-center">
-                @if($administrasi->posisi_doc == 'WITEL')
+                @if($administrasi->posisi_doc == 'WITEL' && Admin::user()->inRoles(['witel']))
                 @if($administrasi->status_doc == 'VERIFIKASI DOKUMEN')
                 <a href="#" class="btn btn-danger " data-toggle="modal" data-target="#modal-reject-witel"><i class="fa fa-close"></i> <br> Reject Dokumen</a>
                 <a href="#" class="btn btn-success " data-toggle="modal" data-target="#modal-approve-witel"><i class="fa fa-check"></i> <br> Approve Dokumen</a>
@@ -73,7 +73,7 @@
                 @endif
                 @endif
 
-                @if($administrasi->posisi_doc == 'TELKOM REGIONAL')
+                @if($administrasi->posisi_doc == 'TELKOM REGIONAL' && Admin::user()->inRoles(['administrator']))
                 @if($administrasi->status_doc == 'VERIFIKASI DOKUMEN')
                 <a href="#" class="btn btn-danger " data-toggle="modal" data-target="#modal-reject-regional"><i class="fa fa-close"></i> <br> Reject Dokumen</a>
                 <a href="#" class="btn btn-success " data-toggle="modal" data-target="#modal-approve-regional"><i class="fa fa-check"></i> <br> Approve Dokumen</a>

@@ -46,6 +46,9 @@
                             @csrf
                             <input type="hidden" name="baseline_id" value="{{$baseline->id}}">
                             <input type="hidden" name="activity_id" value="{{$baseline->activity_id}}">
+                            @if ($baseline->activity_id >= 20)
+                            <input type="hidden" name="actual_status" value="selesai">
+                            @endif
                             <div class="col-6">
                                 <label class="form-label">Volume Kontrak </label>
                                 <input type="text" class="form-control" name="volume_kontrak" value="{{$baseline->volume}}" readonly>
@@ -70,6 +73,7 @@
                                 <label class="form-label">Volume Sebelumnya </label>
                                 <input type="text" class="form-control" name="actual_volume_old" value="{{$actual_volume_old}}" readonly>
                             </div>
+                            @if ($baseline->activity_id < 20)
                             <div class="col-12">
                                 <label class="form-check-label me-3">Status Actual:<sup class="text-danger">*</sup></label>
                                 <div class="form-check form-check-inline">
@@ -81,6 +85,8 @@
                                     <label class="form-check-label" for="actual_status2">Selesai</label>
                                 </div>
                             </div>
+                            @endif
+                            
                             <div class="col-12">
                                 <label class="form-label">Evident<sup class="text-danger">*</sup></label>
                                 <input class="form-control" type="file" id="actual_evident" name="file">

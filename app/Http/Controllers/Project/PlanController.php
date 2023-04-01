@@ -29,38 +29,50 @@ class PlanController extends Controller
             return abort(404);
         }
         $supervisi =  TranSupervisi::whereRaw("$user AND id = $id")->first();
-       
+
 
         $lists = TranBaseline::where("project_id", $supervisi->project_id)->get();
         $countBase = TranBaseline::where("project_id", $supervisi->project_id)->where('bobot', '>=', '1')->count();
         $sumBase = TranBaseline::where("project_id", $supervisi->project_id)->where('bobot', '>=', '1')->sum('bobot');
         $countPlan = TranBaseline::where("project_id", $supervisi->project_id)->where('plan_durasi', '>=', '1')->count();
+
+        $plan_start = TranBaseline::select(['id', 'plan_start'])
+            ->where('project_id', $supervisi->project_id)
+            ->where('activity_id', 1)
+            ->first();
+        $plan_finish = TranBaseline::select(['id', 'plan_finish'])
+            ->where('project_id', $supervisi->project_id)
+            ->orderBy('plan_finish', 'DESC')
+            ->first();
+        $plan_durasi = selisih_hari($plan_start->plan_start, $plan_finish->plan_finish);
+
+
         $sumDurasi = TranBaseline::where("project_id", $supervisi->project_id)->where('plan_durasi', '>=', '1')->sum('plan_durasi');
-        $cek_preparing = \App\Models\TranBaseline::select(['id', 'plan_finish', 'plan_start'])
+        $cek_preparing = TranBaseline::select(['id', 'plan_finish', 'plan_start'])
             ->where('project_id', $supervisi->project_id)
             ->where('activity_id', 2)
             ->first();
-        $cek_material = \App\Models\TranBaseline::select(['id', 'plan_finish', 'plan_start'])
+        $cek_material = TranBaseline::select(['id', 'plan_finish', 'plan_start'])
             ->where('project_id', $supervisi->project_id)
             ->where('activity_id', 9)
             ->first();
-        $cek_jointing = \App\Models\TranBaseline::select(['id', 'plan_finish', 'plan_start'])
+        $cek_jointing = TranBaseline::select(['id', 'plan_finish', 'plan_start'])
             ->where('project_id', $supervisi->project_id)
             ->where('activity_id', 19)
             ->first();
-        $cek_comtes = \App\Models\TranBaseline::select(['id', 'plan_finish', 'plan_start'])
+        $cek_comtes = TranBaseline::select(['id', 'plan_finish', 'plan_start'])
             ->where('project_id', $supervisi->project_id)
             ->where('activity_id', 20)
             ->first();
-        $cek_ut = \App\Models\TranBaseline::select(['id', 'plan_finish', 'plan_start'])
+        $cek_ut = TranBaseline::select(['id', 'plan_finish', 'plan_start'])
             ->where('project_id', $supervisi->project_id)
             ->where('activity_id', 21)
             ->first();
-        $cek_rekon = \App\Models\TranBaseline::select(['id', 'plan_finish', 'plan_start'])
+        $cek_rekon = TranBaseline::select(['id', 'plan_finish', 'plan_start'])
             ->where('project_id', $supervisi->project_id)
             ->where('activity_id', 22)
             ->first();
-        $cek_bast = \App\Models\TranBaseline::select(['id', 'plan_finish', 'plan_start'])
+        $cek_bast = TranBaseline::select(['id', 'plan_finish', 'plan_start'])
             ->where('project_id', $supervisi->project_id)
             ->where('activity_id', 23)
             ->first();
@@ -105,6 +117,7 @@ class PlanController extends Controller
                 'cek_all_delivery_finish',
                 'cek_all_installasi',
                 'cek_all_installasi_finish',
+                'plan_durasi'
             )
         );
     }

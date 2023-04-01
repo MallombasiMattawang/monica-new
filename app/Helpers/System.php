@@ -1,21 +1,22 @@
 <?php
 
 use App\Models\Gtk;
-use App\Models\LampiranMateri;
-use App\Models\MonitoringBelajar;
+use App\Models\User;
+use App\Models\Siswa;
+use App\Models\Sekolah;
 use App\Models\MstMitra;
 use App\Models\MstSatker;
-use App\Models\RefJenisKontrak;
-use App\Models\RefJenisPengadaan;
-use App\Models\RefKualifikasiUsaha;
-use App\Models\RefMetodePengadaan;
-use App\Models\Sekolah;
-use App\Models\Siswa;
-use App\Models\TranSupervisi;
-use App\Models\User;
 use App\Models\WebProfil;
-use Illuminate\Support\Facades\Redirect;
+use App\Models\TranBaseline;
+use App\Models\TranSupervisi;
+use App\Models\LampiranMateri;
+use App\Models\RefJenisKontrak;
+use App\Models\MonitoringBelajar;
+use App\Models\RefJenisPengadaan;
+use App\Models\RefMetodePengadaan;
 use Illuminate\Support\Collection;
+use App\Models\RefKualifikasiUsaha;
+use Illuminate\Support\Facades\Redirect;
 
 function singkat_angka($n, $presisi = 1)
 {
@@ -55,7 +56,7 @@ function getNotifWaspang($waspang_id)
 {
     $query = TranSupervisi::select('id', 'project_name', 'updated_at')
         ->where('waspang_id', $waspang_id)
-        ->where('status_const', 'INSTALL DONE')        
+        ->where('task', 'NEED APPROVED WASPANG')
         ->limit('10')
         ->get();
     return $query;
@@ -63,7 +64,7 @@ function getNotifWaspang($waspang_id)
 function countNotifWaspang($waspang_id)
 {
     $query = TranSupervisi::where('waspang_id', $waspang_id)
-        ->where('status_const', 'INSTALL DONE')        
+        ->where('task', 'NEED APPROVED WASPANG')
         ->count();
     return $query;
 }
@@ -72,7 +73,7 @@ function getNotifUt($tim_ut_id)
 {
     $query = TranSupervisi::select('id', 'project_name', 'updated_at')
         ->where('tim_ut_id', $tim_ut_id)
-        ->where('status_const', 'SELESAI CT')        
+        ->where('task', 'NEED APPROVED TIM UT')
         ->limit('10')
         ->get();
     return $query;
@@ -80,29 +81,83 @@ function getNotifUt($tim_ut_id)
 function countNotifUt($tim_ut_id)
 {
     $query = TranSupervisi::where('tim_ut_id', $tim_ut_id)
-        ->where('status_const', 'SELESAI CT')        
+        ->where('task', 'NEED APPROVED TIM UT')
         ->count();
     return $query;
 }
-
-
-function getMetodePengadaan()
+function cek_last_preparing($project_id)
 {
-    $query = RefMetodePengadaan::select('id', 'metode_pengadaan')->get();
+    $query = TranBaseline::select('actual_finish')
+        ->where('project_id', $project_id)
+        ->whereNotNull('actual_finish')
+        ->where('actual_finish', '<>', '')
+        ->whereBetween('activity_id', [1, 2])->count();
+    return $query;
+}
+function cek_all_delivery($project_id)
+{
+    $query = TranBaseline::select('actual_finish')
+        ->where('project_id', $project_id)
+        ->whereBetween('activity_id', [3, 9])->count();
+    return $query;
+}
+function cek_all_delivery_finish($project_id)
+{
+    $query = TranBaseline::select('actual_finish')
+        ->where('project_id', $project_id)
+        ->whereNotNull('actual_finish')
+        ->where('actual_finish', '<>', '')
+        ->whereBetween('activity_id', [3, 9])->count();
+    return $query;
+}
+function cek_all_installasi($project_id)
+{
+    $query = TranBaseline::select('actual_finish')
+        ->where('project_id', $project_id)
+        ->whereBetween('activity_id', [10, 19])->count();
+    return $query;
+}
+function cek_all_installasi_finish($project_id)
+{
+    $query = TranBaseline::select('actual_finish')
+        ->where('project_id', $project_id)
+        ->whereNotNull('actual_finish')
+        ->where('actual_finish', '<>', '')
+        ->whereBetween('activity_id', [10, 19])->count();
     return $query;
 }
 
-function getJenisKontrak()
+function cek_commisioning_tes($project_id)
 {
-    $query = RefJenisKontrak::select('id', 'jenis_kontrak')->get();
+    $query = TranBaseline::select('actual_finish')
+        ->where('project_id', $project_id)
+        ->whereNotNull('actual_finish')
+        ->where('actual_finish', '<>', '')
+        ->where('activity_id', 20)->exists();
+    return $query;
+}
+function cek_ut($project_id)
+{
+    $query = TranBaseline::select('actual_finish')
+        ->where('project_id', $project_id)
+        ->where('approval_tim_ut', 'APPROVED')
+        ->whereNotNull('actual_finish')
+        ->where('actual_finish', '<>', '')
+        ->where('activity_id', 21)->exists();
+    return $query;
+}
+function cek_rekon($project_id)
+{
+    $query = TranBaseline::select('actual_finish')
+    ->where('project_id', $project_id)
+    ->where('actual_task', 'APPROVED')
+    ->whereNotNull('actual_finish')
+    ->where('actual_finish', '<>', '')
+    ->where('activity_id', 22)->exists();
     return $query;
 }
 
-function getKualifikasiUsaha()
-{
-    $query = RefKualifikasiUsaha::select('id', 'kualifikasi_usaha')->get();
-    return $query;
-}
+
 
 function getTahun()
 {
@@ -156,11 +211,11 @@ if (!function_exists('tgl_indo')) {
 if (!function_exists('selisih_hari')) {
     function selisih_hari($tgl_1, $tgl_2)
     {
-        $tgl1 = strtotime($tgl_1); 
-        $tgl2 = strtotime($tgl_2); 
-        
+        $tgl1 = strtotime($tgl_1);
+        $tgl2 = strtotime($tgl_2);
+
         $jarak = $tgl2 - $tgl1;
-        
+
         $hari = $jarak / 60 / 60 / 24;
 
         return $hari . ' Hari';
@@ -238,7 +293,7 @@ function statusColor($status)
         $color = "danger";
     }
 
-   
+
 
     return $color;
 }

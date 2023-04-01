@@ -71,6 +71,7 @@
                                 <span class="small text-muted me-2">Pembuatan dokumen dimulai setelah pelaksanaan UT</span>
                             </div>
                         </td>
+                        <td></td>
                     </tr>
                     <tr>
                         <td>2</td>
@@ -80,7 +81,7 @@
                             </div>
                         </td>
                         <td>
-                            <a href="{{ route('supervisi.administrasi.form', [$baseline->id, 'docToWitel']) }}" class="btn btn-success {{ $administrasi->status_verfy == NULL || $administrasi->status_verfy == 'REJECTED WITEL'? '' : 'disabled' }} "> <i class="fa fa-upload"></i> Upload Doc </a>
+                            <a href="{{ route('supervisi.administrasi.form', [$baseline->id, 'docToWitel']) }}" class="btn btn-success {{ $administrasi->status_doc == 'PEMBUATAN DOKUMEN' || $administrasi->status_verfy == 'REJECTED WITEL'? '' : 'disabled' }} "> <i class="fa fa-upload"></i> Upload Doc </a>
                         </td>
                     </tr>
                     <tr>

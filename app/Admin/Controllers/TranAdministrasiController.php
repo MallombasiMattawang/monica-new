@@ -5,7 +5,9 @@ namespace App\Admin\Controllers;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use App\Models\TranBaseline;
 use Illuminate\Http\Request;
+use App\Models\TranSupervisi;
 use App\Models\LogAdministrasi;
 use Encore\Admin\Facades\Admin;
 use App\Models\TranAdministrasi;
@@ -30,7 +32,7 @@ class TranAdministrasiController extends AdminController
     {
         $grid = new Grid(new TranAdministrasi());
         if (Admin::user()->inRoles(['witel'])) {
-            $grid->model()->where('witel_id', '=', Admin::user()->username);
+            $grid->model()->where('witel_id', '=', Admin::user()->id);
         }
 
         $grid->column('id', __('Id'));
@@ -60,7 +62,7 @@ class TranAdministrasiController extends AdminController
     protected function detail($id)
     {
         $administrasi = TranAdministrasi::findOrFail($id);
-        $log_administrasi = LogAdministrasi::where('tran_administrasi_id', $administrasi->id)->get();
+        $log_administrasi = LogAdministrasi::where('tran_administrasi_id', $administrasi->id)->orderBy('id', 'desc')->get();
 
         return view('admin.modules.administrasi.detail', [
             'administrasi' => $administrasi,
@@ -74,6 +76,7 @@ class TranAdministrasiController extends AdminController
             'id' =>  'required',
             'catatan_verifikator' => 'required'
         ]);
+        $baseline = TranAdministrasi::where('id', $request->id)->first();
         // UPDATE ACTUAL DI TRANSADMINISTRASI    
         TranAdministrasi::where("id", $request->id)
             ->update([
@@ -91,6 +94,14 @@ class TranAdministrasiController extends AdminController
             'catatan_verifikator' => $request->catatan_verifikator,
             'status_verfy' => 'APPROVAL WITEL',
         ]);
+        // UPDATE ACTUAL DI SUPERIVSI    
+        TranSupervisi::where("project_id", $baseline->project_id)
+            ->update([
+                'task' => 'Verifikasi Dokumen di Witel Berhasil, mohon tunggu proses penandatanganan dokumen',
+                'status_doc' => 'PROSES TANDA TANGAN WITEL',
+                'posisi_doc' => 'WITEL',
+            ]);
+
         admin_success('Approval Witel Success!');
         admin_toastr('Approval Witel Success!', 'success');
         return back();
@@ -102,6 +113,7 @@ class TranAdministrasiController extends AdminController
             'id' =>  'required',
             'catatan_verifikator' => 'required'
         ]);
+        $baseline = TranAdministrasi::where('id', $request->id)->first();
         // UPDATE ACTUAL DI TRANSADMINISTRASI    
         TranAdministrasi::where("id", $request->id)
             ->update([
@@ -119,6 +131,13 @@ class TranAdministrasiController extends AdminController
             'catatan_verifikator' => $request->catatan_verifikator,
             'status_verfy' => 'REJECTED WITEL',
         ]);
+        // UPDATE ACTUAL DI SUPERIVSI    
+        TranSupervisi::where("project_id", $baseline->project_id)
+            ->update([
+                'task' => 'Dokumen ditolak mohon periksa catatan verifikator pada timeline Administrasi Actual',
+                'status_doc' => 'REVISI DOKUMEN',
+                'posisi_doc' => 'MITRA AREA',
+            ]);
         admin_success('Rejected Witel Success!');
         admin_toastr('Rejected Witel Success!', 'success');
         return back();
@@ -139,7 +158,7 @@ class TranAdministrasiController extends AdminController
         $file->move('uploads/administrasi', $nama_file);
         // File path
         $filepath = 'administrasi/' . $nama_file;
-
+        $baseline = TranAdministrasi::where('id', $request->id)->first();
         // UPDATE ACTUAL DI TRANSADMINISTRASI    
         TranAdministrasi::where("id", $request->id)
             ->update([
@@ -159,6 +178,12 @@ class TranAdministrasiController extends AdminController
             'catatan_verifikator' => $request->catatan_verifikator,
             'status_verfy' => 'PENANDATANGANAN WITEL',
         ]);
+        TranSupervisi::where("project_id", $baseline->project_id)
+            ->update([
+                'task' => 'Dokumen ditandatangani WITEL, silahkan download pada timeline Administrasi Activity dan lanjutkan pengiriman dok ke Regional',
+                'status_doc' => 'PENGIRIMAN DOKUMEN KE REGIONAL',
+                'posisi_doc' => 'MITRA AREA',
+            ]);
         admin_success('PENANDATANGANAN WITEL Success!');
         admin_toastr('PENANDATANGANAN WITEL Success!', 'success');
         return back();
@@ -170,6 +195,7 @@ class TranAdministrasiController extends AdminController
             'id' =>  'required',
             'catatan_verifikator' => 'required'
         ]);
+        $baseline = TranAdministrasi::where('id', $request->id)->first();
         // UPDATE ACTUAL DI TRANSADMINISTRASI    
         TranAdministrasi::where("id", $request->id)
             ->update([
@@ -187,6 +213,12 @@ class TranAdministrasiController extends AdminController
             'catatan_verifikator' =>  $request->catatan_verifikator,
             'status_verfy' =>  'APPROVAL TELKOM REGIONAL',
         ]);
+        TranSupervisi::where("project_id", $baseline->project_id)
+            ->update([
+                'task' => 'Verifikasi Dokumen di T.Reg Berhasil, mohon tunggu proses penandatanganan dokumen',
+                'status_doc' => 'PROSES TANDA TANGAN TELKOM REGIONAL',
+                'posisi_doc' => 'TELKOM REGIONAL',
+            ]);
         admin_success('Approval TELKOM REGIONAL Success!');
         admin_toastr('Approval TELKOM REGIONAL Success!', 'success');
         return back();
@@ -198,6 +230,7 @@ class TranAdministrasiController extends AdminController
             'id' =>  'required',
             'catatan_verifikator' => 'required'
         ]);
+        $baseline = TranAdministrasi::where('id', $request->id)->first();
         // UPDATE ACTUAL DI TRANSADMINISTRASI    
         TranAdministrasi::where("id", $request->id)
             ->update([
@@ -215,6 +248,13 @@ class TranAdministrasiController extends AdminController
             'catatan_verifikator' => $request->catatan_verifikator,
             'status_verfy' => 'REJECTED TELKOM REGIONAL',
         ]);
+        // UPDATE ACTUAL DI SUPERIVSI    
+        TranSupervisi::where("project_id", $baseline->project_id)
+            ->update([
+                'task' => 'Dokumen ditolak mohon periksa catatan verifikator pada timeline Administrasi Actual',
+                'status_doc' => 'REVISI DOKUMEN',
+                'posisi_doc' => 'MITRA AREA',
+            ]);
         admin_success('Rejected REGIONAL Success!');
         admin_toastr('Rejected REGIONAL Success!', 'success');
         return back();
@@ -235,6 +275,7 @@ class TranAdministrasiController extends AdminController
         $file->move('uploads/administrasi', $nama_file);
         // File path
         $filepath = 'administrasi/' . $nama_file;
+        $baseline = TranAdministrasi::where('id', $request->id)->first();
 
         // UPDATE ACTUAL DI TRANSADMINISTRASI    
         TranAdministrasi::where("id", $request->id)
@@ -255,6 +296,12 @@ class TranAdministrasiController extends AdminController
             'catatan_verifikator' => $request->catatan_verifikator,
             'status_verfy' =>  'PENANDATANGANAN TELKOM REGIONAL',
         ]);
+        TranSupervisi::where("project_id", $baseline->project_id)
+            ->update([
+                'task' => 'Dokumen ditandatangani T.REG, silahkan download pada timeline Administrasi Activity dan lanjutkan pengiriman BA Rekon ke Regional',
+                'status_doc' => 'DOKUMEN OK',
+                'posisi_doc' =>  'TELKOM REGIONAL',
+            ]);
         admin_success('PENANDATANGANAN TELKOM REGIONAL Success!');
         admin_toastr('PENANDATANGANAN TELKOM REGIONAL Success!', 'success');
         return back();
@@ -266,13 +313,38 @@ class TranAdministrasiController extends AdminController
             'id' =>  'required',
             'catatan_verifikator' => 'required'
         ]);
+        $baseline = TranAdministrasi::where('id', $request->id)->first();
+        $baseline2 = TranBaseline::where('project_id', $baseline->project_id)->first();
+        $actual_finish = date('Y-m-d');
+        $start = strtotime($baseline2->actual_start);
+        $finish = strtotime($actual_finish);
+
+        $jarak = $finish - $start;
+        $actual_durasi = $jarak / 60 / 60 / 24;
+        $actual_durasi = $actual_durasi + 1;
+        
         // UPDATE ACTUAL DI TRANSADMINISTRASI    
         TranAdministrasi::where("id", $request->id)
             ->update([
                 'status_ba_rekon' =>  'APPROVAL',
                 'catatan_verifikator' =>  $request->catatan_verifikator,
             ]);
-       
+        TranSupervisi::where("project_id", $baseline->project_id)
+            ->update([
+                'task' => 'Verifikasi BA REKON di T.Reg Berhasil, mohon tunggu proses BAST-1 selesai',
+                'tgl_rekon' => date('Y-m-d'),
+            ]);
+        TranBaseline::where("activity_id", 22)
+            ->update([
+                'actual_finish' =>  date('Y-m-d'),
+                'actual_task' =>  'APPROVED',
+                'actual_volume' => 1,
+                'actual_progress' =>  100,
+                'progress_bobot' => 100,
+                'actual_durasi' => $actual_durasi,
+
+            ]);
+
         admin_success('Approval BA Rekon Success!');
         admin_toastr('Approval BA Rekon Success!', 'success');
         return back();
@@ -284,6 +356,7 @@ class TranAdministrasiController extends AdminController
             'id' =>  'required',
             'catatan_verifikator' => 'required'
         ]);
+        $baseline = TranAdministrasi::where('id', $request->id)->first();
         // UPDATE ACTUAL DI TRANSADMINISTRASI    
         TranAdministrasi::where("id", $request->id)
             ->update([
@@ -291,7 +364,11 @@ class TranAdministrasiController extends AdminController
                 'catatan_verifikator' =>  $request->catatan_verifikator,
 
             ]);
-      
+        TranSupervisi::where("project_id", $baseline->project_id)
+            ->update([
+                'task' => 'Verifikasi BA REKON di T.Reg ditolak, mohon periksa kembali dokumen BA Rekon '
+            ]);
+
         admin_success('Rejected Approval BA Rekon Success!');
         admin_toastr('Rejected Approval BA Rekon Success!', 'success');
         return back();

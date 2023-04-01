@@ -41,7 +41,7 @@ class TranInventoryController extends AdminController
     {
 
         $grid = new Grid(new TranSupervisi());
-        $grid->model()->where('progress_actual', '>=', 88)->where('progress_actual', '<=', 100);
+        $grid->model()->whereIn('status_const', ['INSTALL DONE', 'SELESAI UT', 'SELESAI CT', 'REKON', 'BAST-1']);
         //$grid->model()->join('tran_baseline', 'tran_supervisi.project_id', '=', 'tran_baseline.project_id')->where('tran_baseline.activity_id', '=',  19)->where('tran_baseline.actual_finish', '>',  0);
         $grid->disableCreateButton();
         $grid->disableRowSelector();

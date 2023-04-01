@@ -71,14 +71,17 @@ class SupervisiController extends Controller
         $progress_plan = TranBaseline::where("project_id", $supervisi->project_id)->whereBetween('plan_finish', [$supervisi->supervisi_project->start_date,  $today])->sum('bobot');
         $bg = '';
         $blink = '';
-        if ($supervisi->status_const == 'INSTALL DONE' && activeGuard() == 'waspang') {
+        if ($supervisi->task == 'NEED APPROVED WASPANG' && activeGuard() == 'waspang') {
           $bg = 'bg-light-success';
           $blink = 'blink';
-        } elseif ($supervisi->status_const == 'SELESAI CT' && activeGuard() == 'tim-ut') {
+        } elseif ($supervisi->task == 'NEED APPROVED TIM UT' && activeGuard() == 'tim-ut') {
           $bg = 'bg-light-success';
           $blink = 'blink';
         }
-        $ssStatus = '';
+        $ssStatus = 'bg-success';
+        if ($supervisi->supervisi_project->status_project == 'DROP') {
+          $ssStatus = 'bg-danger';
+        }
         $response .= '
                  <div class="col-md-4 hello" id="' . $id++ . '">
                  <div class="card '.$bg.'">
@@ -88,7 +91,7 @@ class SupervisiController extends Controller
                    
                    <div class="project-members mb-4">
                    <label class="me-2">Status :</label>
-                     <span class="badge bg-success">' . $supervisi->supervisi_project->status_project . ' </span>
+                     <span class="badge '.$ssStatus.'">' . $supervisi->supervisi_project->status_project . ' </span>
                      <label class="me-2">Const :</label>
                      <span class="badge bg-warning '.$blink.'">' . $status_const . ' </span>
                      

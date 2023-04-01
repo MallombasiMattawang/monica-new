@@ -30,6 +30,11 @@
             {{ session('success') }}
         </div>
         @endif
+        @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+        @endif
         <div class="row">
             <div class="col-12 mb-2">
                 <div class="project-list d-flex flex-nowrap align-items-start">
@@ -38,7 +43,7 @@
                             <li class="nav-item"><a class="nav-link active" href="#" data-bs-toggle="tab" data-bs-target="#pd_overview" role="tab">Overview</a></li>
                             <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#plan_activity" role="tab">Plan Activity</a></li>
                             <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#actual_activity" role="tab">Actual Activity</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#administrasi_activity" role="tab">Administrasi Actual</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#administrasi_activity" role="tab">Administrasi Activity</a></li>
 
                          
                             <li class="divider mt-4 py-2 border-top text-uppercase text-muted"></li>
@@ -69,11 +74,11 @@
                                     <h6 class="card-title mb-0"><a class="me-2 fa fa-arrow-circle-left" href="#" title="back"></a>Project Overview</h6>
                                     <button class="btn btn-sm d-block d-lg-none btn-primary project-list-toggle" type="button"><i class="fa fa-bars"></i></button>
                                 </div>
-                                {{-- <div class="alert alert-success" role="alert">
+                                <div class="alert alert-info" role="alert">
                                     <h6 class="alert-heading">Project Task !</h6>
 
                                     <p class="mb-0">{{ ucwords($profil->task)}}</p>
-                            </div> --}}
+                            </div>
                             <div class="row g-3 row-deck">
                                 <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-6">
                                     <div class="card">

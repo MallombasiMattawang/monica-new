@@ -7,7 +7,7 @@
                     @php
                     $progress_plan = $countPlan != 0 ? ($countPlan / $countBase) * 100 : 0;
                     @endphp
-                    <small class="small"> Total Durasi {{ $sumDurasi }} Hari</small>
+                    <small class="small"> Total Plan Durasi {{ $plan_durasi }}</small>
                 </div>
                 <div class="text-end">
                     <h3 class="mb-0"> {{ (int) $progress_plan }} %</h3>
