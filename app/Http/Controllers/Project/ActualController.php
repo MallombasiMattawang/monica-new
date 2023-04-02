@@ -312,8 +312,8 @@ class ActualController extends Controller
 
             if (cek_commisioning_tes($baseline->project_id) == 1) {
                 $status_const = 'SELESAI CT';
-            }
-            if (cek_all_installasi($baseline->project_id) == cek_all_installasi_finish($baseline->project_id)) {
+            } 
+            if (cek_all_installasi($baseline->project_id) == cek_all_installasi_finish($baseline->project_id) && cek_commisioning_tes($baseline->project_id) == 0) {
                 $status_const = 'INSTALL DONE';
             }
             if (cek_all_installasi($baseline->project_id) > cek_all_installasi_finish($baseline->project_id)) {
