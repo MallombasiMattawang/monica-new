@@ -136,6 +136,7 @@
                             <span class="badge bg-danger">{{ $list->actual_task }}</span>
                             @endif
                         </td>
+                        @if ($supervisi->supervisi_project->status_plan == 1)
                         <td class="text-center">
                             @if ($list->category_id == 001 || $list->category_id == 002)
                                  @if ($list->actual_status == 'belum' || $list->actual_task == null || $list->actual_task == 'REJECTED' && activeGuard() == 'mitra')
@@ -201,7 +202,9 @@
 
                            
 
-                        </td>
+                        </td>   
+                        @endif
+                      
                     </tr>
                     @endforeach
                 </table>
