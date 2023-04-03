@@ -48,12 +48,22 @@ Route::group([
     $router->post('submit-drop-project', 'MstProjectController@submitDropProject');
 
     /**Import File SAP */
-    $router->get('form-import-sap', 'MstSapController@formImport');
-    $router->post('submit-import-sap', 'MstSapController@submitImport');
+    Route::group([
+        'middleware' => 'admin.permission:allow,administrator',
+    ], function ($router) {
+        $router->get('form-import-sap', 'MstSapController@formImport');
+        $router->post('submit-import-sap', 'MstSapController@submitImport');
+    });
+
 
     /**Import File Smilley */
-    $router->get('form-import-smilley', 'MstSmilleyController@formImport');
-    $router->post('submit-import-smilley', 'MstSmilleyController@submitImport');
+    Route::group([
+        'middleware' => 'admin.permission:allow,administrator',
+    ], function ($router) {
+        $router->get('form-import-smilley', 'MstSmilleyController@formImport');
+        $router->post('submit-import-smilley', 'MstSmilleyController@submitImport');
+    });
+    
 
     /**Supervisi */
     $router->get('add-waspang', 'TranSupervisiController@addWaspang');
@@ -75,23 +85,23 @@ Route::group([
     $router->post('reject-administrasi-witel', 'TranAdministrasiController@rejectWitel');
     $router->post('ttd-administrasi-witel', 'TranAdministrasiController@ttdWitel');
 
-     /**Approval administrasi telkom regional */
-     $router->post('approve-administrasi-regional', 'TranAdministrasiController@approveRegional');
-     $router->post('reject-administrasi-regional', 'TranAdministrasiController@rejectRegional');
-     $router->post('ttd-administrasi-regional', 'TranAdministrasiController@ttdRegional');
+    /**Approval administrasi telkom regional */
+    $router->post('approve-administrasi-regional', 'TranAdministrasiController@approveRegional');
+    $router->post('reject-administrasi-regional', 'TranAdministrasiController@rejectRegional');
+    $router->post('ttd-administrasi-regional', 'TranAdministrasiController@ttdRegional');
 
-     /**Approval BA Rekon telkom regional */
-     $router->post('approve-administrasi-ba', 'TranAdministrasiController@approveBa');
-     $router->post('reject-administrasi-ba', 'TranAdministrasiController@rejectBa');
+    /**Approval BA Rekon telkom regional */
+    $router->post('approve-administrasi-ba', 'TranAdministrasiController@approveBa');
+    $router->post('reject-administrasi-ba', 'TranAdministrasiController@rejectBa');
 
-     /**iNVENTORY */
-     $router->post('generate-odp{id?}', 'TranInventoryController@generateOdp');
+    /**iNVENTORY */
+    $router->post('generate-odp{id?}', 'TranInventoryController@generateOdp');
 
-     $router->resource('view-supervisis', ViewSupervisiController::class);
+    $router->resource('view-supervisis', ViewSupervisiController::class);
 
-      /**SUPERVISI VIEW */
-      $router->get('list-supervisis', 'ViewSupervisiController@list');
+    /**SUPERVISI VIEW */
+    $router->get('list-supervisis', 'ViewSupervisiController@list');
 
-      /**Kurva S */
-      $router->get('api/kurva_s/{id?}', 'TranSupervisiController@kurvaS');
+    /**Kurva S */
+    $router->get('api/kurva_s/{id?}', 'TranSupervisiController@kurvaS');
 });

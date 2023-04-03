@@ -10,29 +10,30 @@ use App\Models\MstWitel;
 use Encore\Admin\Widgets;
 use App\Models\MstProject;
 use App\Admin\Forms\addPlan;
+use App\Models\MstWaspangUt;
 use App\Models\TranBaseline;
 use Illuminate\Http\Request;
 use App\Models\TranSupervisi;
+use App\Admin\Actions\Restore;
+use App\Imports\ProjectImport;
 use App\Admin\Forms\AccProject;
 use App\Models\RefListActivity;
 use Encore\Admin\Facades\Admin;
+use App\Models\TranAdministrasi;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Auth\Permission;
 use App\Admin\Actions\Project\Acc;
 use App\Admin\Forms\importProject;
 use Illuminate\Support\Facades\DB;
+use App\Admin\Actions\BatchRestore;
+use App\Admin\Actions\Project\Plan;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Admin\Actions\Post\Replicate;
 use App\Admin\Forms\BaselineActivity;
 use App\Admin\Actions\Project\Baseline;
-use App\Admin\Actions\BatchRestore;
 use App\Admin\Actions\Project\ActualActivity;
-use App\Admin\Actions\Project\Plan;
-use App\Models\MstWaspangUt;
 use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Controllers\AdminController;
-use App\Imports\ProjectImport;
-use App\Models\TranAdministrasi;
-use Maatwebsite\Excel\Facades\Excel;
 
 class MstProjectController extends AdminController
 {
@@ -77,6 +78,9 @@ class MstProjectController extends AdminController
             $actions->disableEdit();
             if ($actions->row->status_project != 'USULAN') {
                 $actions->disableDelete();
+            }
+            if (\request('_scope_') == 'trashed') {
+                $actions->add(new Restore());
             }
         });
         $grid->filter(function ($filter) {
@@ -183,7 +187,7 @@ class MstProjectController extends AdminController
             $form->text('perihal_nde', __('Perihal nde'));
             $form->date('tgl_nde', __('Tgl nde'));
             $form->currency('nilai_permintaan', __('Nilai permintaan'))->symbol('Rp.');
-
+            
             if ($form->isEditing()) {
                 $form->display('mitra_id', __('Mitra'));
             }

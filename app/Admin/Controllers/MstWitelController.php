@@ -2,12 +2,16 @@
 
 namespace App\Admin\Controllers;
 
-use App\Models\MstWitel;
-use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use App\Models\MstWitel;
+use App\Admin\Actions\Restore;
+use Encore\Admin\Facades\Admin;
+use Encore\Admin\Auth\Permission;
+use App\Admin\Actions\BatchRestore;
 use Illuminate\Support\Facades\Hash;
+use Encore\Admin\Controllers\AdminController;
 
 class MstWitelController extends AdminController
 {
@@ -27,17 +31,38 @@ class MstWitelController extends AdminController
     {
         $grid = new Grid(new MstWitel());
         $grid->model()->join('admin_role_users', 'admin_users.id', '=', 'admin_role_users.user_id')->where('role_id', '=',  2);
-        $grid->filter(function($filter){
-
-            // Remove the default id filter
+        $grid->filter(function ($filter) {
+            $filter->scope('trashed', 'Recycle Bin')->onlyTrashed();
             $filter->disableIdFilter();
             $filter->like('name', 'Nama Witel');
-        
-        });       
-        $grid->column('id', 'ID')->sortable();        
-        $grid->column('kode_user', 'Kode User');       
-        $grid->column('name', trans('admin.name'));        
-        
+        });
+        $grid->tools(function ($tools) {
+            $tools->batch(function ($batch) {
+                if (\request('_scope_') == 'trashed') {
+                    $batch->disableDelete();
+                }
+            });
+          
+        });
+
+        $grid->batchActions(function ($batch) {
+            if (\request('_scope_') == 'trashed') {
+                $batch->add(new BatchRestore());
+            }
+        });
+
+        $grid->actions (function ($actions) {
+            if (!Admin::user()->can('delete-witel')) {
+                $actions->disableDelete();
+            }
+            if (\request('_scope_') == 'trashed') {
+                $actions->add(new Restore());
+            }
+        });
+        $grid->column('id', 'ID')->sortable();
+        $grid->column('kode_user', 'Kode User');
+        $grid->column('name', trans('admin.name'));
+
         return $grid;
     }
 
@@ -52,14 +77,8 @@ class MstWitelController extends AdminController
         $show = new Show(MstWitel::findOrFail($id));
 
         $show->field('id', __('Id'));
-        $show->field('username', __('Username'));
-        $show->field('password', __('Password'));
-        $show->field('kode_user', __('Kode User'));
-        $show->field('name', __('Name'));
-        $show->field('avatar', __('Avatar'));        
-        $show->field('remember_token', __('Remember token'));
-        $show->field('created_at', __('Created at'));
-        $show->field('updated_at', __('Updated at'));
+        $show->field('kode_user', __('Kode Witel'));
+        $show->field('name', __('Nama WITEL'));
 
         return $show;
     }
@@ -71,6 +90,7 @@ class MstWitelController extends AdminController
      */
     protected function form()
     {
+        Permission::check('create-witel');
         $userModel = config('admin.database.users_model');
         $permissionModel = config('admin.database.permissions_model');
         $roleModel = config('admin.database.roles_model');
@@ -87,7 +107,7 @@ class MstWitelController extends AdminController
 
         $form->text('name', trans('admin.name'))->rules('required');
         $form->text('kode_user', 'Kode User');
-       
+
         $form->image('avatar', trans('admin.avatar'));
         $form->password('password', trans('admin.password'))->rules('required|confirmed');
         $form->password('password_confirmation', trans('admin.password_confirmation'))->rules('required')

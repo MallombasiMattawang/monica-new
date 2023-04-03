@@ -2,13 +2,15 @@
 
 namespace App\Admin\Controllers;
 
-use App\Models\MstMitra;
-use Illuminate\Support\Facades\Hash;
-use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use App\Models\MstMitra;
+use App\Admin\Actions\Restore;
+use Encore\Admin\Facades\Admin;
 use App\Admin\Actions\BatchRestore;
+use Illuminate\Support\Facades\Hash;
+use Encore\Admin\Controllers\AdminController;
 
 class MstMitraController extends AdminController
 {
@@ -46,8 +48,11 @@ class MstMitraController extends AdminController
             }
         });
         $grid->actions(function ($actions) {
-            if (\request('_scope_') == 'trashed') {
+            if (!Admin::user()->can('delete-witel')) {
                 $actions->disableDelete();
+            }
+            if (\request('_scope_') == 'trashed') {
+                $actions->add(new Restore());
             }
         });
 
@@ -115,16 +120,28 @@ class MstMitraController extends AdminController
 
         $form->divider('Data Mitra');
 
-        $form->text('kode_mitra', __('Kode Mitra'))
+        if ($form->isCreating()) {
+            $form->text('kode_mitra', __('Kode Mitra'))
             ->creationRules(['required', "unique:mst_mitra"])
             ->updateRules(['required', "unique:mst_mitra,kode_mitra,{{id}}"]);
+        }
+        if ($form->isEditing()) {
+            $form->display('kode_mitra', __('Kode Mitra'));
+        }
+       
         $form->text('nama_mitra', __('Nama mitra'))->rules('required');
 
         $form->divider('User Akun');
-
-        $form->text('username', trans('admin.username'))
+        
+        if ($form->isCreating()) {
+            $form->text('username', trans('admin.username'))
             ->creationRules(['required', "unique:mst_mitra"])
             ->updateRules(['required', "unique:mst_mitra,username,{{id}}"]);
+        }
+        if ($form->isEditing()) {
+            $form->display('username', __('admin.username'));
+        }
+       
         $form->password('password', trans('admin.password'))->rules('required|confirmed');
         $form->password('password_confirmation', trans('admin.password_confirmation'))->rules('required')
             ->default(function ($form) {

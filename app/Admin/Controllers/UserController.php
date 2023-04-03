@@ -8,6 +8,8 @@ use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Illuminate\Support\Facades\Hash;
 use Encore\Admin\Controllers\AdminController;
+use App\Admin\Actions\BatchRestore;
+use App\Admin\Actions\Restore;
 
 class UserController extends AdminController
 {
@@ -28,8 +30,32 @@ class UserController extends AdminController
         $grid = new Grid(new User());
         $grid->filter(function ($filter) {
             $filter->disableIdFilter();
+            $filter->scope('trashed', 'Recycle Bin')->onlyTrashed();
             $filter->like('Name', 'name');
         });
+        $grid->tools(function ($tools) {
+            $tools->batch(function ($batch) {
+                if (\request('_scope_') == 'trashed') {
+                    $batch->disableDelete();
+                }
+            });
+          
+        });
+
+        $grid->batchActions(function ($batch) {
+            if (\request('_scope_') == 'trashed') {
+                $batch->add(new BatchRestore());
+            }
+        });
+
+        $grid->actions (function ($actions) {
+
+            if (\request('_scope_') == 'trashed') {
+                $actions->add(new Restore());
+            }
+        
+        });
+        
 
         $grid->column('id', 'ID')->sortable();
         $grid->column('nik', __('NIK'));

@@ -2,11 +2,14 @@
 
 namespace App\Admin\Controllers;
 
-use App\Models\RefBobot;
-use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use App\Models\RefBobot;
+use Encore\Admin\Facades\Admin;
+use Encore\Admin\Auth\Permission;
+
+use Encore\Admin\Controllers\AdminController;
 
 class RefBobotController extends AdminController
 {
@@ -29,11 +32,17 @@ class RefBobotController extends AdminController
             $filter->disableIdFilter();
             $filter->like('Nama Bobot', 'name');
         });
+        $grid->actions(function ($actions) {
+
+            if (!Admin::user()->can('delete-bobot')) {
+                $actions->disableDelete();
+            }
+        });
 
         $grid->column('id', __('Id'));
         $grid->column('name', __('Name'));
         $grid->column('bobot', __('Bobot'));
-        
+
 
         return $grid;
     }
@@ -64,6 +73,7 @@ class RefBobotController extends AdminController
      */
     protected function form()
     {
+        Permission::check('create-bobot');
         $form = new Form(new RefBobot());
 
         $form->text('name', __('Name'));

@@ -2,11 +2,13 @@
 
 namespace App\Admin\Controllers;
 
-use App\Models\RefListActivity;
-use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use App\Models\RefListActivity;
+use Encore\Admin\Facades\Admin;
+use Encore\Admin\Auth\Permission;
+use Encore\Admin\Controllers\AdminController;
 
 class RefListActivityController extends AdminController
 {
@@ -25,6 +27,12 @@ class RefListActivityController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new RefListActivity());
+        $grid->actions(function ($actions) {
+
+            if (!Admin::user()->can('delete-list-activity')) {
+                $actions->disableDelete();
+            }
+        });
         $grid->filter(function ($filter) {
             $filter->disableIdFilter();
             $filter->like('List activity', 'list_activity');
@@ -86,6 +94,7 @@ class RefListActivityController extends AdminController
      */
     protected function form()
     {
+        Permission::check('create-list-activty');
         $form = new Form(new RefListActivity());
         $form->select('category_id', 'category_id')->options(['001' => '[001] Preparing', '002' => '[002] Material Delivery', '003' => '[003] Installasi & Test Comm', '004' => '[004] Closing']);
         $form->text('code', __('Code'));
