@@ -133,6 +133,24 @@
                                 </div>
                             </div> <!-- .Card End -->
                         </div>
+                        <div class="col">
+                            <div class="card text-center">
+
+                                <div class="card-body d-flex align-items-center justify-content-between flex-column">
+                                    <div class="me-auto ms-auto py-4">
+                                        <img class="avatar rounded m-1 lift" src="{{ asset('img/xs/avatar8.jpg.png') }}" data-bs-toggle="tooltip" data-placement="top" title="" alt="" data-bs-original-title="Avatar Name" aria-label="Avatar Name">
+                                        <img class="avatar rounded m-1 lift" src="{{ asset('img/xs/avatar9.jpg.png') }}" data-bs-toggle="tooltip" data-placement="top" title="" alt="" data-bs-original-title="Avatar Name" aria-label="Avatar Name">
+                                        <img class="avatar rounded m-1 lift" src="{{ asset('img/xs/avatar10.jpg.png') }}" data-bs-toggle="tooltip" data-placement="top" title="" alt="" data-bs-original-title="Avatar Name" aria-label="Avatar Name">
+
+                                    </div>
+                                    <div class="mt-2">
+                                        <h5 class="mb-0">HD-PED, WITEL, SDI</h5>
+                                        <hr>
+                                        <a href="{{ url('ped-panel') }}" class="btn btn-primary " title="">Login Now</a>
+                                    </div>
+                                </div>
+                            </div> <!-- .Card End -->
+                        </div>
 
 
 
