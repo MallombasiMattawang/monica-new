@@ -34,7 +34,7 @@ class TranAdministrasiController extends AdminController
         if (Admin::user()->inRoles(['witel'])) {
             $grid->model()->where('witel_id', '=', Admin::user()->id);
         }
-
+        $grid->disableCreateButton();
         $grid->column('id', __('Id'));
         $grid->column('witel.name', __('Witel'));
         $grid->column('project.lop_site_id', __('LOP SITE ID'));
