@@ -84,16 +84,16 @@ class SupervisiController extends Controller
         }
         $response .= '
                  <div class="col-md-4 hello" id="' . $id++ . '">
-                 <div class="card '.$bg.'">
+                 <div class="card ' . $bg . '">
                  <div class="card-body">
                    <h6 class="mb-1"><a href="' . route('supervisi.detail', [$supervisi->id, Str::slug($supervisi->project_name)]) . '" class="color-600">' . $supervisi->project_name . '</a></h6>
                    <p class="text-muted">WITEL : ' . $supervisi->supervisi_witel->name . '</p>
                    
                    <div class="project-members mb-4">
                    <label class="me-2">Status :</label>
-                     <span class="badge '.$ssStatus.'">' . $supervisi->supervisi_project->status_project . ' </span>
+                     <span class="badge ' . $ssStatus . '">' . $supervisi->supervisi_project->status_project . ' </span>
                      <label class="me-2">Const :</label>
-                     <span class="badge bg-warning '.$blink.'">' . $status_const . ' </span>
+                     <span class="badge bg-warning ' . $blink . '">' . $status_const . ' </span>
                      
                    </div>
                    <label class="small d-flex justify-content-between">Progress Plan ' . $progress_plan . '% <span class="text-custom">100%</span></label>
@@ -191,19 +191,20 @@ class SupervisiController extends Controller
       $end_finish = $end_date_actual->actual_finish;
     }
 
-    $end_today = date('Y-m-d');
+    $end_today = date('Y-m-d'); //end dihari ini
     $end = $end_plan;
     if ($end_finish > $end_plan) {
       $end = $end_finish;
     }
     if ($supervisi->progress_actual < 100) {
-      $end = $end_today;
+      // $end = $end_today;
+      $end = $end;
     }
     $sum_bobot_plan = LogPlan::where('project_id', $project->id)
       ->whereBetween('log_date', [$project->start_date, $start])
       ->sum('log_bobot');
     $sum_bobot_real = TranBaseline::where('project_id', $project->id)
-      ->whereBetween('actual_finish', [$project->start_date, $start])
+      ->whereBetween('actual_start', [$project->start_date, $start])
       ->sum('bobot');
 
     $items = array();
@@ -218,9 +219,24 @@ class SupervisiController extends Controller
       $sum_bobot_plan = LogPlan::where('project_id', $project->id)
         ->whereBetween('log_date', [$project->start_date, $start])
         ->sum('log_bobot');
+     
+        // $sum_bobot_real = TranBaseline::where('project_id', $project->id)
+      //   ->whereBetween('actual_start', [$project->start_date, $start])
+      //   ->sum('bobot');
+
       $sum_bobot_real = TranBaseline::where('project_id', $project->id)
-        ->whereBetween('actual_finish', [$project->start_date, $start])
-        ->sum('bobot');
+        ->whereBetween('actual_start', [$project->start_date, $start])
+        //->selectRaw('SUM(bobot * (actual_progress/100 )) as total')
+        ->selectRaw('ROUND(SUM(bobot * (actual_progress/100 )), 1) as total')
+        ->pluck('total');
+
+      
+
+      if ($end_today < $start) {
+        $sum_bobot_real = null;
+      } else {
+        $sum_bobot_real = $sum_bobot_real;
+      }
     }
 
     //make response JSON
