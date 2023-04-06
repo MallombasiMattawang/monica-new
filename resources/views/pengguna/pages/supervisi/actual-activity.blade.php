@@ -9,12 +9,12 @@
 
                         </div>
                         <div class="text-end">
-                            <h3 class="mb-0"> {{ (int) $progress_plan }} %</h3>
+                            <h3 class="mb-0"> {{ getProgressPlan($supervisi->project_id, $supervisi->supervisi_project->start_date) }} %</h3>
                             <small class="info">of 100%</small>
                         </div>
                     </div>
                     <div class="progress mt-3" style="height: 2px;">
-                        <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100" style="width: {{ (int) $progress_plan }}%;"></div>
+                        <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100" style="width: {{ (int) getProgressPlan($supervisi->project_id, $supervisi->supervisi_project->start_date) }}%;"></div>
                     </div>
                 </div>
             </div>
@@ -28,12 +28,12 @@
 
                         </div>
                         <div class="text-end">
-                            <h3 class="mb-0"> {{ $sum_selesai + $sum_belum }} %</h3>
+                            <h3 class="mb-0"> {{ getProgressActual($supervisi->project_id, $supervisi->supervisi_project->start_date) }} %</h3>
                             <small class="info">of 100%</small>
                         </div>
                     </div>
                     <div class="progress mt-3" style="height: 2px;">
-                        <div class="progress-bar bg-success" role="progressbar" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100" style="width: {{ $sum_selesai + $sum_belum }}%;"></div>
+                        <div class="progress-bar bg-success" role="progressbar" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100" style="width: {{ getProgressActual($supervisi->project_id, $supervisi->supervisi_project->start_date) }}%;"></div>
                     </div>
                 </div>
             </div>

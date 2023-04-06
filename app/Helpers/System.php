@@ -3,6 +3,7 @@
 use App\Models\Gtk;
 use App\Models\User;
 use App\Models\Siswa;
+use App\Models\LogPlan;
 use App\Models\Sekolah;
 use App\Models\MstMitra;
 use App\Models\MstSatker;
@@ -17,6 +18,27 @@ use App\Models\RefMetodePengadaan;
 use Illuminate\Support\Collection;
 use App\Models\RefKualifikasiUsaha;
 use Illuminate\Support\Facades\Redirect;
+
+
+function getProgressActual($project_id, $start_date)
+{
+    $sum_bobot_real = TranBaseline::where('project_id', $project_id)
+        ->whereBetween('actual_start', [$start_date, date('Y-m-d')])
+        ->selectRaw('ROUND(SUM(bobot * (actual_progress/100 )), 1) as total')
+        ->value('total');
+
+    return ($sum_bobot_real != null) ? $sum_bobot_real : 0;
+}
+
+function getProgressPlan($project_id, $start_date)
+{
+    $sum_bobot_plan = LogPlan::where('project_id', $project_id)
+        ->whereBetween('log_date', [$start_date, date('Y-m-d')])
+        ->selectRaw('ROUND(SUM(log_bobot), 1) as total')
+        ->value('total');
+
+    return ($sum_bobot_plan != null) ? $sum_bobot_plan : 0;
+}
 
 function singkat_angka($n, $presisi = 1)
 {
@@ -149,11 +171,11 @@ function cek_ut($project_id)
 function cek_rekon($project_id)
 {
     $query = TranBaseline::select('actual_finish')
-    ->where('project_id', $project_id)
-    ->where('actual_task', 'APPROVED')
-    ->whereNotNull('actual_finish')
-    ->where('actual_finish', '<>', '')
-    ->where('activity_id', 22)->exists();
+        ->where('project_id', $project_id)
+        ->where('actual_task', 'APPROVED')
+        ->whereNotNull('actual_finish')
+        ->where('actual_finish', '<>', '')
+        ->where('activity_id', 22)->exists();
     return $query;
 }
 

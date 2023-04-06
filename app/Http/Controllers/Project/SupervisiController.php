@@ -228,14 +228,14 @@ class SupervisiController extends Controller
         ->whereBetween('actual_start', [$project->start_date, $start])
         //->selectRaw('SUM(bobot * (actual_progress/100 )) as total')
         ->selectRaw('ROUND(SUM(bobot * (actual_progress/100 )), 1) as total')
-        ->pluck('total');
+        ->value('total');
 
       
 
       if ($end_today < $start) {
         $sum_bobot_real = null;
       } else {
-        $sum_bobot_real = $sum_bobot_real;
+        $sum_bobot_real = ($sum_bobot_real != null) ? $sum_bobot_real : 0;
       }
     }
 
