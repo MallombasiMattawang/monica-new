@@ -211,7 +211,7 @@ class SupervisiController extends Controller
     $i = 1;
     while (strtotime($start) <= strtotime($end)) {
       $items[] = ([
-        'date' => $start,
+        'date' => tgl_indo($start),
         'bobot_plan' => number_format($sum_bobot_plan, 1, '.', ''),
         'bobot_real' => $sum_bobot_real
       ]);
