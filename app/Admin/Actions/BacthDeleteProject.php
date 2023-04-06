@@ -24,7 +24,7 @@ class BacthDeleteProject extends BatchAction
             //     ->log(__('has permanently deleted'));
         }
 
-        return $this->response()->success(__('Deleted Project, untuk menghapus permanen / restore project masuk ke rycle bin'))->refresh();
+        return $this->response()->success(__('Deleted Project, hanya data dengan status "USULAN" yang dapat dihapus'))->refresh();
     }
 
     public function dialog ()
