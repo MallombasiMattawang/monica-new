@@ -27,13 +27,18 @@ use App\Admin\Forms\importProject;
 use Illuminate\Support\Facades\DB;
 use App\Admin\Actions\BatchRestore;
 use App\Admin\Actions\Project\Plan;
+use App\Admin\Actions\DeleteProject;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Admin\Actions\Post\Replicate;
 use App\Admin\Forms\BaselineActivity;
 use App\Admin\Actions\Project\Baseline;
+use Encore\Admin\Grid\Tools\BatchDelete;
+use App\Admin\Actions\BacthDeleteProject;
+use App\Admin\Actions\DeleteProjectPermanen;
 use App\Admin\Actions\Project\ActualActivity;
 use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Controllers\AdminController;
+use App\Admin\Actions\BacthDeleteProjectPermanen;
 
 class MstProjectController extends AdminController
 {
@@ -59,28 +64,39 @@ class MstProjectController extends AdminController
             $grid->model()->where('witel_id', '=', Admin::user()->username);
             $grid->disableRowSelector();
         }
+        
+       
 
         $grid->tools(function ($tools) {
             $tools->batch(function ($batch) {
-                if (\request('_scope_') == 'trashed') {
-                    $batch->disableDelete();
-                }
+                $batch->disableDelete();
+                /** pakai custom delete */
+                 if (\request('_scope_') != 'trashed') {                    
+                     $batch->add(new BacthDeleteProject());
+                 } 
+                
+                
             });
             $tools->append('<a href="/ped-panel/form-import-project" class="btn btn-default btn-sm"><i class="fa fa-download"></i>  Import Project</a>');
         });
 
         $grid->batchActions(function ($batch) {
             if (\request('_scope_') == 'trashed') {
+                $batch->add(new BacthDeleteProjectPermanen());
                 $batch->add(new BatchRestore());
+               
             }
         });
         $grid->actions(function ($actions) {
             $actions->disableEdit();
-            if ($actions->row->status_project != 'USULAN') {
-                $actions->disableDelete();
+            $actions->disableDelete();
+            if ($actions->row->status_project == 'USULAN' && \request('_scope_') != 'trashed') {
+                $actions->add(new DeleteProject());
             }
             if (\request('_scope_') == 'trashed') {
-                $actions->add(new Restore());
+                $actions->add(new Restore());          
+                $actions->add(new DeleteProjectPermanen());     
+
             }
         });
         $grid->filter(function ($filter) {
@@ -104,7 +120,11 @@ class MstProjectController extends AdminController
         });
         $grid->rows(function (Grid\Row $row) {
             if ($row->status_project == 'USULAN') {
-                $row->setAttributes(['style' => 'color:red;']);
+                $row->setAttributes(['class' => 'bg-danger']);
+            } elseif($row->status_project == 'DROP') {
+                $row->setAttributes(['class' => 'bg-warning']);
+            } else {
+                $row->setAttributes(['class' => 'bg-success']);
             }
         });
         //$grid->fixColumns(3, -2);
