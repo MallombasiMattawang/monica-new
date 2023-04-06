@@ -20,6 +20,6 @@ class DeleteProject extends RowAction
 
     public function dialog()
     {
-        $this->confirm(__('Are you sure you want to delete permanently?'));
+        $this->confirm(__('Are you sure you want to delete ?'));
     }
 }

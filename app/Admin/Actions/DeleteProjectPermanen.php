@@ -15,7 +15,7 @@ class DeleteProjectPermanen extends RowAction
             $model->forceDelete();
         }
 
-        return $this->response()->success('Deleted Permanently')->refresh();
+        return $this->response()->success('Deleted')->refresh();
     }
 
     public function dialog()
