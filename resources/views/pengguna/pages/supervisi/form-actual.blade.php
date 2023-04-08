@@ -81,7 +81,7 @@
                             @if ($baseline->activity_id < 23)
                             <div class="col-6">
                                 <label class="form-label">Volume Actual <sup class="text-danger">*</sup></label>
-                                <input type="number" class="form-control" name="actual_volume" value="">
+                                <input type="number" class="form-control" name="actual_volume" value="{{ old('actual_volume') }}">
                             </div>
                             <div class="col-6">
                                 <label class="form-label">Volume Sebelumnya </label>
@@ -109,11 +109,11 @@
 
                             <div class="col-md-6">
                                 <label for="actual_message" class="form-label">Remarks<sup class="text-danger">*</sup></label>
-                                <textarea name="actual_message" cols="30" rows="5" class="form-control"></textarea>
+                                <textarea name="actual_message" cols="30" rows="5" class="form-control">{{ old('actual_message') }}</textarea>
                             </div>
                             <div class="col-md-6">
                                 <label for="actual_message" class="form-label">Kendala</label>
-                                <textarea name="actual_kendala" cols="30" rows="5" class="form-control"></textarea>
+                                <textarea name="actual_kendala" cols="30" rows="5" class="form-control">{{ old('actual_kendala') }}</textarea>
                             </div>
 
 

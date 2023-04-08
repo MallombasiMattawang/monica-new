@@ -96,12 +96,12 @@ class SupervisiController extends Controller
                      <span class="badge bg-warning ' . $blink . '">' . $status_const . ' </span>
                      
                    </div>
-                   <label class="small d-flex justify-content-between">Progress Plan ' . $progress_plan . '% <span class="text-custom">100%</span></label>
+                   <label class="small d-flex justify-content-between">Progress Plan ' . getProgressPlan($supervisi->project_id, $supervisi->supervisi_project->start_date) . '% <span class="text-custom">100%</span></label>
                    <div class="progress mt-1" style="height: 3px;">
                      <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100" style="width: ' . $progress_plan . '%;"></div>
                    </div>
                    <br>
-                   <label class="small d-flex justify-content-between">Progress Actual ' . $supervisi->progress_actual . '% <span class="text-custom">100%</span></label>
+                   <label class="small d-flex justify-content-between">Progress Actual ' . getProgressActual($supervisi->project_id, $supervisi->supervisi_project->start_date) . '% <span class="text-custom">100%</span></label>
                    <div class="progress mt-1" style="height: 3px;">
                      <div class="progress-bar bg-success" role="progressbar" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100" style="width: ' . $supervisi->progress_actual . '%;"></div>
                    </div>

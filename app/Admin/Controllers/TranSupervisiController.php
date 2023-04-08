@@ -61,9 +61,9 @@ class TranSupervisiController extends AdminController
     }
     $grid->rows(function (Grid\Row $row) {
       if ($row->supervisi_project['status_project'] == 'DROP') {
-          $row->setAttributes(['style' => 'color:red;']);
+        $row->setAttributes(['style' => 'color:red;']);
       }
-  });
+    });
     $grid->filter(function ($filter) {
       $filter->disableIdFilter();
       $filter->column(1 / 2, function ($filter) {
@@ -90,7 +90,7 @@ class TranSupervisiController extends AdminController
           $actions->add(new Baseline);
         } else {
           $actions->add(new Baseline);
-          $actions->add(new Actual);
+          //$actions->add(new Actual);
         }
       }
     });
@@ -140,16 +140,22 @@ class TranSupervisiController extends AdminController
       $today = date('Y-m-d');
       $project_id = $this->project_id;
       $start_date = MstProject::select('start_date')
-        ->where('id', $this->project_id)
-        ->first();
-      $progress_plan = TranBaseline::where('project_id', $project_id)
-        ->whereBetween('plan_finish', [$start_date->start_date, $today])
-        ->sum('bobot');
-      return "<span style='color:blue'>$progress_plan %</span>";
+        ->where('id', $project_id)
+        ->value('start_date');
+
+      $progress_plan = getProgressPlan($project_id, $start_date);
+
+      return "<span class='bg-danger'>$progress_plan %</span>";
     });
 
     $grid->column('progress_actual')->display(function ($progress_actual) {
-      return "<span style='color:blue'>$progress_actual %</span>";
+      $project_id = $this->project_id;
+      $start_date = MstProject::select('start_date')
+        ->where('id', $project_id)
+        ->value('start_date');
+
+      $progress_actual = getProgressActual($project_id, $start_date);
+      return "<span class='bg-success'>$progress_actual %</span>";
     });
     Admin::style(
       '.table {
@@ -222,7 +228,7 @@ class TranSupervisiController extends AdminController
   public function formBaseline($id)
   {
     return Admin::content(function (Content $content) use ($id) {
-     
+
       $project = MstProject::where("id", $id)->first();
       if ($project->status_project == 'USULAN' || $project->status_project == 'DROP') {
         return abort(404);
@@ -232,13 +238,13 @@ class TranSupervisiController extends AdminController
       $content->description('Baseline Activity');
       $content->breadcrumb(
         ['text' => 'Supervisi', 'url' => 'tran-supervisis'],
-        ['text' => $project->lop_site_id, 'url' => 'tran-supervisis/'. $supervisi->id .''],
+        ['text' => $project->lop_site_id, 'url' => 'tran-supervisis/' . $supervisi->id . ''],
         ['text' => 'Baseline Activity']
       );
       $checkBaseline = TranBaseline::where("project_id", $id)->exists();
       if ($checkBaseline == 1) {
         $lists = TranBaseline::where("project_id", $id)->get();
-        
+
         $waspang = User::where('role', '=',  'waspang')->get();
         $tim_ut = User::where('role', '=',  'tim_ut')->get();
         $countBase = TranBaseline::where("project_id", $id)->where('bobot', '>=', '1')->count();
@@ -271,7 +277,7 @@ class TranSupervisiController extends AdminController
         $countBase = 0;
         $countPlan = 0;
         $sumDurasi = 0;
-        $c=0;
+        $c = 0;
         $content->body(view('admin.modules.supervisi.form-baseline', [
           'project' => $project,
           'deliveryKabel' => $deliveryKabel,
@@ -294,9 +300,9 @@ class TranSupervisiController extends AdminController
   }
 
 
-  
+
   public function createBaseline(Request $request)
-  {   
+  {
     $request->validate([
       'volume.*' => 'required|numeric|gt:0',
       'bobot.*' => 'required|numeric|gt:0',
@@ -969,59 +975,59 @@ class TranSupervisiController extends AdminController
 
   public function kurvaS($id)
   {
-      $project = MstProject::where("id", $id)->first();
-      $supervisi = TranSupervisi::where('project_id', $id)->first();
-      // $lists = TranBaseline::where("project_id", $id)
-      //     ->select('id', 'activity_id', 'bobot', 'plan_durasi', 'plan_start', 'plan_finish')
-      //     ->get();
-      $lists_asc_date = TranBaseline::where("project_id", $id)->orderBy('plan_finish', 'ASC')->get();
-      $end_date_plan = TranBaseline::where("project_id", $id)->whereNotNull('plan_finish')->orderBy('plan_finish', 'Desc')->first();
-      $end_date_actual = TranBaseline::where("project_id", $id)->whereNotNull('actual_finish')->orderBy('id', 'Desc')->first();
+    $project = MstProject::where("id", $id)->first();
+    $supervisi = TranSupervisi::where('project_id', $id)->first();
+    // $lists = TranBaseline::where("project_id", $id)
+    //     ->select('id', 'activity_id', 'bobot', 'plan_durasi', 'plan_start', 'plan_finish')
+    //     ->get();
+    $lists_asc_date = TranBaseline::where("project_id", $id)->orderBy('plan_finish', 'ASC')->get();
+    $end_date_plan = TranBaseline::where("project_id", $id)->whereNotNull('plan_finish')->orderBy('plan_finish', 'Desc')->first();
+    $end_date_actual = TranBaseline::where("project_id", $id)->whereNotNull('actual_finish')->orderBy('id', 'Desc')->first();
 
-      $start = $project->start_date;
-      $end_plan = $end_date_plan->plan_finish;
-      $end_finish = 0;
-      if ($end_date_actual) {
-          $end_finish = $end_date_actual->actual_finish;
-      }
+    $start = $project->start_date;
+    $end_plan = $end_date_plan->plan_finish;
+    $end_finish = 0;
+    if ($end_date_actual) {
+      $end_finish = $end_date_actual->actual_finish;
+    }
 
-      $end_today = date('Y-m-d');
-      $end = $end_plan;
-      if ($end_finish > $end_plan) {
-          $end = $end_finish;
-      }
-      if ($supervisi->progress_actual < 100) {
-          $end = $end_today;
-      }
+    $end_today = date('Y-m-d');
+    $end = $end_plan;
+    if ($end_finish > $end_plan) {
+      $end = $end_finish;
+    }
+    if ($supervisi->progress_actual < 100) {
+      $end = $end_today;
+    }
+    $sum_bobot_plan = LogPlan::where('project_id', $project->id)
+      ->whereBetween('log_date', [$project->start_date, $start])
+      ->sum('log_bobot');
+    $sum_bobot_real = TranBaseline::where('project_id', $project->id)
+      ->whereBetween('actual_finish', [$project->start_date, $start])
+      ->sum('bobot');
+
+    $items = array();
+    $i = 1;
+    while (strtotime($start) <= strtotime($end)) {
+      $items[] = ([
+        'date' => $start,
+        'bobot_plan' => number_format($sum_bobot_plan, 1, '.', ''),
+        'bobot_real' => $sum_bobot_real
+      ]);
+      $start = date('Y-m-d', strtotime('+1 day', strtotime($start))); //looping tambah 1 date
       $sum_bobot_plan = LogPlan::where('project_id', $project->id)
-          ->whereBetween('log_date', [$project->start_date, $start])
-          ->sum('log_bobot');
+        ->whereBetween('log_date', [$project->start_date, $start])
+        ->sum('log_bobot');
       $sum_bobot_real = TranBaseline::where('project_id', $project->id)
-          ->whereBetween('actual_finish', [$project->start_date, $start])
-          ->sum('bobot');
+        ->whereBetween('actual_finish', [$project->start_date, $start])
+        ->sum('bobot');
+    }
 
-      $items = array();
-      $i = 1;
-      while (strtotime($start) <= strtotime($end)) {
-          $items[] = ([
-              'date' => $start,
-              'bobot_plan' => number_format($sum_bobot_plan, 1, '.', ''),
-              'bobot_real' => $sum_bobot_real
-          ]);
-          $start = date('Y-m-d', strtotime('+1 day', strtotime($start))); //looping tambah 1 date
-          $sum_bobot_plan = LogPlan::where('project_id', $project->id)
-              ->whereBetween('log_date', [$project->start_date, $start])
-              ->sum('log_bobot');
-          $sum_bobot_real = TranBaseline::where('project_id', $project->id)
-              ->whereBetween('actual_finish', [$project->start_date, $start])
-              ->sum('bobot');
-      }
-
-      //make response JSON
-      return response()->json([
-          'status' => 'success',
-          'data'   => $items,
-          //'date' => $person,
-      ], 200);
+    //make response JSON
+    return response()->json([
+      'status' => 'success',
+      'data'   => $items,
+      //'date' => $person,
+    ], 200);
   }
 }

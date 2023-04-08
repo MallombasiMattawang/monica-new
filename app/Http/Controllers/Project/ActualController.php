@@ -177,11 +177,13 @@ class ActualController extends Controller
             [
                 'file' => 'required|mimes:jpg,png,zip,rar,pdf,doc,docx,xlsx,csv,sql|max:25000',
                 'actual_volume' => 'required',
-                'actual_status' => 'required'
+                'actual_status' => 'required',
+                'actual_message' => 'required'
             ],
             [
                 'actual_volume.required' => 'Actual Volume tidak boleh kosong',
                 'actual_status.required' => 'Actual Status tidak boleh kosong',
+                'actual_message.required' => 'Remarks tidak boleh kosong',
                 'file.required' => 'Evident tidak boleh kosong.',
                 'file.mimes' => 'Evident yang diizinkan masuk (jpg,png,zip,rar,pdf,doc,docx,xlsx,csv,sql).',
                 'file.max' => 'Ukuran Evident tidak boleh lebih dari 25 MB.',
