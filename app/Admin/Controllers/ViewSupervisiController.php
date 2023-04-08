@@ -100,6 +100,6 @@ class ViewSupervisiController extends AdminController
 
     public function export()
     {
-        return Excel::download(new SupervisiExport, 'supervisi.xlsx');
+        return Excel::download(new SupervisiExport, date('y-m-d-his-') . 'supervisi.xlsx');
     }
 }
