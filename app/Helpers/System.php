@@ -240,7 +240,7 @@ if (!function_exists('selisih_hari')) {
 
         $hari = $jarak / 60 / 60 / 24;
 
-        return $hari . ' Hari';
+        return $hari + 1 . ' Hari';
     }
 }
 

@@ -101,6 +101,8 @@ Route::group([
 
     /**SUPERVISI VIEW */
     $router->get('list-supervisis', 'ViewSupervisiController@list');
+    $router->get('export-supervisis', 'ViewSupervisiController@export')->name('admin.export.supervisi');
+    
 
     /**Kurva S */
     $router->get('api/kurva_s/{id?}', 'TranSupervisiController@kurvaS');
