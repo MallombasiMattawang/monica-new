@@ -5,6 +5,8 @@ namespace App\Admin\Controllers;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use App\Models\MstMitra;
+use App\Models\MstWitel;
 use App\Models\TranBaseline;
 use Illuminate\Http\Request;
 use App\Models\TranSupervisi;
@@ -34,8 +36,27 @@ class TranAdministrasiController extends AdminController
         if (Admin::user()->inRoles(['witel'])) {
             $grid->model()->where('witel_id', '=', Admin::user()->id);
         }
+        $grid->filter(function ($filter) {
+            $filter->disableIdFilter();
+            $filter->column(1 / 2, function ($filter) {
+              $filter->like('project_name', 'LOP / SITE ID');
+              $filter->in('project.tematik', 'TEMATIK')->multipleSelect(['PT3' => 'PT3', 'PT2' => 'PT2', 'NODE-B' => 'NODE-B', 'OLO' => 'OLO', 'HEM' => 'HEM', 'ISP' => 'ISP', 'FTTH 2022' => 'FTTH 2022']);
+              $filter->in('witel_id', 'WITEL')->multipleSelect(
+                MstWitel::join('admin_role_users', 'admin_users.id', '=', 'admin_role_users.user_id')
+                  ->where('admin_role_users.role_id', '2')->pluck('name', 'id')
+              );
+              $filter->in('mitra_id', 'MITRA')->multipleSelect(
+                MstMitra::pluck('nama_mitra', 'id')
+              );
+            });
+      
+            $filter->column(1 / 2, function ($filter) {
+              $filter->like('supervisi_project.sto_id', 'STO');
+            });
+          });
         $grid->disableCreateButton();
         $grid->column('id', __('Id'));
+        $grid->column('project.tematik', __('Tematik'));
         $grid->column('witel.name', __('Witel'));
         $grid->column('project.lop_site_id', __('LOP SITE ID'));
         $grid->column('mitra.nama_mitra', __('Mitra'));

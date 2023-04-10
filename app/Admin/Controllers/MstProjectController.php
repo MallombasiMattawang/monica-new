@@ -39,6 +39,7 @@ use App\Admin\Actions\Project\ActualActivity;
 use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Controllers\AdminController;
 use App\Admin\Actions\BacthDeleteProjectPermanen;
+use App\Models\MstMitra;
 
 class MstProjectController extends AdminController
 {
@@ -108,8 +109,14 @@ class MstProjectController extends AdminController
             $filter->column(1 / 2, function ($filter) {
                 $filter->like('lop_site_id', 'LOP / SITE ID');
                 $filter->in('status_project', 'STATUS PROJECT')->multipleSelect(['USULAN' => 'USULAN', 'DONE DRM' => 'DONE DRM', 'PELIMPAHAN' => 'PELIMPAHAN', 'PO' => 'PO/SP', 'DROP' => 'DROP']);
-                $filter->like('witel_id', 'WITEL');
-                $filter->like('mitra_id', 'MITRA');
+                $filter->in('tematik', 'TEMATIK')->multipleSelect(['PT3' => 'PT3', 'PT2' => 'PT2', 'NODE-B' => 'NODE-B', 'OLO' => 'OLO', 'HEM' => 'HEM', 'ISP' => 'ISP', 'FTTH 2022' => 'FTTH 2022']);               
+                $filter->in('witel_id', 'WITEL')->multipleSelect(
+                    MstWitel::join('admin_role_users', 'admin_users.id', '=', 'admin_role_users.user_id')
+                    ->where('admin_role_users.role_id', '2')->pluck('name', 'kode_user')
+                  );
+                $filter->in('mitra_id', 'MITRA')->multipleSelect(
+                    MstMitra::pluck('nama_mitra', 'kode_mitra')
+                  );
             });
 
             $filter->column(1 / 2, function ($filter) {

@@ -3,23 +3,28 @@
 namespace App\Admin\Controllers;
 
 //use Encore\Admin\Form;
+use App\Models\User;
+use App\Models\MstSap;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+//use Encore\Admin\Admin;
+use App\Models\LogPlan;
+use App\Models\MstMitra;
 use App\Models\MstWitel;
 use App\Models\LogActual;
-//use Encore\Admin\Admin;
 use App\Models\MstProject;
 use App\Admin\Forms\addPlan;
+
 use App\Models\MstWaspangUt;
 use App\Models\TranBaseline;
 use Encore\Admin\Layout\Row;
 use Illuminate\Http\Request;
-
 use App\Models\TranSupervisi;
 use Encore\Admin\Widgets\Box;
 use App\Admin\Forms\addActual;
 use Encore\Admin\Widgets\Form;
 use App\Admin\Forms\addApprove;
+use App\Models\MstSmilleyNilai;
 use App\Models\RefListActivity;
 use Encore\Admin\Facades\Admin;
 use App\Models\TranAdministrasi;
@@ -32,10 +37,6 @@ use App\Admin\Actions\Project\Baseline;
 use App\Admin\Actions\Project\ActualActivity;
 use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Controllers\AdminController;
-use App\Models\LogPlan;
-use App\Models\MstSap;
-use App\Models\MstSmilleyNilai;
-use App\Models\User;
 
 class TranSupervisiController extends AdminController
 {
@@ -68,12 +69,18 @@ class TranSupervisiController extends AdminController
       $filter->disableIdFilter();
       $filter->column(1 / 2, function ($filter) {
         $filter->like('project_name', 'LOP / SITE ID');
-        $filter->like('supervisi_project.witel_id', 'WITEL');
         $filter->like('supervisi_sap.kontrak', 'NO. SP TELKOM');
+        $filter->in('supervisi_project.tematik', 'TEMATIK')->multipleSelect(['PT3' => 'PT3', 'PT2' => 'PT2', 'NODE-B' => 'NODE-B', 'OLO' => 'OLO', 'HEM' => 'HEM', 'ISP' => 'ISP', 'FTTH 2022' => 'FTTH 2022']);
+        $filter->in('witel_id', 'WITEL')->multipleSelect(
+          MstWitel::join('admin_role_users', 'admin_users.id', '=', 'admin_role_users.user_id')
+            ->where('admin_role_users.role_id', '2')->pluck('name', 'id')
+        );
+        $filter->in('mitra_id', 'MITRA')->multipleSelect(
+          MstMitra::pluck('nama_mitra', 'id')
+        );
       });
 
       $filter->column(1 / 2, function ($filter) {
-        $filter->like('supervisi_mitra.nama_mitra', 'MITRA');
         $filter->like('supervisi_project.sto_id', 'STO');
       });
     });

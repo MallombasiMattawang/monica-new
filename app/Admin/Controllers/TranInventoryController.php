@@ -5,23 +5,25 @@ namespace App\Admin\Controllers;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use App\Models\TranOdp;
+use App\Models\MstMitra;
+use App\Models\MstWitel;
+use App\Models\MstProject;
 use App\Models\MstWaspangUt;
 use App\Models\TranBaseline;
+use Illuminate\Http\Request;
 use App\Models\TranInventory;
 use App\Models\TranSupervisi;
-use App\Models\MstProject;
 use Encore\Admin\Facades\Admin;
+//use Illuminate\Support\Facades\Request;
+use Encore\Admin\Widgets\Table;
+use Encore\Admin\Layout\Content;
+use App\Admin\Actions\Project\Odp;
 use App\Admin\Actions\Project\Plan;
 use App\Admin\Actions\Project\Actual;
 use App\Admin\Actions\Project\Baseline;
-use App\Admin\Actions\Project\Odp;
-//use Illuminate\Support\Facades\Request;
 use App\Admin\Extensions\Tools\GridView;
-use App\Models\TranOdp;
 use Encore\Admin\Controllers\AdminController;
-use Encore\Admin\Widgets\Table;
-use Illuminate\Http\Request;
-use Encore\Admin\Layout\Content;
 
 class TranInventoryController extends AdminController
 {
@@ -59,7 +61,14 @@ class TranInventoryController extends AdminController
 
             $filter->column(1 / 2, function ($filter) {
                 $filter->like('project_name', 'LOP / SITE ID');
-                $filter->like('supervisi_project.witel_id', 'WITEL');
+                $filter->in('project.tematik', 'TEMATIK')->multipleSelect(['PT3' => 'PT3', 'PT2' => 'PT2', 'NODE-B' => 'NODE-B', 'OLO' => 'OLO', 'HEM' => 'HEM', 'ISP' => 'ISP', 'FTTH 2022' => 'FTTH 2022']);
+                $filter->in('witel_id', 'WITEL')->multipleSelect(
+                    MstWitel::join('admin_role_users', 'admin_users.id', '=', 'admin_role_users.user_id')
+                        ->where('admin_role_users.role_id', '2')->pluck('name', 'id')
+                );
+                $filter->in('mitra_id', 'MITRA')->multipleSelect(
+                    MstMitra::pluck('nama_mitra', 'id')
+                );
                 $filter->like('status_gl_sdi', 'STATUS GL SDI');
             });
 
@@ -183,9 +192,9 @@ class TranInventoryController extends AdminController
         $form = new Form(new TranSupervisi());
         $form->tools(function (Form\Tools $tools) {
             $tools->disableDelete();
-            
-           // $tools->append('<a href="' . $form->id . '/edit" class="btn btn-warning ">VERIFIKASI DOKUMEN</a>');
-            
+
+            // $tools->append('<a href="' . $form->id . '/edit" class="btn btn-warning ">VERIFIKASI DOKUMEN</a>');
+
             //$tools->disableView();
             //$tools->disableList();
 
@@ -255,13 +264,13 @@ class TranInventoryController extends AdminController
     public function generateOdp(Request $request)
     {
         //print_r($_POST);
-       // echo $request->supervisi_id;
+        // echo $request->supervisi_id;
         //die();
         $cek = -1;
         for ($i = $request->start; $i <= $request->finish; $i++) {
             $cek++;
             echo $i;
-            echo'<br>';
+            echo '<br>';
             $odp = TranOdp::create([
                 'supervisi_id' => $request->supervisi_id,
                 'jenis_odp' => $_POST['jenis_odp_in'][$cek],
@@ -285,6 +294,6 @@ class TranInventoryController extends AdminController
         admin_success('ODP Updated');
         admin_toastr('ODP Project Updated', 'success');
         //return back();
-        return redirect('/ped-panel/tran-inventory/'.$request->supervisi_id);
+        return redirect('/ped-panel/tran-inventory/' . $request->supervisi_id);
     }
 }
