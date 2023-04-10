@@ -61,7 +61,7 @@ class TranInventoryController extends AdminController
 
             $filter->column(1 / 2, function ($filter) {
                 $filter->like('project_name', 'LOP / SITE ID');
-                $filter->in('project.tematik', 'TEMATIK')->multipleSelect(['PT3' => 'PT3', 'PT2' => 'PT2', 'NODE-B' => 'NODE-B', 'OLO' => 'OLO', 'HEM' => 'HEM', 'ISP' => 'ISP', 'FTTH 2022' => 'FTTH 2022']);
+                $filter->in('supervisi_project.tematik', 'TEMATIK')->multipleSelect(['PT3' => 'PT3', 'PT2' => 'PT2', 'NODE-B' => 'NODE-B', 'OLO' => 'OLO', 'HEM' => 'HEM', 'ISP' => 'ISP', 'FTTH 2022' => 'FTTH 2022']);
                 $filter->in('witel_id', 'WITEL')->multipleSelect(
                     MstWitel::join('admin_role_users', 'admin_users.id', '=', 'admin_role_users.user_id')
                         ->where('admin_role_users.role_id', '2')->pluck('name', 'id')
