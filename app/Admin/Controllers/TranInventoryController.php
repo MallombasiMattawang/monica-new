@@ -68,8 +68,17 @@ class TranInventoryController extends AdminController
                 );
                 $filter->in('mitra_id', 'MITRA')->multipleSelect(
                     MstMitra::pluck('nama_mitra', 'id')
-                );
-                $filter->like('status_gl_sdi', 'STATUS GL SDI');
+                );                
+                $filter->in('status_gl_sdi', 'STATUS GL SDI')->multipleSelect([
+                    'NO DATA' => 'NO DATA',
+                    'VALIDASI ABD' => 'VALIDASI ABD',
+                    'DRAWING' => 'DRAWING',
+                    'INVENTORY' => 'INVENTORY',
+                    'TERMINASI UIM' => 'TERMINASI UIM',
+                    'GOLIVE PARSIAL' => 'GOLIVE PARSIAL',
+                    'GOLIVE' => 'GOLIVE',
+                    'KENDALA' => 'KENDALA',
+                ]);
             });
 
             $filter->column(1 / 2, function ($filter) {
