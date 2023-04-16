@@ -14,6 +14,7 @@ use App\Admin\Forms\importSmilley;
 use App\Models\MstSmilleyVolume;
 use Encore\Admin\Widgets\Tab;
 use App\Imports\SmilleyNilaiImport;
+use App\Imports\SmilleyVoulumeImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 
@@ -265,7 +266,8 @@ class MstSmilleyController extends AdminController
         $file->move('uploads/temp_import', $nama_file);
 
         try {
-            Excel::import(new SmilleyNilaiImport, public_path('/uploads/temp_import/' . $nama_file));
+            // Excel::import(new SmilleyNilaiImport, public_path('/uploads/temp_import/' . $nama_file, 'Nilai'));
+            Excel::import(new SmilleyVoulumeImport, public_path('/uploads/temp_import/' . $nama_file, 'Volume'));
             admin_success('Processed import successfully.');
         } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
             $failures = $e->failures();

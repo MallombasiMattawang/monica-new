@@ -9,7 +9,7 @@ class MstSmilleyVolume extends Model
 {
     use HasFactory;
 
-    protected $table = 'smilley_volume';
+    protected $table = 'mst_smilley_volume';
 
     protected $fillable = [
         'kd_kontrak',
