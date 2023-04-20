@@ -175,7 +175,7 @@ class ActualController extends Controller
     {
         $request->validate(
             [
-                'file' => 'required|mimes:jpg,png,zip,rar,pdf,doc,docx,xlsx,csv,sql|max:25000',
+                'file.*' => 'required|mimes:jpg,png,zip,rar,pdf,doc,docx,xlsx,csv,sql|max:25000',
                 'actual_volume' => 'required',
                 'actual_status' => 'required',
                 'actual_message' => 'required'
@@ -189,14 +189,38 @@ class ActualController extends Controller
                 'file.max' => 'Ukuran Evident tidak boleh lebih dari 25 MB.',
             ]
         );
-        // menangkap file 
-        $file = $request->file('file');
-        // membuat nama file unik
-        $nama_file = now()->timestamp . '.' . $file->getClientOriginalExtension();
-        // upload ke folder public
-        $file->move('uploads/evident', $nama_file);
-        // File path
-        $filepath = 'evident/' . $nama_file;
+      
+        // Get all uploaded files
+        $files = $request->file('file');
+
+        // Create an array to store file names
+        $filenames = [];
+
+        // Loop through each uploaded file
+        foreach ($files as $file) {
+
+            // Generate unique name for file
+            $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+
+            // Move the uploaded file to storage
+            $file->move('uploads/evident', $filename);
+
+            // Add the filename to array
+            $filenames[] = $filename;
+        }
+
+        // Join all filenames with comma as delimiter
+        $filesString = implode(',', $filenames);
+        // // menangkap file 
+        // $file = $request->file('file');
+
+
+        // // membuat nama file unik
+        // $nama_file = now()->timestamp . '.' . $file->getClientOriginalExtension();
+        // // upload ke folder public
+        // $file->move('uploads/evident', $nama_file);
+        // // File path
+        // $filepath = 'evident/' . $nama_file;
 
         //INITIAL VARIABEL REQUEST
         $baseline_id =  $request->baseline_id;
@@ -288,7 +312,7 @@ class ActualController extends Controller
                 'tran_baseline_id' => $baseline->id,
                 'actual_volume' => $request->actual_volume,
                 'actual_progress' =>  $actual_progress,
-                'actual_evident' => $filepath,
+                'actual_evident' => $filesString,
                 'actual_status' => $actual_status,
                 'actual_message' => $actual_message,
                 'actual_kendala' => $actual_kendala,
@@ -314,7 +338,7 @@ class ActualController extends Controller
 
             if (cek_commisioning_tes($baseline->project_id) == 1) {
                 $status_const = 'SELESAI CT';
-            } 
+            }
             if (cek_all_installasi($baseline->project_id) == cek_all_installasi_finish($baseline->project_id) && cek_commisioning_tes($baseline->project_id) == 0) {
                 $status_const = 'INSTALL DONE';
             }

@@ -19,7 +19,7 @@ use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 
-class SmilleyVoulumeImport implements OnEachRow, WithStartRow, WithCalculatedFormulas, WithValidation, SkipsEmptyRows
+class SmilleyVoulumeImport implements OnEachRow, WithStartRow, WithCalculatedFormulas, WithValidation, SkipsEmptyRows, WithMultipleSheets
 {
     public function onRow(Row $row)
     {
@@ -127,12 +127,13 @@ class SmilleyVoulumeImport implements OnEachRow, WithStartRow, WithCalculatedFor
         return 2;
     }
 
-    // public function sheets(): array
-    // {
-    //     return [
-    //         1 => $this,
-    //     ];
-    // }
+    public function sheets(): array
+{
+    return [
+        1 => $this,
+    ];
+}
+
 
     public function rules(): array
     {

@@ -104,8 +104,17 @@
                             
                             <div class="col-12">
                                 <label class="form-label">Evident<sup class="text-danger">*</sup></label>
-                                <input class="form-control" type="file" id="actual_evident" name="file">
+                                <input class="form-control" type="file" id="actual_evident" name="file[0]">                               
                             </div>
+                            <div id="file-inputs"></div>
+                            <div class="col-12">
+                                <div class="col-2">
+                                    <button type="button" id="add-file-btn" class="btn btn-primary">Add File</button>
+                                </div>
+                                
+                            </div>
+                            
+
 
                             <div class="col-md-6">
                                 <label for="actual_message" class="form-label">Remarks<sup class="text-danger">*</sup></label>
@@ -129,3 +138,20 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    $(document).ready(function() {
+        var fileInputsCount = 1; // jumlah input file awal
+        
+        // saat tombol "Add" ditekan
+        $("#add-file-btn").click(function() {
+            // tambahkan input file baru
+            $("#file-inputs").append('<div class="col-12"><label class="form-label">Evident<sup class="text-danger">*</sup></label><input class="form-control" type="file" id="actual_evident_'+fileInputsCount+'" name="file['+fileInputsCount+']"></div>');
+            
+            fileInputsCount++; // tambahkan jumlah input file
+        });
+    });
+    </script>
+    
+@endpush

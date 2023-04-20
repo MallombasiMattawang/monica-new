@@ -25,7 +25,7 @@ class MstSmilleyController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Tabel Smilley';
+    protected $title = 'Tabel Smilley Nilai';
 
     /**
      * Make a grid builder.
@@ -35,14 +35,14 @@ class MstSmilleyController extends AdminController
     protected function grid()
     {
 
-        $grid_1 = new Grid(new MstSmilleyNilai());
-        $grid_1->disableActions();
+        $grid = new Grid(new MstSmilleyNilai());
+        $grid->disableActions();
 
-        $grid_1->disableCreateButton();
-        $grid_1->disableRowSelector();
-        $grid_1->disableExport();
-        $grid_1->disableColumnSelector();
-        $grid_1->filter(function ($filter) {
+        $grid->disableCreateButton();
+        $grid->disableRowSelector();
+        $grid->disableExport();
+        $grid->disableColumnSelector();
+        $grid->filter(function ($filter) {
             // Remove the default id filter
             $filter->disableIdFilter();
             $filter->column(1 / 2, function ($filter) {
@@ -51,59 +51,61 @@ class MstSmilleyController extends AdminController
 
             
         });
-        $grid_1->tools(function ($tools) {
+        $grid->tools(function ($tools) {
+            $tools->append('<a href="/ped-panel/mst-smilleys" class="btn btn-default btn-sm"><i class="fa fa-database"></i>&nbsp;&nbsp; Smilley Nilai</a>');
+            $tools->append('<a href="/ped-panel/mst-smilley-volumes" class="btn btn-default btn-sm"><i class="fa fa-database"></i>&nbsp;&nbsp; Smilley Volume</a>');
             $tools->append('<a href="/ped-panel/form-import-smilley" class="btn btn-default btn-sm"><i class="fa fa-download"></i>&nbsp;&nbsp; Import Tabel Smilley</a>');
         });
 
-        $grid_1->column('id', __('Id'));
-        $grid_1->column('kd_kontrak', __('Kd kontrak'));
-        $grid_1->column('no_amdke', __('No amdke'));
-        $grid_1->column('kd_wbs', __('Kd wbs'));
-        $grid_1->column('kd_sgrup', __('Kd sgrup'));
-        $grid_1->column('pk_owner', __('Pk owner'));
-        $grid_1->column('kd_lokasi1', __('Kd lokasi1'));
-        $grid_1->column('ubis_waslak', __('Ubis waslak'));
-        $grid_1->column('unit_waslak', __('Unit waslak'));
-        $grid_1->column('waslak_har', __('Waslak har'));
-        $grid_1->column('ubis_owner', __('Ubis owner'));
-        $grid_1->column('no_kontrak', __('No kontrak'));
-        $grid_1->column('nm_proyek', __('Nm proyek'));
-        $grid_1->column('tg_edc', __('Tg edc'));
-        $grid_1->column('tg_toc', __('Tg toc'));
-        $grid_1->column('nm_tematik', __('Nm tematik'));
-        $grid_1->column('nm_witel', __('Nm witel'));
-        $grid_1->column('nm_lokasi1', __('Nm lokasi1'));
-        $grid_1->column('project_site_id', __('Project site id'));
-        $grid_1->column('kt_lokasi', __('Kt lokasi'));
-        $grid_1->column('site_alamat', __('Site alamat'));
-        $grid_1->column('pro_plan', __('Pro plan'));
-        $grid_1->column('pro_actual', __('Pro actual'));
-        $grid_1->column('pro_bast', __('Pro bast'));
-        $grid_1->column('status', __('Status'));
-        $grid_1->column('tg_plan_start', __('Tg plan start'));
-        $grid_1->column('tg_plan_finish', __('Tg plan finish'));
-        $grid_1->column('tg_actual_start', __('Tg actual start'));
-        $grid_1->column('no_ut', __('No ut'));
-        $grid_1->column('tg_ut', __('Tg ut'));
-        $grid_1->column('no_bast1', __('No bast1'));
-        $grid_1->column('tg_baut', __('Tg baut'));
-        $grid_1->column('ni_barang', __('Ni barang'));
-        $grid_1->column('ni_jasa', __('Ni jasa'));
-        $grid_1->column('ni_kontrak', __('Ni kontrak'));
-        $grid_1->column('ni_bast1', __('Ni bast1'));
-        $grid_1->column('no_po1', __('No po1'));
-        $grid_1->column('no_po2', __('No po2'));
-        $grid_1->column('no_po3', __('No po3'));
-        $grid_1->column('no_po4', __('No po4'));
-        $grid_1->column('no_po5', __('No po5'));
-        $grid_1->column('nm_vendor', __('Nm vendor'));
-        $grid_1->column('tg_bast1', __('Tg bast1'));
-        $grid_1->fixColumns(4, -2);
+        $grid->column('id', __('Id'));
+        $grid->column('kd_kontrak', __('Kd kontrak'));
+        $grid->column('no_amdke', __('No amdke'));
+        $grid->column('kd_wbs', __('Kd wbs'));
+        $grid->column('kd_sgrup', __('Kd sgrup'));
+        $grid->column('pk_owner', __('Pk owner'));
+        $grid->column('kd_lokasi1', __('Kd lokasi1'));
+        $grid->column('ubis_waslak', __('Ubis waslak'));
+        $grid->column('unit_waslak', __('Unit waslak'));
+        $grid->column('waslak_har', __('Waslak har'));
+        $grid->column('ubis_owner', __('Ubis owner'));
+        $grid->column('no_kontrak', __('No kontrak'));
+        $grid->column('nm_proyek', __('Nm proyek'));
+        $grid->column('tg_edc', __('Tg edc'));
+        $grid->column('tg_toc', __('Tg toc'));
+        $grid->column('nm_tematik', __('Nm tematik'));
+        $grid->column('nm_witel', __('Nm witel'));
+        $grid->column('nm_lokasi1', __('Nm lokasi1'));
+        $grid->column('project_site_id', __('Project site id'));
+        $grid->column('kt_lokasi', __('Kt lokasi'));
+        $grid->column('site_alamat', __('Site alamat'));
+        $grid->column('pro_plan', __('Pro plan'));
+        $grid->column('pro_actual', __('Pro actual'));
+        $grid->column('pro_bast', __('Pro bast'));
+        $grid->column('status', __('Status'));
+        $grid->column('tg_plan_start', __('Tg plan start'));
+        $grid->column('tg_plan_finish', __('Tg plan finish'));
+        $grid->column('tg_actual_start', __('Tg actual start'));
+        $grid->column('no_ut', __('No ut'));
+        $grid->column('tg_ut', __('Tg ut'));
+        $grid->column('no_bast1', __('No bast1'));
+        $grid->column('tg_baut', __('Tg baut'));
+        $grid->column('ni_barang', __('Ni barang'));
+        $grid->column('ni_jasa', __('Ni jasa'));
+        $grid->column('ni_kontrak', __('Ni kontrak'));
+        $grid->column('ni_bast1', __('Ni bast1'));
+        $grid->column('no_po1', __('No po1'));
+        $grid->column('no_po2', __('No po2'));
+        $grid->column('no_po3', __('No po3'));
+        $grid->column('no_po4', __('No po4'));
+        $grid->column('no_po5', __('No po5'));
+        $grid->column('nm_vendor', __('Nm vendor'));
+        $grid->column('tg_bast1', __('Tg bast1'));
+        $grid->fixColumns(4, -2);
 
-
-
-        return $grid_1;
+        return $grid;
     }
+
+   
 
     /**
      * Make a show builder.
@@ -266,8 +268,8 @@ class MstSmilleyController extends AdminController
         $file->move('uploads/temp_import', $nama_file);
 
         try {
-            // Excel::import(new SmilleyNilaiImport, public_path('/uploads/temp_import/' . $nama_file, 'Nilai'));
-            Excel::import(new SmilleyVoulumeImport, public_path('/uploads/temp_import/' . $nama_file, 'Volume'));
+            Excel::import(new SmilleyNilaiImport, public_path('/uploads/temp_import/' . $nama_file));
+            Excel::import(new SmilleyVoulumeImport, public_path('/uploads/temp_import/' . $nama_file));
             admin_success('Processed import successfully.');
         } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
             $failures = $e->failures();
@@ -278,7 +280,8 @@ class MstSmilleyController extends AdminController
             }
             admin_error('Processed import gagal,', $errors);
         } catch (\Exception $e) {
-            admin_error('Processed import gagal, Format excel tidak sesuai');
+            $errorMessage = $e->getMessage(); // get error message from the Exception object
+            admin_error('Processed import gagal, Format excel tidak sesuai. Pesan kesalahan: ' . $errorMessage);
         }
 
         // Hapus file Excel

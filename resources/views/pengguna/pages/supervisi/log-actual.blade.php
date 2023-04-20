@@ -77,13 +77,15 @@
                                                     <td>
                                                         <p>
                                                             <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapse_{{ $log->id }}" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                                               File Evident
+                                                                File Evident
                                                             </a>
                                                         </p>
                                                         <div class="collapse" id="collapse_{{ $log->id }}">
-                                                            <img src="/uploads/{{ $log->actual_evident}}" onerror="this.onerror=null; this.src='/img/no-data.svg';" class="w120" />
-                                                            <br><br>
-                                                            <a href="/uploads/{{ $log->actual_evident}}" target="_blank" class="btn btn-primary border lift">Download Evident</a>
+                                                            @foreach(explode(',', $log->actual_evident) as $file)
+                                                            <a href="{{ asset('uploads/evident/' . $file) }}" target="_blank">{{ $file }}</a><br>
+                                                            @endforeach
+
+                                                            
                                                         </div>
                                                     </td>
                                                 </tr>

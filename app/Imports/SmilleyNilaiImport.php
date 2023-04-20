@@ -18,7 +18,8 @@ use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 
-class SmilleyNilaiImport implements OnEachRow, WithStartRow, WithMultipleSheets, WithCalculatedFormulas, WithValidation, SkipsEmptyRows
+class SmilleyNilaiImport implements OnEachRow, WithStartRow, WithCalculatedFormulas, WithValidation, SkipsEmptyRows, WithMultipleSheets
+
 {
     public function onRow(Row $row)
     {

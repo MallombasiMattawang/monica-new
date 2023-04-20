@@ -24,6 +24,7 @@ Route::group([
     $router->resource('mst-projects', MstProjectController::class);
     $router->resource('mst-saps', MstSapController::class);
     $router->resource('mst-smilleys', MstSmilleyController::class);
+    $router->resource('mst-smilley-volumes', MstSmilleyVolumeController::class);
 
     /**Route tabel referensi */
     $router->resource('ref-list-activities', RefListActivityController::class);
