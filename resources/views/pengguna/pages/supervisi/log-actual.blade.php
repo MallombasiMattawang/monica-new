@@ -82,7 +82,7 @@
                                                         </p>
                                                         <div class="collapse" id="collapse_{{ $log->id }}">
                                                             @foreach(explode(',', $log->actual_evident) as $file)
-                                                            <a href="{{ asset('uploads/evident/' . $file) }}" target="_blank">{{ $file }}</a><br>
+                                                            <a href="{{ asset('uploads/' . $file) }}" target="_blank">{{ $file }}</a><br>
                                                             @endforeach
 
                                                             

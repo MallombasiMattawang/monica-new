@@ -189,7 +189,7 @@
 
                                 @if ($cek_rekon == 1 && $list->activity_id == 23)
                                     @if ($list->actual_finish == null || $list->actual_finish == '')
-                                        <div class="btn bg-light-info">
+                                        <div class="btn bg-light-info"> {{ $cek_rekon }}
                                             Tanggal penerbitan BAST-1 belum terbit, mohon tunggu untuk upload Evident BAST-1 
                                         </div>
                                     @else

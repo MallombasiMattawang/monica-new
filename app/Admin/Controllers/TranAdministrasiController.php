@@ -358,7 +358,7 @@ class TranAdministrasiController extends AdminController
                 'status_const' => 'SELESAI REKON',
                 'file_ba_rekon' => $baseline->file_ba_rekon,
             ]);
-        TranBaseline::where("activity_id", 22)
+        TranBaseline::where("activity_id", 22)->where('project_id', $baseline->project_id)
             ->update([
                 'actual_finish' =>  date('Y-m-d'),
                 'actual_task' =>  'APPROVED',
