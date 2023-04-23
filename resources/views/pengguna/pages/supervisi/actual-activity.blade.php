@@ -155,20 +155,14 @@
                                         <a href="{{ route('supervisi.actual.form',  [$list->id, Str::slug($list->list_activity)])  }}" class="btn btn-primary"><i class="fa fa-plus"></i></a>
                                         </a>
                                     @endif
-                                @elseif(activeGuard() == 'mitra' || activeGuard() == 'tim-ut' || activeGuard() == 'waspang')                                    
+                                @elseif(activeGuard() == 'mitra' || activeGuard() == 'tim-ut' && activeGuard() != 'waspang')                                    
                                     <a href="{{ route('supervisi.actual.log',  [$list->id, Str::slug($list->list_activity)])  }}" class="btn btn-info"><i class="fa fa-search"></i></a>        
                                 @endif
-                                @if (activeGuard() == 'waspang')
-                                        @php
-                                            $log = App\Models\LogActual::where('tran_baseline_id', $list->id)
-                                                ->whereNull('approval_waspang')
-                                                //->where('approval_waspang', '<>', '')
-                                                ->count();
-                                        @endphp
-                                        @if ($log > 0 && $list->activity_id == 20)
+                                @if (activeGuard() == 'waspang')                                     
+                                        @if (cekWaspangAdmin($list->project_id) == 1 && $list->activity_id == 20)
                                             <a href="{{ route('supervisi.actual.log',  [$list->id, Str::slug($list->list_activity)])  }}" class="btn btn-warning"><i class="fa fa-edit"></i></a>                                               
                                         @endif                                   
-                                    @endif
+                                @endif
                              @endif
                              @if ($list->category_id == 004)
                                     
