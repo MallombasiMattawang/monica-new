@@ -74,6 +74,23 @@ function separator($output)
 }
 
 
+
+
+function cekWaspangAdmin($project_id)
+{
+    $query = TranSupervisi::where('project_id', $project_id)
+        ->where('task', 'NEED APPROVED WASPANG')
+        ->exists();
+    return $query;
+}
+function cekUtAdmin($project_id)
+{
+    $query = TranSupervisi::where('project_id', $project_id)
+        ->where('task', 'NEED APPROVED TIM UT')
+        ->exists();
+    return $query;
+}
+
 function getNotifWaspang($waspang_id)
 {
     $query = TranSupervisi::select('id', 'project_name', 'updated_at')
@@ -90,6 +107,7 @@ function countNotifWaspang($waspang_id)
         ->count();
     return $query;
 }
+
 
 function getNotifUt($tim_ut_id)
 {

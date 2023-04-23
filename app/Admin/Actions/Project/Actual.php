@@ -13,7 +13,7 @@ class Actual extends RowAction
     {
         // $model ...
 
-        return $this->response()->info('Lembar Kerja Actual Activity')->redirect('actual-generate?id='.$model->project_id);
+        return $this->response()->info('Lembar Kerja Actual Activity')->redirect('actual-generate/'.$model->project_id);
     }
 
 }

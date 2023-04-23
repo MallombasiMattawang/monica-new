@@ -1,50 +1,13 @@
-@extends('pengguna.layouts.app')
-
-@section('page_header')
-<div class="page-header pattern-bg">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12 mb-2">
-
-                @include('pengguna.layouts.partials.breadcrumb')
-
-                <div class="d-flex justify-content-between align-items-center">
-                    <h1 class="h2 mb-md-0 text-white fw-light">Activity: {{ $pageTitle }} </h1>
-                    <div class="page-action text-center">
-                        @if (activeGuard() == 'waspang' && $baseline->activity_id == 20 && $supervisi->task == 'NEED APPROVED WASPANG' )
-                        <div class="text-end">
-                            <button class="btn bg-danger" data-bs-toggle="modal" data-bs-target="#reject_waspang">Reject</button>
-                            <button class="btn bg-success" data-bs-toggle="modal" data-bs-target="#approve_waspang">Approve</button>
-                        </div>
-                        @endif
-                        @if (activeGuard() == 'tim-ut' && $baseline->activity_id == 21 && $supervisi->task == 'NEED APPROVED TIM UT')
-                        <div class="text-end">
-                            <button class="btn bg-danger" data-bs-toggle="modal" data-bs-target="#reject_ut">Reject</button>
-                            <button class="btn bg-success" data-bs-toggle="modal" data-bs-target="#approve_ut">Approve</button>
-                        </div>
-                        @endif
-
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</div>
-@endsection
-
-@section('contents')
 <div class="page-body">
-    <div class="container-fluid">
+    <div class="container">
         <div class="col-md-12">
             <div class="col-md-6">
-                <div class="card p-md-4 p-2">
+                <div class="">
                     @foreach ($logs as $log)
-                    <div class="timeline-item ti-info ms-2" style="display: inline;">
-                        <div class="d-flex">
-                            <img class="avatar sm rounded-circle" src="{{ asset('img/xs/avatar1.jpg.png') }}" alt="">
-                            <div class="flex-fill ms-3">
-                                <div class="row g-3">
+                    <div class="box box-default">
+                        <div class="box-body">
+                            <div class="">
+                                <div class="">
                                     <div class="table-responsive">
                                         <table class="table no-footer dtr-inline">
                                             <tbody>
@@ -76,7 +39,7 @@
                                                     <td>Evident</td>
                                                     <td>
                                                         <p>
-                                                            <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapse_{{ $log->id }}" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                                            <a class="btn btn-primary" data-toggle="collapse" href="#collapse_{{ $log->id }}" role="button" aria-expanded="false" aria-controls="collapseExample">
                                                                 File Evident
                                                             </a>
                                                         </p>
@@ -85,7 +48,7 @@
                                                             <a href="{{ asset('uploads/evident/' . $file) }}" target="_blank">{{ $file }}</a><br>
                                                             @endforeach
 
-                                                            
+
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -124,6 +87,25 @@
                     @endforeach
                 </div>
             </div>
+            <div class="col-md-6">
+                <div class="box">
+                   
+                    <div class="box-body">
+                        @if (activeGuard() == 'admin' && $baseline->activity_id == 20 && $supervisi->task == 'NEED APPROVED WASPANG' )
+                        <div class="text-center">
+                            <button class="btn bg-danger" data-toggle="modal" data-target="#reject_waspang">Reject</button>
+                            <button class="btn bg-success" data-toggle="modal" data-target="#approve_waspang">Approve</button>
+                        </div>
+                        @endif
+                        @if (activeGuard() == 'admin' && $baseline->activity_id == 21 && $supervisi->task == 'NEED APPROVED TIM UT')
+                        <div class="text-center">
+                            <button class="btn bg-danger" data-toggle="modal" data-target="#reject_ut">Reject</button>
+                            <button class="btn bg-success" data-toggle="modal" data-target="#approve_ut">Approve</button>
+                        </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
 
         </div>
 
@@ -132,7 +114,7 @@
 </div>
 {{-- Modal Rejetc waspang --}}
 <div class="modal fade" id="reject_waspang">
-    <form action="{{route('supervisi.actual.waspang')}}" method="POST">
+    <form action="{{url('ped-panel/approve-waspang')}}" method="POST">
         @csrf
         <input type="hidden" name="baseline_id" value="{{$baseline->id}}">
         <input type="hidden" name="activity_id" value="{{$baseline->activity_id}}">
@@ -141,7 +123,7 @@
             <div class="modal-content">
                 <div class="modal-header bg-danger">
                     <h5 class="modal-title" id="exampleModalLiveLabel">Reject Actual</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <p>Yakin untuk Reject report ini ?</p>
@@ -151,7 +133,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary submit-button">Save changes</button>
                 </div>
             </div>
@@ -161,7 +143,7 @@
 </div>
 {{-- Modal Approve waspang --}}
 <div class="modal fade" id="approve_waspang">
-    <form action="{{route('supervisi.actual.waspang')}}" method="POST">
+    <form action="{{url('ped-panel/approve-waspang')}}" method="POST">
         @csrf
         <input type="hidden" name="baseline_id" value="{{$baseline->id}}">
         <input type="hidden" name="activity_id" value="{{$baseline->activity_id}}">
@@ -170,7 +152,7 @@
             <div class="modal-content">
                 <div class="modal-header bg-success">
                     <h5 class="modal-title" id="exampleModalLiveLabel">Approve Actual</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <p>Yakin untuk Approve report ini ?</p>
@@ -180,7 +162,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary submit-button">Save changes</button>
                 </div>
             </div>
@@ -190,7 +172,7 @@
 
 {{-- Modal Rejetc tim-ut --}}
 <div class="modal fade" id="reject_ut">
-    <form action="{{route('supervisi.actual.ut')}}" method="POST">
+    <form action="{{url('ped-panel/approve-ut')}}" method="POST">
         @csrf
         <input type="hidden" name="baseline_id" value="{{$baseline->id}}">
         <input type="hidden" name="activity_id" value="{{$baseline->activity_id}}">
@@ -199,7 +181,7 @@
             <div class="modal-content">
                 <div class="modal-header bg-danger">
                     <h5 class="modal-title" id="exampleModalLiveLabel">Reject Actual UT</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <p>Yakin untuk Reject report ini ?</p>
@@ -209,7 +191,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary submit-button">Save changes</button>
                 </div>
             </div>
@@ -219,7 +201,7 @@
 </div>
 {{-- Modal Approve tim-ut --}}
 <div class="modal fade" id="approve_ut">
-    <form action="{{route('supervisi.actual.ut')}}" method="POST">
+    <form action="{{url('ped-panel/approve-ut')}}" method="POST">
         @csrf
         <input type="hidden" name="baseline_id" value="{{$baseline->id}}">
         <input type="hidden" name="activity_id" value="{{$baseline->activity_id}}">
@@ -228,7 +210,7 @@
             <div class="modal-content">
                 <div class="modal-header bg-success">
                     <h5 class="modal-title" id="exampleModalLiveLabel">Approve Actual UT</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <p>Yakin untuk Approve report ini ?</p>
@@ -238,11 +220,10 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary submit-button">Save changes</button>
                 </div>
             </div>
         </div>
     </form>
 </div>
-@endsection
