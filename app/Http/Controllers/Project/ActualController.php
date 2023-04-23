@@ -586,7 +586,7 @@ class ActualController extends Controller
                     'actual_task' =>  'APPROVED',
                     'tim_ut_by' => $user_id
                 ]);
-            TranBaseline::where("activity_id", 22)->where('project_id', $baseline_id)
+            TranBaseline::where("activity_id", 22)->where('project_id', $baseline->project_id)
                 ->update([
                     'actual_start' =>  date('Y-m-d'),
 
