@@ -74,7 +74,23 @@ function separator($output)
 }
 
 
+function pendingItemCT($project_id)
+{
+    $query = TranBaseline::where('project_id', $project_id)
+        ->where('activity_id', 20)
+        ->where('pending_item', 'YA')
+        ->exists();
+    return $query;
+}
 
+function pendingItemUT($project_id)
+{
+    $query = TranBaseline::where('project_id', $project_id)
+        ->where('activity_id', 21)
+        ->where('pending_item', 'YA')
+        ->exists();
+    return $query;
+}
 
 function cekWaspangAdmin($project_id)
 {

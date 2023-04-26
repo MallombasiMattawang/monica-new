@@ -101,6 +101,20 @@
                                 </div>
                             </div>
                             @endif
+
+                            @if ($baseline->activity_id == 20 || $baseline->activity_id == 21)
+                            <div class="col-12">
+                                <label class="form-check-label me-3">Pending Item:<sup class="text-danger">*</sup></label>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="pending_item" id="pending_item1" value="YA" required>
+                                    <label class="form-check-label" for="pending_item1">Ya</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="pending_item" id="pending_item2" value="TIDAK" checked required>
+                                    <label class="form-check-label" for="pending_item">Tidak</label>
+                                </div>
+                            </div>
+                            @endif
                             
                             <div class="col-12">
                                 <label class="form-label">Evident<sup class="text-danger">*</sup></label>
@@ -112,12 +126,11 @@
                                     <button type="button" id="add-file-btn" class="btn btn-primary">Add File</button>
                                 </div>
                                 
-                            </div>
-                            
+                            </div>                           
 
 
                             <div class="col-md-6">
-                                <label for="actual_message" class="form-label">Remarks<sup class="text-danger">*</sup></label>
+                                <label for="actual_message" class="form-label">Remarks</label>
                                 <textarea name="actual_message" cols="30" rows="5" class="form-control">{{ old('actual_message') }}</textarea>
                             </div>
                             <div class="col-md-6">
@@ -127,8 +140,8 @@
 
 
                             <div class="col-12 text-end">
-                                <button class="btn btn-outline-secondary">Cancle</button>
-                                <button class="btn btn-primary">Submit</button>
+                                <a href="javascript:history.back()" class="btn btn-outline-secondary">Cancle</a>
+                                <button type="submit" class="btn btn-primary">Submit</button>
                             </div>
                         </form>
                     </div>

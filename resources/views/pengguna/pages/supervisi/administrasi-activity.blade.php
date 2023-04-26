@@ -81,7 +81,7 @@
                             </div>
                         </td>
                         <td>
-                            <a href="{{ route('supervisi.administrasi.form', [$baseline->id, 'docToWitel']) }}" class="btn btn-success {{ $administrasi->status_doc == 'PEMBUATAN DOKUMEN' || $administrasi->status_verfy == 'REJECTED WITEL'? '' : 'disabled' }} "> <i class="fa fa-upload"></i> Upload Doc </a>
+                            <a href="{{ route('supervisi.administrasi.form', [$baseline->id, 'docToWitel']) }}" class="btn btn-success {{ ($administrasi->status_doc == 'PEMBUATAN DOKUMEN' || $administrasi->status_verfy == 'REJECTED WITEL') && pendingItemUT($administrasi->project_id) == 0 ? '' : 'disabled' }} "> <i class="fa fa-upload"></i> Upload Doc </a>
                         </td>
                     </tr>
                     <tr>

@@ -33,6 +33,7 @@ class TranBaseline extends Model
         'actual_task',
         'actual_message',
         'actual_kendala',
+        'pending_item',
         'approval_waspang',
         'approval_tim_ut',
         'approval_message',

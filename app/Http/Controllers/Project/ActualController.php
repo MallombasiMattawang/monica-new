@@ -175,21 +175,20 @@ class ActualController extends Controller
     {
         $request->validate(
             [
-                'file.*' => 'required|mimes:jpg,png,zip,rar,pdf,doc,docx,xlsx,csv,sql|max:25000',
+                'file.*' => 'required|mimes:jpg,png,zip,rar,pdf,doc,docx,xlsx,csv|max:25000',
                 'actual_volume' => 'required',
                 'actual_status' => 'required',
-                'actual_message' => 'required'
+                'pending_item' => $request->filled('pending_item') ? 'required' : '',
             ],
             [
                 'actual_volume.required' => 'Actual Volume tidak boleh kosong',
                 'actual_status.required' => 'Actual Status tidak boleh kosong',
-                'actual_message.required' => 'Remarks tidak boleh kosong',
                 'file.required' => 'Evident tidak boleh kosong.',
-                'file.mimes' => 'Evident yang diizinkan masuk (jpg,png,zip,rar,pdf,doc,docx,xlsx,csv,sql).',
+                'file.mimes' => 'Evident yang diizinkan masuk (jpg,png,zip,rar,pdf,doc,docx,xlsx,csv).',
                 'file.max' => 'Ukuran Evident tidak boleh lebih dari 25 MB.',
             ]
         );
-      
+
         // Get all uploaded files
         $files = $request->file('file');
 
@@ -211,16 +210,6 @@ class ActualController extends Controller
 
         // Join all filenames with comma as delimiter
         $filesString = implode(',', $filenames);
-        // // menangkap file 
-        // $file = $request->file('file');
-
-
-        // // membuat nama file unik
-        // $nama_file = now()->timestamp . '.' . $file->getClientOriginalExtension();
-        // // upload ke folder public
-        // $file->move('uploads/evident', $nama_file);
-        // // File path
-        // $filepath = 'evident/' . $nama_file;
 
         //INITIAL VARIABEL REQUEST
         $baseline_id =  $request->baseline_id;
@@ -334,6 +323,7 @@ class ActualController extends Controller
                     'actual_durasi' => $actual_durasi_verifikasi,
                     'actual_message' => $actual_message,
                     'actual_kendala' => $actual_kendala,
+                    'pending_item' => $request->pending_item,
                 ]);
 
             if (cek_commisioning_tes($baseline->project_id) == 1) {
@@ -460,6 +450,11 @@ class ActualController extends Controller
         $progress_bobot = $log->progress_bobot;
         $actual_volume = $log->actual_volume;
         $baseline = TranBaseline::where('id', $baseline_id)->first();
+        if ($baseline->pending_item == 'YA') {
+            $task = 'Status "PENDING ITEM" selesaikan Pending Item untuk melanjutkan Actual Selanjutnya';
+        } else {
+            $task = 'silahkan melanjutkan Actual Selanjutnya';
+        }
 
         if ($approval_waspang == 'REJECTED') {
             LogActual::where("tran_baseline_id", $baseline_id)->where('approval_waspang', NULL)
@@ -516,7 +511,7 @@ class ActualController extends Controller
                     'status_doc' => 'KONSTRUKSI',
                     'progress_const' => $actual_progress_const,
                     'tgl_selesai_ct' => date('Y-m-d'),
-                    'task' => 'Appoval Waspang, status: "SELESAI CT", silahkan melanjutkan Pelaksanaan UT, '
+                    'task' => 'Appoval Waspang, status: "SELESAI CT", '. $task .', '
                 ]);
         }
         $supervisi = TranSupervisi::where("project_id", $baseline->project_id)->first();
@@ -538,6 +533,11 @@ class ActualController extends Controller
         $progress_bobot = $log->progress_bobot;
         $actual_volume = $log->actual_volume;
         $baseline = TranBaseline::where('id', $baseline_id)->first();
+        if ($baseline->pending_item == 'YA') {
+            $task = 'Status "PENDING ITEM" selesaikan Pending Item untuk melanjutkan Actual Selanjutnya';
+        } else {
+            $task = 'silahkan melanjutkan Actual Selanjutnya';
+        }
         $administrasi = TranAdministrasi::where('project_id', $baseline->project_id)->first();
         if ($approval_tim_ut == 'REJECTED') {
             LogActual::where("tran_baseline_id", $baseline_id)->where('approval_tim_ut', NULL)
@@ -599,7 +599,7 @@ class ActualController extends Controller
                     'status_doc' => 'ADMINISTRASI',
                     'progress_const' => $actual_progress_const,
                     'tgl_selesai_ut' => date('Y-m-d'),
-                    'task' => 'Appoval TIM UT, status: "SELESAI UT", silahkan melanjutkan pembuatan dokumen administrasi '
+                    'task' => 'Appoval TIM UT, status: "SELESAI UT" , '.$task.' '
                 ]);
             TranAdministrasi::where("project_id", $baseline->project_id)
                 ->update([
@@ -615,5 +615,53 @@ class ActualController extends Controller
         }
         $supervisi = TranSupervisi::where("project_id", $baseline->project_id)->first();
         return redirect()->route('supervisi.detail', [$supervisi->id, Str::slug($supervisi->project_name)])->with(['success' => 'Apprive Actual #' . $baseline->list_activity . ' Berhasil']);
+    }
+
+    public function actualActivityPendingItem(Request $request)
+    {
+        $request->validate(
+            [
+                'pending_item' => 'required',
+                'actual_message' => 'required',
+            ],
+            [
+                'pending_item.required' => 'Pending Item tidak boleh kosong',
+                'actual_message.required' => 'Remarks tidak boleh kosong',
+            ]
+        );
+
+        //initial variabel
+        $baseline_id = $request->baseline_id;
+        $activity_id = $request->activity_id;
+        $pending_item = $request->pending_item;
+        $actual_message = $request->actual_message;
+        $user_id =  getUser()->id;
+        if ($pending_item == 'YA') {
+            $task = 'Status "PENDING ITEM" selesaikan Pending Item untuk melanjutkan Actual Selanjutnya';
+        } else {
+            $task = 'Status "PENDING ITEM SELESAI" silahkan melanjutkan Actual Selanjutnya';
+        }
+        $log = LogActual::where(
+            'tran_baseline_id',
+            $baseline_id
+        )->latest()->first();
+
+        $baseline = TranBaseline::where('id', $baseline_id)->first();
+
+        LogActual::where("id", $log->id)
+            ->update([
+                'actual_message' =>  $actual_message,
+            ]);
+        TranBaseline::where("id", $baseline_id)
+            ->update([
+                'pending_item' => $pending_item,
+            ]);
+        TranSupervisi::where("project_id", $baseline->project_id)
+            ->update([
+                'task' => $task
+            ]);
+
+        $supervisi = TranSupervisi::where("project_id", $baseline->project_id)->first();
+        return redirect()->route('supervisi.detail', [$supervisi->id, Str::slug($supervisi->project_name)])->with(['success' => 'Update Actual #' . $baseline->list_activity . ' Berhasil']);
     }
 }

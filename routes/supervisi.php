@@ -34,6 +34,7 @@ Route::controller(ActualController::class)
         Route::post('/actual-activity/approve-waspang', 'actualActivityWaspang')->name('supervisi.actual.waspang');
         Route::post('/actual-activity/approve-ut', 'actualActivityUt')->name('supervisi.actual.ut');
         Route::get('/actual-activity/log-actual/{id}/{slug}', 'actualActivityLog')->name('supervisi.actual.log');
+        Route::post('/actual-activity/update-pending-item', 'actualActivityPendingItem')->name('supervisi.actual.pending_item');
     });
 
 Route::controller(AdministrasiController::class)

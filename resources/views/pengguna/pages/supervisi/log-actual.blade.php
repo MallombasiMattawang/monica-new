@@ -85,7 +85,7 @@
                                                             <a href="{{ asset('uploads/evident/' . $file) }}" target="_blank">{{ $file }}</a><br>
                                                             @endforeach
 
-                                                            
+
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -124,6 +124,53 @@
                     @endforeach
                 </div>
             </div>
+            <br>
+            @if ($baseline->pending_item == 'YA' && ($baseline->activity_id == 20 || $baseline->activity_id == 21) && activeGuard() == 'mitra')
+
+            <div class="col-md-6">
+                <div class="card p-md-4 p-2">
+                    <div class="card-header py-3 bg-transparent border-bottom-0">
+                        <h6 class="card-title mb-0"><i class="fa fa-edit"></i> Update Pending Item</h6>
+                    </div>
+                    @if ($errors->any())
+                    <div class="col-md-12">
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                    @endif
+                    <form class="row g-3" action="{{ route('supervisi.actual.pending_item') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" name="baseline_id" value="{{$baseline->id}}">
+                        <input type="hidden" name="activity_id" value="{{$baseline->activity_id}}">
+                        <div class="col-12">
+                            <label class="form-check-label me-3">Pending Item:<sup class="text-danger">*</sup></label>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="pending_item" id="pending_item1" value="YA" required>
+                                <label class="form-check-label" for="pending_item1">Ya</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="pending_item" id="pending_item2" value="TIDAK" required>
+                                <label class="form-check-label" for="pending_item">Tidak</label>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <label for="actual_message" class="form-label">Remarks</label>
+                            <textarea name="actual_message" cols="30" rows="5" class="form-control">{{ $log->actual_message }}</textarea>
+                        </div>
+                        <hr>
+                        <div class="col-12 text-end">
+                            <a href="javascript:history.back()" class="btn btn-outline-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            @endif
 
         </div>
 
