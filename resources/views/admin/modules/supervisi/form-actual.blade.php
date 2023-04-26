@@ -68,12 +68,12 @@
                     <span class="info-box-text">Progress Plan</span>
                     <span class="info-box-number">
 
-                        {{ (int) $progress_plan }} %
+                        {{ getProgressPlan($supervisi->project_id, $supervisi->supervisi_project->start_date) }} %
 
                     </span>
 
                     <div class="progress">
-                        <div class="progress-bar" style="width: {{ (int) $progress_plan }}%"></div>
+                        <div class="progress-bar" style="width: {{ getProgressPlan($supervisi->project_id, $supervisi->supervisi_project->start_date) }}%"></div>
                     </div>
                     <span class="progress-description">
                         {{-- Total Durasi {{ $progress_plan }} Hari --}}
@@ -90,10 +90,10 @@
                     <span class="info-box-text">Progress Actual</span>
                     <span class="info-box-number">
 
-                        {{ $sum_selesai + $sum_belum }} %
+                        {{ getProgressActual($supervisi->project_id, $supervisi->supervisi_project->start_date) }} %
                     </span>
                     <div class="progress">
-                        <div class="progress-bar" style="width: {{ $supervisi->progress_actual }}%"></div>
+                        <div class="progress-bar" style="width: {{ getProgressActual($supervisi->project_id, $supervisi->supervisi_project->start_date) }}%"></div>
                     </div>
                     <span class="progress-description">
                         {{-- Selesai : {{ $sum_selesai }} | Belum : {{ $sum_belum }} --}}
@@ -102,38 +102,7 @@
 
             </div>
         </div>
-        <div class="col-md-6 col-sm-6 col-xs-12">
-            <div class="info-box bg-blue">
-                <span class="info-box-icon"><i class="fa fa-envelope-o"></i></span>
-
-                <div class="info-box-content">
-                    <span class="info-box-text">Progress Administrasi</span>
-                    <span class="info-box-number">
-                        @if ($supervisi->posisi_doc == 'MITRA REGIONAL')
-                            50 %
-                        @elseif ($supervisi->status_doc == 'FINISH')
-                            100 %
-                        @else
-                            0 %
-                        @endif
-
-                    </span>
-                    <div class="progress">
-                        @if ($supervisi->posisi_doc == 'MITRA REGIONAL')
-                            <div class="progress-bar" style="width: 50%"></div>
-                        @elseif ($supervisi->status_doc == 'FINISH')
-                            <div class="progress-bar" style="width: 100%"></div>
-                        @else
-                            <div class="progress-bar" style="width: 0%"></div>
-                        @endif
-
-                    </div>
-                </div>
-                <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
-        </div>
-
+        
 
     </div>
 
@@ -425,71 +394,71 @@ Admin::style('.table {
 <script>
     $(function() {
 
-        var dateLabel = [],
-            planData = [],
-            actualData = []
+        var dateLabel = []
+            , planData = []
+            , actualData = []
 
         window.chartColors = {
-            red: 'rgb(255, 99, 132)',
-            orange: 'rgb(255, 159, 64)',
-            yellow: 'rgb(255, 205, 86)',
-            green: 'rgb(75, 192, 192)',
-            blue: 'rgb(54, 162, 235)',
-            purple: 'rgb(153, 102, 255)',
-            grey: 'rgb(201, 203, 207)'
+            red: 'rgb(255, 99, 132)'
+            , orange: 'rgb(255, 159, 64)'
+            , yellow: 'rgb(255, 205, 86)'
+            , green: 'rgb(75, 192, 192)'
+            , blue: 'rgb(54, 162, 235)'
+            , purple: 'rgb(153, 102, 255)'
+            , grey: 'rgb(201, 203, 207)'
         };
 
         async function dummyChart() {
             await getDummyData()
 
             var config = {
-                type: 'line',
-                data: {
-                    labels: dateLabel,
-                    datasets: [{
-                            label: 'Bobot Plan',
-                            backgroundColor: window.chartColors.red,
-                            borderColor: window.chartColors.red,
-                            data: planData,
-                            fill: false,
-                        },
-                        {
-                            label: 'Bobot Real',
-                            backgroundColor: window.chartColors.green,
-                            borderColor: window.chartColors.green,
-                            data: actualData,
-                            fill: false,
-                        },
+                type: 'line'
+                , data: {
+                    labels: dateLabel
+                    , datasets: [{
+                            label: 'Bobot Plan'
+                            , backgroundColor: window.chartColors.red
+                            , borderColor: window.chartColors.red
+                            , data: planData
+                            , fill: false
+                        , }
+                        , {
+                            label: 'Bobot Real'
+                            , backgroundColor: window.chartColors.green
+                            , borderColor: window.chartColors.green
+                            , data: actualData
+                            , fill: false
+                        , },
 
                     ]
-                },
-                options: {
-                    responsive: true,
-                    title: {
-                        display: true,
-                        text: 'Grafik Plan VS Grafik REAL'
-                    },
-                    tooltips: {
-                        mode: 'index',
-                        intersect: true,
-                    },
-                    hover: {
-                        mode: 'nearest',
-                        intersect: true
-                    },
-                    scales: {
-                        scaleShowValues: true,
-                        xAxes: [{
+                }
+                , options: {
+                    responsive: true
+                    , title: {
+                        display: true
+                        , text: 'Grafik Plan VS Grafik REAL'
+                    }
+                    , tooltips: {
+                        mode: 'index'
+                        , intersect: true
+                    , }
+                    , hover: {
+                        mode: 'nearest'
+                        , intersect: true
+                    }
+                    , scales: {
+                        scaleShowValues: true
+                        , xAxes: [{
                             ticks: {
                                 autoSkip: true
                             }
                         }],
-                        
+
                         yAxes: [{
-                            display: true,
-                            scaleLabel: {
-                                display: true,
-                                labelString: 'Value'
+                            display: true
+                            , scaleLabel: {
+                                display: true
+                                , labelString: 'Value'
                             }
                         }]
                     }
@@ -505,13 +474,13 @@ Admin::style('.table {
         //Fetch Data from API
 
         async function getDummyData() {
-            const apiUrl = "{{ url('/ped-panel/api/kurva_s/'.$project->id) }}"
+            const apiUrl = "{{ url('/supervisi/kurva_s/' . $list->project_id) }}"
 
             const response = await fetch(apiUrl)
             const barChatData = await response.json()
 
             const actual = barChatData.data.map((x) => x.bobot_real)
-           // console.log(salary)
+            // console.log(salary)
             const plan = barChatData.data.map((x) => x.bobot_plan)
             const date = barChatData.data.map((x) => x.date)
 
@@ -522,4 +491,5 @@ Admin::style('.table {
         }
 
     });
+
 </script>

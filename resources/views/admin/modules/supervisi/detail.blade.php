@@ -20,23 +20,8 @@
                     <div class="tab-content">
                         <!-- /.tab-pane -->
                         <div class="tab-pane active" id="tab_actual">
-                            <div class="progress-group">
-                                <span class="progress-text">Progress Plan</span>
-                                <span class="progress-number"><b>{{ $supervisi->progress_plan }}</b>/100</span>
-
-                                <div class="progress active">
-                                    <div class="progress-bar progress-bar-red progress-bar-striped" style="width: {{ $supervisi->progress_plan }}%"></div>
-                                </div>
-                            </div>
-                            <!-- /.progress-group -->
-                            <div class="progress-group">
-                                <span class="progress-text">Progress Actual</span>
-                                <span class="progress-number"><b>{{ $supervisi->progress_actual }}</b>/100</span>
-
-                                <div class="progress active">
-                                    <div class="progress-bar progress-bar-aqua progress-bar-striped" style="width: {{ $supervisi->progress_actual }}%"></div>
-                                </div>
-                            </div>
+                            
+                            
                             <table class="table table-bordered">
                                 <tr>
                                     <td>Status Project </td>
@@ -54,18 +39,7 @@
                                     <td>Tim UT</td>
                                     <td> {{ ($supervisi->supervisi_tim_ut) ? $supervisi->supervisi_tim_ut->name : '-' }} </td>
                                 </tr>
-                                <tr>
-                                    <td>Status Const</td>
-                                    <td> {{ $supervisi->status_const }} </td>
-                                </tr>
-                                <tr>
-                                    <td>Progress Const</td>
-                                    <td> {{ $supervisi->progress_const }} </td>
-                                </tr>
-                                <tr>
-                                    <td>Remarks Const</td>
-                                    <td> {{ $supervisi->remarks }} </td>
-                                </tr>
+                               
 
 
                             </table>
