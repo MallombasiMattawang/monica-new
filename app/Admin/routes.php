@@ -79,6 +79,8 @@ Route::group([
     $router->get('form-baseline/{id}', 'TranSupervisiController@formBaseline');
     $router->post('create-baseline', 'TranSupervisiController@createBaseline');
     $router->post('update-baseline', 'TranSupervisiController@updateBaseline');
+    $router->post('add-delivery', 'TranSupervisiController@addDelivery');
+    $router->post('add-instalasi', 'TranSupervisiController@addInstalasi');
 
 
     $router->post('plan-baseline', 'TranSupervisiController@baseLineActivityPlan');

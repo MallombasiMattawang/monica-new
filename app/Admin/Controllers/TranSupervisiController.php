@@ -34,8 +34,11 @@ use Illuminate\Support\Facades\DB;
 use App\Admin\Actions\Project\Plan;
 use App\Admin\Forms\addAdministrasi;
 use App\Admin\Actions\Project\Actual;
+use Illuminate\Support\Facades\Cookie;
 use App\Admin\Actions\Project\Baseline;
+use Illuminate\Support\Facades\Session;
 use App\Admin\Actions\Project\ActualActivity;
+use App\Models\TempBaseline;
 use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Controllers\AdminController;
 
@@ -238,6 +241,8 @@ class TranSupervisiController extends AdminController
     return Admin::content(function (Content $content) use ($id) {
 
       $project = MstProject::where("id", $id)->first();
+      $temp_baseline_delivery = TempBaseline::where("project_id", $id)->where('category_id', '002')->get();
+      $temp_baseline_install = TempBaseline::where("project_id", $id)->where('category_id', '003')->get();
       if ($project->status_project == 'USULAN' || $project->status_project == 'DROP') {
         return abort(404);
       }
@@ -299,12 +304,53 @@ class TranSupervisiController extends AdminController
           'sumDurasi' =>  $sumDurasi,
           'lists' => $lists,
           'supervisi' => $supervisi,
-          'c' => $c
+          'c' => $c,
+          'temp_baseline_delivery' =>$temp_baseline_delivery,
+          'temp_baseline_install' =>$temp_baseline_install,
         ]));
       } else {
         return abort(404);
       }
     });
+  }
+
+  public function addDelivery(Request $request)
+  {
+    $project_id = $request->input('project_id');
+    $category_id = $request->input('category_id');
+    $list_activity = $request->input('list_activity');
+    $satuan = $request->input('satuan');
+
+    $temp = TempBaseline::create([
+      'project_id' => $project_id,
+      'category_id' => $category_id,
+      'list_activity' => $list_activity,
+      'satuan' => $satuan,
+    ]);
+    $temp->save();
+
+
+    admin_toastr('Add Delivery Success!', 'success');
+    return back();
+  }
+  public function addInstalasi(Request $request)
+  {
+    $project_id = $request->input('project_id');
+    $category_id = $request->input('category_id');
+    $list_activity = $request->input('list_activity');
+    $satuan = $request->input('satuan');
+
+    $temp = TempBaseline::create([
+      'project_id' => $project_id,
+      'category_id' => $category_id,
+      'list_activity' => $list_activity,
+      'satuan' => $satuan,
+    ]);
+    $temp->save();
+
+
+    admin_toastr('Add Instalasi Success!', 'success');
+    return back();
   }
 
 
@@ -959,176 +1005,176 @@ class TranSupervisiController extends AdminController
 
   public function actualActivityWaspang(Request $request)
   {
-      //initial variabel
-      $baseline_id = $request->baseline_id;
-      $activity_id = $request->activity_id;
-      $approval_waspang = $request->approval_waspang;
-      $user_id = 0;
-      $log = LogActual::where(
-          'tran_baseline_id',
-          $baseline_id
-      )->latest()->first();
-      $actual_progress = $log->actual_progress;
-      $progress_bobot = $log->progress_bobot;
-      $actual_volume = $log->actual_volume;
-      $baseline = TranBaseline::where('id', $baseline_id)->first();
+    //initial variabel
+    $baseline_id = $request->baseline_id;
+    $activity_id = $request->activity_id;
+    $approval_waspang = $request->approval_waspang;
+    $user_id = 0;
+    $log = LogActual::where(
+      'tran_baseline_id',
+      $baseline_id
+    )->latest()->first();
+    $actual_progress = $log->actual_progress;
+    $progress_bobot = $log->progress_bobot;
+    $actual_volume = $log->actual_volume;
+    $baseline = TranBaseline::where('id', $baseline_id)->first();
 
-      if ($approval_waspang == 'REJECTED') {
-          LogActual::where("tran_baseline_id", $baseline_id)->where('approval_waspang', NULL)
-              ->update([
-                  'approval_waspang' => $approval_waspang,
-                  'approval_message' =>  $request->approval_message,
-                  'waspang_by' => $user_id
-              ]);
-          TranBaseline::where("id", $baseline_id)
-              ->update([
-                  'approval_waspang' => $approval_waspang,
-                  'approval_message' =>  $request->approval_message,
-                  'actual_progress' =>  0,
-                  'progress_bobot' => 0,
-                  'actual_volume' => 0,
-                  'actual_task' =>  'REJECTED',
-                  'waspang_by' => $user_id
-              ]);
-          TranSupervisi::where("project_id", $baseline->project_id)
-              ->update([
-                  'task' => 'Rejected Waspang, catatan: "' . $request->approval_message . '", silahkan laporkan kembali CT , '
-              ]);
-      } else {
-          $actual_finish = date('Y-m-d');
-          $start = strtotime($baseline->actual_start);
-          $finish = strtotime($actual_finish);
+    if ($approval_waspang == 'REJECTED') {
+      LogActual::where("tran_baseline_id", $baseline_id)->where('approval_waspang', NULL)
+        ->update([
+          'approval_waspang' => $approval_waspang,
+          'approval_message' =>  $request->approval_message,
+          'waspang_by' => $user_id
+        ]);
+      TranBaseline::where("id", $baseline_id)
+        ->update([
+          'approval_waspang' => $approval_waspang,
+          'approval_message' =>  $request->approval_message,
+          'actual_progress' =>  0,
+          'progress_bobot' => 0,
+          'actual_volume' => 0,
+          'actual_task' =>  'REJECTED',
+          'waspang_by' => $user_id
+        ]);
+      TranSupervisi::where("project_id", $baseline->project_id)
+        ->update([
+          'task' => 'Rejected Waspang, catatan: "' . $request->approval_message . '", silahkan laporkan kembali CT , '
+        ]);
+    } else {
+      $actual_finish = date('Y-m-d');
+      $start = strtotime($baseline->actual_start);
+      $finish = strtotime($actual_finish);
 
-          $jarak = $finish - $start;
-          $actual_durasi = $jarak / 60 / 60 / 24;
-          $actual_durasi = $actual_durasi + 1;
-          LogActual::where("tran_baseline_id", $baseline_id)->where('approval_waspang', NULL)
-              ->update([
-                  'approval_waspang' => $approval_waspang,
-                  'approval_message' =>  $request->approval_message,
-                  'waspang_by' => $user_id
-              ]);
-          TranBaseline::where("id", $baseline_id)
-              ->update([
-                  'approval_waspang' => $approval_waspang,
-                  'approval_message' =>  $request->approval_message,
-                  'actual_finish' =>  date('Y-m-d'),
-                  'actual_durasi' => $actual_durasi,
-                  'actual_progress' =>  100,
-                  'progress_bobot' =>  $progress_bobot,
-                  'actual_volume' =>  $actual_volume,
-                  'actual_task' =>  'APPROVED',
-                  'waspang_by' => $user_id
-              ]);
-          //update dokumen di supervisi
-          $actual_progress_const = 100 * $baseline->bobot / 100;
-          TranSupervisi::where("project_id", $baseline->project_id)
-              ->update([
-                  'status_const' => 'SELESAI CT',
-                  'status_doc' => 'KONSTRUKSI',
-                  'progress_const' => $actual_progress_const,
-                  'tgl_selesai_ct' => date('Y-m-d'),
-                  'task' => 'Appoval Waspang, status: "SELESAI CT", silahkan melanjutkan Pelaksanaan UT, '
-              ]);
-      }
-      admin_success('Waspang Updated.');
+      $jarak = $finish - $start;
+      $actual_durasi = $jarak / 60 / 60 / 24;
+      $actual_durasi = $actual_durasi + 1;
+      LogActual::where("tran_baseline_id", $baseline_id)->where('approval_waspang', NULL)
+        ->update([
+          'approval_waspang' => $approval_waspang,
+          'approval_message' =>  $request->approval_message,
+          'waspang_by' => $user_id
+        ]);
+      TranBaseline::where("id", $baseline_id)
+        ->update([
+          'approval_waspang' => $approval_waspang,
+          'approval_message' =>  $request->approval_message,
+          'actual_finish' =>  date('Y-m-d'),
+          'actual_durasi' => $actual_durasi,
+          'actual_progress' =>  100,
+          'progress_bobot' =>  $progress_bobot,
+          'actual_volume' =>  $actual_volume,
+          'actual_task' =>  'APPROVED',
+          'waspang_by' => $user_id
+        ]);
+      //update dokumen di supervisi
+      $actual_progress_const = 100 * $baseline->bobot / 100;
+      TranSupervisi::where("project_id", $baseline->project_id)
+        ->update([
+          'status_const' => 'SELESAI CT',
+          'status_doc' => 'KONSTRUKSI',
+          'progress_const' => $actual_progress_const,
+          'tgl_selesai_ct' => date('Y-m-d'),
+          'task' => 'Appoval Waspang, status: "SELESAI CT", silahkan melanjutkan Pelaksanaan UT, '
+        ]);
+    }
+    admin_success('Waspang Updated.');
 
-      return redirect()->back();
+    return redirect()->back();
   }
 
   public function actualActivityUt(Request $request)
   {
-      //initial variabel
-      $baseline_id = $request->baseline_id;
-      $activity_id = $request->activity_id;
-      $approval_tim_ut = $request->approval_tim_ut;
-      $user_id = 0;
-      $log = LogActual::where(
-          'tran_baseline_id',
-          $baseline_id
-      )->latest()->first();
-      $actual_progress = $log->actual_progress;
-      $progress_bobot = $log->progress_bobot;
-      $actual_volume = $log->actual_volume;
-      $baseline = TranBaseline::where('id', $baseline_id)->first();
-      $administrasi = TranAdministrasi::where('project_id', $baseline->project_id)->first();
-      if ($approval_tim_ut == 'REJECTED') {
-          LogActual::where("tran_baseline_id", $baseline_id)->where('approval_tim_ut', NULL)
-              ->update([
-                  'approval_tim_ut' => $approval_tim_ut,
-                  'approval_message' =>  $request->approval_message,
-                  'tim_ut_by' => $user_id
-              ]);
-          TranBaseline::where("id", $baseline_id)
-              ->update([
-                  'approval_tim_ut' => $approval_tim_ut,
-                  'approval_message' =>  $request->approval_message,
-                  'actual_progress' =>  0,
-                  'progress_bobot' => 0,
-                  'actual_volume' => 0,
-                  'actual_task' =>  'REJECTED',
-                  'tim_ut_by' => $user_id
-              ]);
-          TranSupervisi::where("project_id", $baseline->project_id)
-              ->update([
-                  'task' => 'Rejected TIM UT, catatan: "' . $request->approval_message . '", silahkan laporkan kembali Pelaksanaan UT , '
-              ]);
-      } else {
-          $actual_finish = date('Y-m-d');
-          $start = strtotime($baseline->actual_start);
-          $finish = strtotime($actual_finish);
+    //initial variabel
+    $baseline_id = $request->baseline_id;
+    $activity_id = $request->activity_id;
+    $approval_tim_ut = $request->approval_tim_ut;
+    $user_id = 0;
+    $log = LogActual::where(
+      'tran_baseline_id',
+      $baseline_id
+    )->latest()->first();
+    $actual_progress = $log->actual_progress;
+    $progress_bobot = $log->progress_bobot;
+    $actual_volume = $log->actual_volume;
+    $baseline = TranBaseline::where('id', $baseline_id)->first();
+    $administrasi = TranAdministrasi::where('project_id', $baseline->project_id)->first();
+    if ($approval_tim_ut == 'REJECTED') {
+      LogActual::where("tran_baseline_id", $baseline_id)->where('approval_tim_ut', NULL)
+        ->update([
+          'approval_tim_ut' => $approval_tim_ut,
+          'approval_message' =>  $request->approval_message,
+          'tim_ut_by' => $user_id
+        ]);
+      TranBaseline::where("id", $baseline_id)
+        ->update([
+          'approval_tim_ut' => $approval_tim_ut,
+          'approval_message' =>  $request->approval_message,
+          'actual_progress' =>  0,
+          'progress_bobot' => 0,
+          'actual_volume' => 0,
+          'actual_task' =>  'REJECTED',
+          'tim_ut_by' => $user_id
+        ]);
+      TranSupervisi::where("project_id", $baseline->project_id)
+        ->update([
+          'task' => 'Rejected TIM UT, catatan: "' . $request->approval_message . '", silahkan laporkan kembali Pelaksanaan UT , '
+        ]);
+    } else {
+      $actual_finish = date('Y-m-d');
+      $start = strtotime($baseline->actual_start);
+      $finish = strtotime($actual_finish);
 
-          $jarak = $finish - $start;
-          $actual_durasi = $jarak / 60 / 60 / 24;
-          $actual_durasi = $actual_durasi + 1;
-          LogActual::where("tran_baseline_id", $baseline_id)->where('approval_tim_ut', NULL)
-              ->update([
-                  'approval_tim_ut' => $approval_tim_ut,
-                  'approval_message' =>  $request->approval_message,
-                  'tim_ut_by' => $user_id
-              ]);
-          TranBaseline::where("id", $baseline_id)
-              ->update([
-                  'approval_tim_ut' => $approval_tim_ut,
-                  'approval_message' =>  $request->approval_message,
-                  'actual_finish' =>  date('Y-m-d'),
-                  'actual_durasi' => $actual_durasi,
-                  'actual_progress' =>  100,
-                  'progress_bobot' =>  $progress_bobot,
-                  'actual_volume' =>  $actual_volume,
-                  'actual_task' =>  'APPROVED',
-                  'tim_ut_by' => $user_id
-              ]);
-          TranBaseline::where("activity_id", 22)->where('project_id', $baseline->project_id)
-              ->update([
-                  'actual_start' =>  date('Y-m-d'),
+      $jarak = $finish - $start;
+      $actual_durasi = $jarak / 60 / 60 / 24;
+      $actual_durasi = $actual_durasi + 1;
+      LogActual::where("tran_baseline_id", $baseline_id)->where('approval_tim_ut', NULL)
+        ->update([
+          'approval_tim_ut' => $approval_tim_ut,
+          'approval_message' =>  $request->approval_message,
+          'tim_ut_by' => $user_id
+        ]);
+      TranBaseline::where("id", $baseline_id)
+        ->update([
+          'approval_tim_ut' => $approval_tim_ut,
+          'approval_message' =>  $request->approval_message,
+          'actual_finish' =>  date('Y-m-d'),
+          'actual_durasi' => $actual_durasi,
+          'actual_progress' =>  100,
+          'progress_bobot' =>  $progress_bobot,
+          'actual_volume' =>  $actual_volume,
+          'actual_task' =>  'APPROVED',
+          'tim_ut_by' => $user_id
+        ]);
+      TranBaseline::where("activity_id", 22)->where('project_id', $baseline->project_id)
+        ->update([
+          'actual_start' =>  date('Y-m-d'),
 
-              ]);
-          //update dokumen di supervisi
-          $actual_progress_const = 100 * $baseline->bobot / 100;
-          TranSupervisi::where("project_id", $baseline->project_id)
-              ->update([
-                  'status_const' => 'SELESAI UT',
-                  'status_doc' => 'ADMINISTRASI',
-                  'progress_const' => $actual_progress_const,
-                  'tgl_selesai_ut' => date('Y-m-d'),
-                  'task' => 'Appoval TIM UT, status: "SELESAI UT", silahkan melanjutkan pembuatan dokumen administrasi '
-              ]);
-          TranAdministrasi::where("project_id", $baseline->project_id)
-              ->update([
-                  'status_doc' => 'PEMBUATAN DOKUMEN',
-                  'posisi_doc' => 'MITRA AREA'
-              ]);
-          //SIMPAN KE LOG ACTUAL
-          LogAdministrasi::create([
-              'tran_administrasi_id' => $administrasi->id,
-              'status_doc' => 'PEMBUATAN DOKUMEN',
-              'posisi_doc' => 'MITRA AREA',
-          ]);
-      }
-      admin_success('UT Updated.');
+        ]);
+      //update dokumen di supervisi
+      $actual_progress_const = 100 * $baseline->bobot / 100;
+      TranSupervisi::where("project_id", $baseline->project_id)
+        ->update([
+          'status_const' => 'SELESAI UT',
+          'status_doc' => 'ADMINISTRASI',
+          'progress_const' => $actual_progress_const,
+          'tgl_selesai_ut' => date('Y-m-d'),
+          'task' => 'Appoval TIM UT, status: "SELESAI UT", silahkan melanjutkan pembuatan dokumen administrasi '
+        ]);
+      TranAdministrasi::where("project_id", $baseline->project_id)
+        ->update([
+          'status_doc' => 'PEMBUATAN DOKUMEN',
+          'posisi_doc' => 'MITRA AREA'
+        ]);
+      //SIMPAN KE LOG ACTUAL
+      LogAdministrasi::create([
+        'tran_administrasi_id' => $administrasi->id,
+        'status_doc' => 'PEMBUATAN DOKUMEN',
+        'posisi_doc' => 'MITRA AREA',
+      ]);
+    }
+    admin_success('UT Updated.');
 
-      return redirect()->back();
+    return redirect()->back();
   }
 
 

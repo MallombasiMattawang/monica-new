@@ -53,7 +53,71 @@
         </div>
     </div>
 
+    <div id="add_delivery" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <form method="post" action="{{ url('ped-panel/add-delivery') }}">
+                @csrf
+                <input type="hidden" name="project_id" value="{{ $project->id }}">
+                <input type="hidden" name="category_id" value="002">
 
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Add Actual Delivery</h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="form-group">
+                            <label>Nama Actual Activity</label>
+                            <input type="text" class="form-control" name="list_activity" placeholder="Enter Activity">
+                        </div>
+                        <div class="form-group">
+                            <label>Satuan</label>
+                            <input type="text" class="form-control" name="satuan" placeholder="Enter Satuan">
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </form>
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div id="add_instalasi" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <form method="post" action="{{ url('ped-panel/add-instalasi') }}">
+                @csrf
+                <input type="hidden" name="project_id" value="{{ $project->id }}">
+                <input type="hidden" name="category_id" value="003">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Add Actual Instalasi</h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="form-group">
+                            <label>Nama Actual Activity</label>
+                            <input type="text" class="form-control" name="list_activity" placeholder="Enter Activity">
+                        </div>
+                        <div class="form-group">
+                            <label>Satuan</label>
+                            <input type="text" class="form-control" name="satuan" placeholder="Enter Satuan">
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </form>
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
     <div class="box box-default">
         <div class="box-header">
@@ -137,15 +201,17 @@
                                 <td>
                                     <b>[002] MATERIAL DELIVERY
                                     </b>
+                                    <a id="add-delivery" class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#add_delivery"> <i class="fa fa-plus"></i> Add Activity</a>
                                 </td>
                                 <td class="text-center"> <input type="text" id="total_material" class="form-control" placeholder="Total" name="total_material" readonly="">
                                 </td>
                                 <td colspan="2"><i class="text-red">(Pastikan total bobot "MATERIAL DELIVERY" =
                                         <b>30</b>)</i></td>
                             </tr>
+
                             <tr>
                                 <td>
-                                    2.01. [016] Delivery Material Sipil (MH/HH/Bridge/Pondasi) <span class="label label-warning">Material Delivery</span>
+                                    2.01. [016] Delivery Material Sipil (MH/HH/Bridge/Pondasi) <span class="label label-warning">Material Delivery</span><a class="delete-row-btn btn btn-default">Delete</a>
 
                                     <input type="hidden" class="form-control" name="activity_id[]" value=" 3 ">
                                     <input type="hidden" class="form-control" name="category_id[]" value=" 002 ">
@@ -161,7 +227,7 @@
                             <tr>
                                 <td>
                                     2.02. [017] Delivery Duct/subduct/HDPE <span class="label label-warning">Material
-                                        Delivery</span>
+                                        Delivery</span><a class="delete-row-btn btn btn-default">Delete</a>
 
                                     <input type="hidden" class="form-control" name="activity_id[]" value=" 4 ">
                                     <input type="hidden" class="form-control" name="category_id[]" value=" 002 ">
@@ -178,10 +244,10 @@
                             @php
                             $c = 4;
                             @endphp
-                            <tr class="bg-gray">
+                            <tr>
                                 <td>
                                     2.03. [018] Delivery Kabel <span class="label label-warning">Material
-                                        Delivery</span>
+                                        Delivery</span><a class="delete-row-btn btn btn-default">Delete</a>
 
                                     <input type="hidden" class="form-control" name="activity_id[]" value=" 5 ">
                                     <input type="hidden" class="form-control" name="category_id[]" value=" 002 ">
@@ -197,10 +263,10 @@
                             @php
                             $c = 5;
                             @endphp
-                            <tr class="bg-gray">
+                            <tr>
                                 <td>
                                     2.04. [019] Delivery Tiang <span class="label label-warning">Material
-                                        Delivery</span>
+                                        Delivery</span><a class="delete-row-btn btn btn-default">Delete</a>
 
                                     <input type="hidden" class="form-control" name="activity_id[]" value=" 6 ">
                                     <input type="hidden" class="form-control" name="category_id[]" value=" 002 ">
@@ -217,7 +283,7 @@
                             @php
                             $c = 6;
                             @endphp
-                            <tr class="bg-gray">
+                            <tr>
                                 <td>
                                     2.05. [020] Delivery ODP <span class="label label-warning">Material
                                         Delivery</span>
@@ -237,7 +303,7 @@
                             @php
                             $c = 7;
                             @endphp
-                            <tr class="bg-gray">
+                            <tr>
                                 <td>
                                     2.06. [026] Delivery ODC <span class="label label-warning">Material
                                         Delivery</span>
@@ -253,14 +319,13 @@
                                 </td>
                             </tr>
                             @endif
-
                             <tr>
                                 @php
                                 $c = $c + 1;
                                 @endphp
                                 <td>
                                     2.07. [027] Delivery Aksesoris <span class="label label-warning">Material
-                                        Delivery</span>
+                                        Delivery</span><a class="delete-row-btn btn btn-default">Delete</a>
 
                                     <input type="hidden" class="form-control" name="activity_id[]" value=" 9 ">
                                     <input type="hidden" class="form-control" name="category_id[]" value=" 002 ">
@@ -273,10 +338,31 @@
                                 <td> <input type="text" class="form-control" name="satuan[]" readonly value="PCS">
                                 </td>
                             </tr>
+                            @foreach ($temp_baseline_delivery as $d)
+                            <tr class="bg-gray">
+                                @php
+                                $c = $c + 1;
+                                @endphp
+                                <td>
+                                    {{ $d->list_activity }}</span> <a class="delete-row-btn btn btn-default">Delete</a>
+
+                                    <input type="hidden" class="form-control" name="activity_id[]" value="0">
+                                    <input type="hidden" class="form-control" name="category_id[]" value=" 002 ">
+                                    <input type="hidden" class="form-control" name="list_activity[]" value="{{ $d->list_activity }}">
+                                </td>
+                                <td> <input type="number" class="form-control jumlah material" name="bobot[]" value="2">
+                                </td>
+                                <td> <input type="number" class="form-control" name="volume[]" value="{{ old('volume.' . $c . '') }}" required>
+                                </td>
+                                <td> <input type="text" class="form-control" name="satuan[]" readonly value=" {{ $d->satuan }}">
+                                </td>
+                            </tr>
+                            @endforeach
                             <tr>
                                 <td>
                                     <b>[003] INSTALASI & TEST COMM
                                     </b>
+                                    <a id="add-instalasi" class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#add_instalasi"> <i class="fa fa-plus"></i> Add Activity</a>
                                 </td>
                                 <td class="text-center"> <input type="text" id="total_install" class="form-control" placeholder="Total" name="total_install" readonly="">
                                 </td>
@@ -290,7 +376,7 @@
                                     @php
                                     $c = $c + 1;
                                     @endphp
-                                    3.01. [010] Perijinan Pihak Ketiga (PU/BTS/Warga/SITAC) <span class="label label-primary">Installasi &amp; Test Comm</span>
+                                    3.01. [010] Perijinan Pihak Ketiga (PU/BTS/Warga/SITAC) <span class="label label-primary">Installasi &amp; Test Comm</span> <a class="delete-row-btn-install btn btn-default">Delete</a>
 
                                     <input type="hidden" class="form-control" name="activity_id[]" value=" 10 ">
                                     <input type="hidden" class="form-control" name="category_id[]" value=" 003 ">
@@ -307,7 +393,7 @@
                                 $c = $c + 1;
                                 @endphp
                                 <td>
-                                    3.02. [011] Pekerjaan Galian (Trenching/Rodding/Crossing/Borring) <span class="label label-primary">Installasi &amp; Test Comm</span>
+                                    3.02. [011] Pekerjaan Galian (Trenching/Rodding/Crossing/Borring) <span class="label label-primary">Installasi &amp; Test Comm</span> <a class="delete-row-btn-install btn btn-default">Delete</a>
 
                                     <input type="hidden" class="form-control" name="activity_id[]" value=" 11 ">
                                     <input type="hidden" class="form-control" name="category_id[]" value=" 003 ">
@@ -325,7 +411,7 @@
                                 $c = $c + 1;
                                 @endphp
                                 <td>
-                                    3.03. [013] Pekerjaan Sipil (HH/MH/Bridge/Pondasi) <span class="label label-primary">Installasi &amp; Test Comm</span>
+                                    3.03. [013] Pekerjaan Sipil (HH/MH/Bridge/Pondasi) <span class="label label-primary">Installasi &amp; Test Comm</span> <a class="delete-row-btn-install btn btn-default">Delete</a>
 
                                     <input type="hidden" class="form-control" name="activity_id[]" value=" 12 ">
                                     <input type="hidden" class="form-control" name="category_id[]" value=" 003 ">
@@ -343,7 +429,7 @@
                                 $c = $c + 1;
                                 @endphp
                                 <td>
-                                    3.04. [014] Pekerjaan Duct/Subduct/HDPE <span class="label label-primary">Installasi &amp; Test Comm</span>
+                                    3.04. [014] Pekerjaan Duct/Subduct/HDPE <span class="label label-primary">Installasi &amp; Test Comm</span> <a class="delete-row-btn-install btn btn-default">Delete</a>
 
                                     <input type="hidden" class="form-control" name="activity_id[]" value=" 13 ">
                                     <input type="hidden" class="form-control" name="category_id[]" value=" 003 ">
@@ -357,14 +443,14 @@
                                 </td>
                             </tr>
                             @if ($deliveryTiang > 0)
-                            <tr class="bg-gray">
+                            <tr>
                                 @php
                                 $c = $c + 1;
                                 @endphp
                                 <td>
                                     3.05. [015] Penanaman Tiang <span class="label label-primary">Installasi &amp;
                                         Test
-                                        Comm</span>
+                                        Comm</span> <a class="delete-row-btn-install btn btn-default">Delete</a>
 
                                     <input type="hidden" class="form-control" name="activity_id[]" value=" 14 ">
                                     <input type="hidden" class="form-control" name="category_id[]" value=" 003 ">
@@ -377,13 +463,13 @@
                             </tr>
                             @endif
                             @if ($penarikanFeeder > 0)
-                            <tr class="bg-gray">
+                            <tr>
                                 @php
                                 $c = $c + 1;
                                 @endphp
                                 <td>
                                     3.06. [021] Penarikan Kabel Feeder <span class="label label-primary">Installasi
-                                        &amp; Test Comm</span>
+                                        &amp; Test Comm</span> <a class="delete-row-btn-install btn btn-default">Delete</a>
 
                                     <input type="hidden" class="form-control" name="activity_id[]" value=" 15 ">
                                     <input type="hidden" class="form-control" name="category_id[]" value=" 003 ">
@@ -396,13 +482,13 @@
                             </tr>
                             @endif
                             @if ($penarikanDist > 0)
-                            <tr class="bg-gray">
+                            <tr>
                                 @php
                                 $c = $c + 1;
                                 @endphp
                                 <td>
                                     3.07. [022] Penarikan Kabel Distribusi <span class="label label-primary">Installasi
-                                        &amp; Test Comm</span>
+                                        &amp; Test Comm</span> <a class="delete-row-btn-install btn btn-default">Delete</a>
 
                                     <input type="hidden" class="form-control" name="activity_id[]" value=" 16 ">
                                     <input type="hidden" class="form-control" name="category_id[]" value=" 003 ">
@@ -416,14 +502,14 @@
                             @endif
 
                             @if ($deliveryOdc > 0)
-                            <tr class="bg-gray">
+                            <tr>
                                 @php
                                 $c = $c + 1;
                                 @endphp
                                 <td>
                                     3.08. [023] Pemasangan ODC <span class="label label-primary">Installasi &amp;
                                         Test
-                                        Comm</span>
+                                        Comm</span> <a class="delete-row-btn-install btn btn-default">Delete</a>
 
                                     <input type="hidden" class="form-control" name="activity_id[]" value=" 17 ">
                                     <input type="hidden" class="form-control" name="category_id[]" value=" 003 ">
@@ -436,14 +522,14 @@
                             </tr>
                             @endif
                             @if ($deliveryOdp > 0)
-                            <tr class="bg-gray">
+                            <tr>
                                 @php
                                 $c = $c + 1;
                                 @endphp
                                 <td>
                                     3.09. [024] Pemasangan ODP <span class="label label-primary">Installasi &amp;
                                         Test
-                                        Comm</span>
+                                        Comm</span> <a class="delete-row-btn-install btn btn-default">Delete</a>
 
                                     <input type="hidden" class="form-control" name="activity_id[]" value=" 18 ">
                                     <input type="hidden" class="form-control" name="category_id[]" value=" 003 ">
@@ -455,6 +541,26 @@
                                 <td> <input type="text" class="form-control" name="satuan[]" readonly value="PCS"> </td>
                             </tr>
                             @endif
+                            @foreach ($temp_baseline_install as $d)
+                            <tr class="bg-gray">
+                                @php
+                                $c = $c + 1;
+                                @endphp
+                                <td>
+                                    {{ $d->list_activity }}</span> <a class="delete-row-btn-install btn btn-default">Delete</a>
+
+                                    <input type="hidden" class="form-control" name="activity_id[]" value="0">
+                                    <input type="hidden" class="form-control" name="category_id[]" value=" 003 ">
+                                    <input type="hidden" class="form-control" name="list_activity[]" value="{{ $d->list_activity }}">
+                                </td>
+                                <td> <input type="number" class="form-control jumlah install" name="bobot[]" value="2">
+                                </td>
+                                <td> <input type="number" class="form-control" name="volume[]" value="{{ old('volume.' . $c . '') }}" required>
+                                </td>
+                                <td> <input type="text" class="form-control" name="satuan[]" readonly value=" {{ $d->satuan }}">
+                                </td>
+                            </tr>
+                            @endforeach
 
                             <tr>
                                 @php
@@ -574,6 +680,116 @@ Admin::script('
 
 ');
 @endphp
+<script>
+    // get all the delete buttons
+    var deleteButtons = document.querySelectorAll('.delete-row-btn');
+    var hitung = 0;
+    var total = 0;
+
+
+    // add click event listener to each delete button
+    deleteButtons.forEach(function(button) {
+
+        button.addEventListener('click', function() {
+            var hitung = 0;
+            var total = 0;
+
+            var hitung_total = 0;
+            var total_total = 0;
+            $('.form-prevent').find('.jumlah').each(function() {
+                hitung_total++;
+                total_total = total_total + parseInt($(this).val());
+            });
+            $("#total").val(total_total);
+
+            $('.form-prevent').find('.material').each(function() {
+                hitung++;
+                total = total + parseInt($(this).val());
+            });
+            $("#total_material").val(total);
+            // get the row to be deleted
+            var row = this.parentNode.parentNode;
+
+            // remove the row from the table
+            row.parentNode.removeChild(row);
+            var hitung = 0;
+            var total = 0;
+
+            var hitung_total = 0;
+            var total_total = 0;
+            $('.form-prevent').find('.jumlah').each(function() {
+                hitung_total++;
+                total_total = total_total + parseInt($(this).val());
+            });
+            $("#total").val(total_total);
+
+            $('.form-prevent').find('.material').each(function() {
+                hitung++;
+                total = total + parseInt($(this).val());
+            });
+            $("#total_material").val(total);
+
+        });
+
+    });
+
+</script>
+
+<script>
+    // get all the delete buttons
+    var deleteButtons = document.querySelectorAll('.delete-row-btn-install');
+    var hitung = 0;
+    var total = 0;
+
+
+    // add click event listener to each delete button
+    deleteButtons.forEach(function(button) {
+
+        button.addEventListener('click', function() {
+            var hitung = 0;
+            var total = 0;
+
+            var hitung_total = 0;
+            var total_total = 0;
+            $('.form-prevent').find('.jumlah').each(function() {
+                hitung_total++;
+                total_total = total_total + parseInt($(this).val());
+            });
+            $("#total").val(total_total);
+
+            $('.form-prevent').find('.install').each(function() {
+                hitung++;
+                total = total + parseInt($(this).val());
+            });
+            $("#total_install").val(total);
+            // get the row to be deleted
+            var row = this.parentNode.parentNode;
+
+            // remove the row from the table
+            row.parentNode.removeChild(row);
+            var hitung = 0;
+            var total = 0;
+
+            var hitung_total = 0;
+            var total_total = 0;
+            $('.form-prevent').find('.jumlah').each(function() {
+                hitung_total++;
+                total_total = total_total + parseInt($(this).val());
+            });
+            $("#total").val(total_total);
+
+            $('.form-prevent').find('.install').each(function() {
+                hitung++;
+                total = total + parseInt($(this).val());
+            });
+            $("#total_install").val(total);
+
+        });
+
+    });
+
+</script>
+
 <script>
     $(document).ready(function() {
         var hitung = 0;
