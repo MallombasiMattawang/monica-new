@@ -156,7 +156,7 @@
                                             <a href="#" class="btn btn-primary disabled">&nbsp;&nbsp;Add Plan</a> --}}
                                     @endif
 
-                                    @if ($list->activity_id >= 3 && $list->activity_id <= 9) @if ($list->plan_finish)
+                                    @if (($list->activity_id >= 3 && $list->activity_id <= 9) || ($list->activity_id == 0 && $list->category_id == '002')) @if ($list->plan_finish)
                                         <a data-bs-toggle="modal" data-bs-target="#createDate" data-id="{{ $list->id }}" data-activityId="{{ $list->activity_id }}" data-name="{{ $list->list_activity }}" data-start="{{ $cek_preparing->plan_finish }}" id="cek" class="btn btn-light get-id">&nbsp;&nbsp;Edit Plan</a>
                                         @else
                                         @if ($cek_preparing->plan_finish)
@@ -171,7 +171,7 @@
                                         <a href="#" class="btn btn-primary disabled">&nbsp;&nbsp;Add Plan</a> --}}
                                         @endif
 
-                                        @if ($list->activity_id >= 10 && $list->activity_id <= 19 && $cek_all_delivery==$cek_all_delivery_finish) @if ($list->plan_finish)
+                                        @if (($list->activity_id >= 10 && $list->activity_id <= 19 && $cek_all_delivery==$cek_all_delivery_finish) || ($list->activity_id == 0 && $list->category_id == '003')) @if ($list->plan_finish)
                                             <a data-bs-toggle="modal" data-bs-target="#createDate" data-id="{{ $list->id }}" data-activityId="{{ $list->activity_id }}" data-name="{{ $list->list_activity }}" data-start="{{ $cek_material->plan_finish }}" id="cek" class="btn btn-light get-id">&nbsp;&nbsp;Edit Plan</a>
                                             @else
                                             @if ($cek_material->plan_finish)
@@ -293,7 +293,6 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     @if ((int) $progress_plan == 100)
                     <button type="submit" class="btn btn-primary submit-modal">Submit Plan</button>
                     @endif
@@ -422,7 +421,7 @@
             });
 
             $('#plan_start').on("dp.change", function(e) {
-               
+
                 $('#plan_finish').data("DateTimePicker").minDate(e.date);
                 $("#plan_finish").prop("readonly", false);
 

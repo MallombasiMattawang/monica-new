@@ -171,7 +171,7 @@ class PlanController extends Controller
                     ]);
             }
             //  }
-            //ketika ada update 
+            //ketika ada update
 
             return response()->json(['success' => 'update plan berhasil']);
         } else {
@@ -192,8 +192,7 @@ class PlanController extends Controller
             ->update([
                 'task' => 'PENGISIAN ACTUAL',
             ]);
-        admin_success('Submit Plan Success!');
-        admin_toastr('Submit Plan Success!', 'success');
+
         return back();
     }
 }

@@ -102,7 +102,7 @@
 
             </div>
         </div>
-        
+
 
     </div>
 
@@ -141,7 +141,7 @@
                                         Activity </th>
                                     <th colspan="3" class="text-center bg-warning">BASELINE
                                     </th>
-            
+
                                     <th colspan="3" class="text-center bg-info">
                                         PROGRESS
                                         ACTUAL
@@ -170,7 +170,7 @@
                                 @foreach ($lists as $list)
                                 @php
                                 $n++;
-            
+
                                 @endphp
                                 @if ($list->activity_id == 1)
                                 <tr class="bg-light">
@@ -236,38 +236,37 @@
                                                 <a href="{{ url('ped-panel/log-generate/' . $list->id) }}"
                                                     class="btn btn-info"><i
                                                         class="fa fa-search"></i>&nbsp;&nbsp;
-                                                </a>  
-                                            @endif                                        
+                                                </a>
+                                            @endif
                                         @endif
                                         @if ($list->category_id == 003)
                                             @if ($list->actual_task != null && $list->actual_task != 'NEED APPROVED WASPANG')
                                                 <a href="{{ url('ped-panel/log-generate/' . $list->id) }}"
                                                     class="btn btn-info"><i
                                                         class="fa fa-search"></i>&nbsp;&nbsp;
-                                                </a>  
+                                                </a>
                                             @endif
                                              @if (cekWaspangAdmin($list->project_id) == 1 && $list->activity_id == 20)
                                                  <a href="{{ url('ped-panel/log-generate/' . $list->id) }}" class="btn btn-warning"><i class="fa fa-edit"></i></a>
                                             @endif
                                          @endif
-                                         @if ($list->category_id == 004)                                                
+                                         @if ($list->category_id == 004)
                                          @if ($list->actual_task != null && $list->actual_task != 'NEED APPROVED TIM UT')
                                                 <a href="{{ url('ped-panel/log-generate/' . $list->id) }}"
                                                     class="btn btn-info"><i
                                                         class="fa fa-search"></i>&nbsp;&nbsp;
-                                                </a>  
+                                                </a>
                                             @endif
                                             @if (cekUtadmin($list->project_id) == 1 && $list->activity_id == 21)
                                                 <a href="{{ url('ped-panel/log-generate/' . $list->id) }}" class="btn btn-warning"><i class="fa fa-edit"></i>Approve</a>
                                             @endif
                                         @endif
-                                        
-            
-                                       
-            
-                                    </td>   
+
+
+
+                                    </td>
                                     @endif
-                                  
+
                                 </tr>
                                 @endforeach
                             </table>
@@ -339,8 +338,8 @@ Admin::style('.table {
             background-color: #ffffd5;
             color: #373737;
           }
-         
-          
+
+
           .table td {
             text-transform: uppercase;
             white-space: nowrap;

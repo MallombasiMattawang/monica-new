@@ -211,7 +211,7 @@
 
                             <tr>
                                 <td>
-                                    2.01. [016] Delivery Material Sipil (MH/HH/Bridge/Pondasi) <span class="label label-warning">Material Delivery</span><a class="delete-row-btn btn btn-default">Delete</a>
+                                    2.01. [016] Delivery Material Sipil (MH/HH/Bridge/Pondasi) <span class="label label-warning">Material Delivery</span><a class="pull-right delete-row-btn btn btn-sm btn-default"><i class="fa fa-close"></i></a>
 
                                     <input type="hidden" class="form-control" name="activity_id[]" value=" 3 ">
                                     <input type="hidden" class="form-control" name="category_id[]" value=" 002 ">
@@ -227,7 +227,7 @@
                             <tr>
                                 <td>
                                     2.02. [017] Delivery Duct/subduct/HDPE <span class="label label-warning">Material
-                                        Delivery</span><a class="delete-row-btn btn btn-default">Delete</a>
+                                        Delivery</span><a class="pull-right delete-row-btn btn btn-sm btn-default"><i class="fa fa-close"></i></a>
 
                                     <input type="hidden" class="form-control" name="activity_id[]" value=" 4 ">
                                     <input type="hidden" class="form-control" name="category_id[]" value=" 002 ">
@@ -247,7 +247,7 @@
                             <tr>
                                 <td>
                                     2.03. [018] Delivery Kabel <span class="label label-warning">Material
-                                        Delivery</span><a class="delete-row-btn btn btn-default">Delete</a>
+                                        Delivery</span><a class="pull-right delete-row-btn btn btn-sm btn-default"><i class="fa fa-close"></i></a>
 
                                     <input type="hidden" class="form-control" name="activity_id[]" value=" 5 ">
                                     <input type="hidden" class="form-control" name="category_id[]" value=" 002 ">
@@ -266,7 +266,7 @@
                             <tr>
                                 <td>
                                     2.04. [019] Delivery Tiang <span class="label label-warning">Material
-                                        Delivery</span><a class="delete-row-btn btn btn-default">Delete</a>
+                                        Delivery</span><a class="pull-right delete-row-btn btn btn-sm btn-default"><i class="fa fa-close"></i></a>
 
                                     <input type="hidden" class="form-control" name="activity_id[]" value=" 6 ">
                                     <input type="hidden" class="form-control" name="category_id[]" value=" 002 ">
@@ -325,7 +325,7 @@
                                 @endphp
                                 <td>
                                     2.07. [027] Delivery Aksesoris <span class="label label-warning">Material
-                                        Delivery</span><a class="delete-row-btn btn btn-default">Delete</a>
+                                        Delivery</span><a class="pull-right delete-row-btn btn btn-sm btn-default"><i class="fa fa-close"></i></a>
 
                                     <input type="hidden" class="form-control" name="activity_id[]" value=" 9 ">
                                     <input type="hidden" class="form-control" name="category_id[]" value=" 002 ">
@@ -344,7 +344,7 @@
                                 $c = $c + 1;
                                 @endphp
                                 <td>
-                                    {{ $d->list_activity }}</span> <a class="delete-row-btn btn btn-default">Delete</a>
+                                    {{ $d->list_activity }}</span> <a class="pull-right delete-row-btn btn btn-sm btn-default"><i class="fa fa-close"></i></a>
 
                                     <input type="hidden" class="form-control" name="activity_id[]" value="0">
                                     <input type="hidden" class="form-control" name="category_id[]" value=" 002 ">
@@ -376,7 +376,7 @@
                                     @php
                                     $c = $c + 1;
                                     @endphp
-                                    3.01. [010] Perijinan Pihak Ketiga (PU/BTS/Warga/SITAC) <span class="label label-primary">Installasi &amp; Test Comm</span> <a class="delete-row-btn-install btn btn-default">Delete</a>
+                                    3.01. [010] Perijinan Pihak Ketiga (PU/BTS/Warga/SITAC) <span class="label label-primary">Installasi &amp; Test Comm</span> <a class="pull-right delete-row-btn-install btn-sm btn-default"><i class="fa fa-close"></i></a>
 
                                     <input type="hidden" class="form-control" name="activity_id[]" value=" 10 ">
                                     <input type="hidden" class="form-control" name="category_id[]" value=" 003 ">
@@ -393,7 +393,7 @@
                                 $c = $c + 1;
                                 @endphp
                                 <td>
-                                    3.02. [011] Pekerjaan Galian (Trenching/Rodding/Crossing/Borring) <span class="label label-primary">Installasi &amp; Test Comm</span> <a class="delete-row-btn-install btn btn-default">Delete</a>
+                                    3.02. [011] Pekerjaan Galian (Trenching/Rodding/Crossing/Borring) <span class="label label-primary">Installasi &amp; Test Comm</span> <a class="pull-right delete-row-btn-install btn-sm btn-default"><i class="fa fa-close"></i></a>
 
                                     <input type="hidden" class="form-control" name="activity_id[]" value=" 11 ">
                                     <input type="hidden" class="form-control" name="category_id[]" value=" 003 ">
@@ -411,7 +411,7 @@
                                 $c = $c + 1;
                                 @endphp
                                 <td>
-                                    3.03. [013] Pekerjaan Sipil (HH/MH/Bridge/Pondasi) <span class="label label-primary">Installasi &amp; Test Comm</span> <a class="delete-row-btn-install btn btn-default">Delete</a>
+                                    3.03. [013] Pekerjaan Sipil (HH/MH/Bridge/Pondasi) <span class="label label-primary">Installasi &amp; Test Comm</span> <a class="pull-right delete-row-btn-install btn-sm btn-default"><i class="fa fa-close"></i></a>
 
                                     <input type="hidden" class="form-control" name="activity_id[]" value=" 12 ">
                                     <input type="hidden" class="form-control" name="category_id[]" value=" 003 ">
@@ -429,7 +429,7 @@
                                 $c = $c + 1;
                                 @endphp
                                 <td>
-                                    3.04. [014] Pekerjaan Duct/Subduct/HDPE <span class="label label-primary">Installasi &amp; Test Comm</span> <a class="delete-row-btn-install btn btn-default">Delete</a>
+                                    3.04. [014] Pekerjaan Duct/Subduct/HDPE <span class="label label-primary">Installasi &amp; Test Comm</span> <a class="pull-right delete-row-btn-install btn-sm btn-default"><i class="fa fa-close"></i></a>
 
                                     <input type="hidden" class="form-control" name="activity_id[]" value=" 13 ">
                                     <input type="hidden" class="form-control" name="category_id[]" value=" 003 ">
@@ -450,7 +450,7 @@
                                 <td>
                                     3.05. [015] Penanaman Tiang <span class="label label-primary">Installasi &amp;
                                         Test
-                                        Comm</span> <a class="delete-row-btn-install btn btn-default">Delete</a>
+                                        Comm</span> <a class="pull-right delete-row-btn-install btn-sm btn-default"><i class="fa fa-close"></i></a>
 
                                     <input type="hidden" class="form-control" name="activity_id[]" value=" 14 ">
                                     <input type="hidden" class="form-control" name="category_id[]" value=" 003 ">
@@ -469,7 +469,7 @@
                                 @endphp
                                 <td>
                                     3.06. [021] Penarikan Kabel Feeder <span class="label label-primary">Installasi
-                                        &amp; Test Comm</span> <a class="delete-row-btn-install btn btn-default">Delete</a>
+                                        &amp; Test Comm</span> <a class="pull-right delete-row-btn-install btn-sm btn-default"><i class="fa fa-close"></i></a>
 
                                     <input type="hidden" class="form-control" name="activity_id[]" value=" 15 ">
                                     <input type="hidden" class="form-control" name="category_id[]" value=" 003 ">
@@ -488,7 +488,7 @@
                                 @endphp
                                 <td>
                                     3.07. [022] Penarikan Kabel Distribusi <span class="label label-primary">Installasi
-                                        &amp; Test Comm</span> <a class="delete-row-btn-install btn btn-default">Delete</a>
+                                        &amp; Test Comm</span> <a class="pull-right delete-row-btn-install btn-sm btn-default"><i class="fa fa-close"></i></a>
 
                                     <input type="hidden" class="form-control" name="activity_id[]" value=" 16 ">
                                     <input type="hidden" class="form-control" name="category_id[]" value=" 003 ">
@@ -509,7 +509,7 @@
                                 <td>
                                     3.08. [023] Pemasangan ODC <span class="label label-primary">Installasi &amp;
                                         Test
-                                        Comm</span> <a class="delete-row-btn-install btn btn-default">Delete</a>
+                                        Comm</span> <a class="pull-right delete-row-btn-install btn-sm btn-default"><i class="fa fa-close"></i></a>
 
                                     <input type="hidden" class="form-control" name="activity_id[]" value=" 17 ">
                                     <input type="hidden" class="form-control" name="category_id[]" value=" 003 ">
@@ -529,7 +529,7 @@
                                 <td>
                                     3.09. [024] Pemasangan ODP <span class="label label-primary">Installasi &amp;
                                         Test
-                                        Comm</span> <a class="delete-row-btn-install btn btn-default">Delete</a>
+                                        Comm</span> <a class="pull-right delete-row-btn-install btn-sm btn-default"><i class="fa fa-close"></i></a>
 
                                     <input type="hidden" class="form-control" name="activity_id[]" value=" 18 ">
                                     <input type="hidden" class="form-control" name="category_id[]" value=" 003 ">
@@ -547,7 +547,7 @@
                                 $c = $c + 1;
                                 @endphp
                                 <td>
-                                    {{ $d->list_activity }}</span> <a class="delete-row-btn-install btn btn-default">Delete</a>
+                                    {{ $d->list_activity }}</span> <a class="pull-right delete-row-btn-install btn-sm btn-default"><i class="fa fa-close"></i></a>
 
                                     <input type="hidden" class="form-control" name="activity_id[]" value="0">
                                     <input type="hidden" class="form-control" name="category_id[]" value=" 003 ">
