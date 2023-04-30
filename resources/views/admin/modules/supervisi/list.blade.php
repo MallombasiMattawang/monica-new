@@ -5,7 +5,8 @@
                 <div class="col-md-6">
                     <form action="{{ url('ped-panel/list-supervisis') }}" method="GET">
                         <div class="input-group">
-                            <input type="text" name="search" class="form-control" placeholder="Cari berdasarkan Project Name" value="{{ $search }}">
+                            <input type="text" name="search" class="form-control"
+                                placeholder="Cari berdasarkan Project Name" value="{{ $search }}">
                             <span class="input-group-btn">
                                 <button class="btn btn-primary" type="submit">Cari</button>
                             </span>
@@ -13,7 +14,8 @@
                     </form>
                 </div>
                 <div class="col-md-6">
-                    <a href="{{ route('ped-panel.admin.export.supervisi') }}" target="_blank" class="btn btn-primary"><i class="fa fa-file-excel-o"></i> Eksports</a>
+                    <a href="{{ route('ped-panel.admin.export.supervisi') }}" target="_blank" class="btn btn-primary"><i
+                            class="fa fa-file-excel-o"></i> Eksports</a>
                 </div>
             </div>
             <hr>
@@ -46,8 +48,11 @@
                                     <th>remarks</th>
                                     <th>kendala</th>
                                     <th>tgl MOS</th>
+                                    <th>plan Install Done</th>
                                     <th>tgl Install Done</th>
+                                    <th>plan Selesai CT</th>
                                     <th>tgl Selesai CT</th>
+                                    <th>plan Selesai UT</th>
                                     <th>tgl Selesai UT</th>
                                     <th>tgl Selesai Rekon</th>
                                     <th>tgl BAST1</th>
@@ -62,159 +67,213 @@
                             </thead>
                             <tbody>
                                 @foreach ($supervisis as $d)
-                                @php
-                                // Mendapatkan data transaksi dari model
-                                $remarks = App\Models\LogActual::where('project_id', $d->project_id)
-                                ->whereNotNull('actual_message')
-                                ->where('actual_message', '<>', '')->get();
+                                    @php
+                                        // Mendapatkan data transaksi dari model
+                                        $remarks = App\Models\LogActual::where('project_id', $d->project_id)
+                                            ->whereNotNull('actual_message')
+                                            ->where('actual_message', '<>', '')
+                                            ->get();
 
-                                // Mengelompokkan transaksi berdasarkan tanggal
-                                $groupedRemarks = $remarks->groupBy(function($remark) {
-                                    return $remark->created_at->format('Y-m-d');
-                                });
+                                        // Mengelompokkan transaksi berdasarkan tanggal
+                                        $groupedRemarks = $remarks->groupBy(function ($remark) {
+                                            return $remark->created_at->format('Y-m-d');
+                                        });
 
-                                $kendala = App\Models\LogActual::where('project_id', $d->project_id)
-                                ->whereNotNull('actual_kendala')
-                                ->where('actual_kendala', '<>', '')->get();
+                                        $kendala = App\Models\LogActual::where('project_id', $d->project_id)
+                                            ->whereNotNull('actual_kendala')
+                                            ->where('actual_kendala', '<>', '')
+                                            ->get();
 
-                                // Mengelompokkan transaksi berdasarkan tanggal
-                                $groupedKendala = $kendala->groupBy(function($kendala) {
-                                    return $kendala->created_at->format('Y-m-d');
-                                });
+                                        // Mengelompokkan transaksi berdasarkan tanggal
+                                        $groupedKendala = $kendala->groupBy(function ($kendala) {
+                                            return $kendala->created_at->format('Y-m-d');
+                                        });
 
-
-                                  
                                         $tgl_mos = App\Models\TranBaseline::where('project_id', $d->project_id)
-                                        ->whereNotNull('actual_finish')
-                                        ->where('actual_finish', '<>', '')
-                                            ->whereBetween('activity_id', [3, 9])
-                                            ->orderBy('actual_finish', 'desc')
-                                            ->first();
-                                            $tgl_install_done = App\Models\TranBaseline::where('project_id', $d->project_id)
                                             ->whereNotNull('actual_finish')
                                             ->where('actual_finish', '<>', '')
-                                                ->whereBetween('activity_id', [10, 19])
-                                                ->orderBy('actual_finish', 'desc')
-                                                ->first();
-                                                $tgl_selesai_ct = App\Models\TranBaseline::where('project_id', $d->project_id)
-                                                ->whereNotNull('actual_finish')
-                                                ->where('actual_finish', '<>', '')
-                                                    ->where('activity_id', 20)
-                                                    ->first();
-                                                    $tgl_selesai_ut = App\Models\TranBaseline::where('project_id', $d->project_id)
-                                                    ->whereNotNull('actual_finish')
-                                                    ->where('actual_finish', '<>', '')
-                                                        ->where('activity_id', 21)
-                                                        ->first();
-                                                        $tgl_selesai_rekon = App\Models\TranBaseline::where('project_id', $d->project_id)
-                                                        ->whereNotNull('actual_finish')
-                                                        ->where('actual_finish', '<>', '')
-                                                            ->where('activity_id', 22)
-                                                            ->first();
-                                                            $tgl_bast1 = App\Models\TranBaseline::where('project_id', $d->project_id)
-                                                            ->whereNotNull('actual_finish')
-                                                            ->where('actual_finish', '<>', '')
-                                                                ->where('activity_id', 23)
-                                                                ->first();
-                                                                @endphp
-                                                                <tr>
-                                                                    <td>{{ $d->id }}</td>
-                                                                    <td>{{ $d->{'tematik'} }}</td>
-                                                                    <td>{{ $d->{'witel'} }}</td>
-                                                                    <td>{{ $d->{'sto'} }}</td>
-                                                                    <td>{{ $d->{'project_name'} }}</td>
-                                                                    <td>{{ $d->{'mitra'} }}</td>
-                                                                    <td>{{ $d->{'no_sp_telkom'} }}</td>
-                                                                    <td>{{ $d->{'edc'} }}</td>
-                                                                    <td>{{ $d->{'toc'} }}</td>
-                                                                    <td>{{ $d->{'nilai_kontrak'} }}</td>
-                                                                    <td>{{ $d->{'nilai_bast1_sap'} }}</td>
-                                                                    <td>{{ $d->{'nilai_bast1_smilley'} }}</td>
-                                                                    <td>{{ $d->{'plan_port'} }}</td>
-                                                                    <td>{{ $d->{'real_port'} }}</td>
-                                                                    <td>{{ $d->{'plan_homepass'} }}</td>
-                                                                    <td>{{ $d->{'real_homepass'} }}</td>
-                                                                    <td>{{ $d->{'name_waspang'} }}</td>
-                                                                    <td>{{ $d->{'name_tim_ut'} }}</td>
-                                                                    <td>{{ $d->{'status_const_app'} }}</td>
-                                                                    <td>{{ $d->{'status_const_sap'} }}</td>
-                                                                    <td>
-                                                                        <ul class="list-unstyled">
-                                                                            @php
-                                                                            foreach($groupedRemarks as $date => $remarks) {
-                                                                            echo '<li>' . tgl_indo($date) . '</li>';
-                                                                            echo '<ul>';
-                                                                                foreach($remarks as $remark) {
-                                                                                echo '<li>' . $remark->actual_message . '</li>';
-                                                                                }
-                                                                                echo '</ul>';
-                                                                            }
-                                                                            @endphp
-                                                                        </ul>
-                                                                    </td>
-                                                                    <td>
-                                                                        <ul class="list-unstyled">
-                                                                            @php
-                                                                            foreach($groupedKendala as $date => $kendalas) {
-                                                                            echo '<li>' . tgl_indo($date) . '</li>';
-                                                                            echo '<ul>';
-                                                                                foreach($kendalas as $kendala) {
-                                                                                echo '<li>' . $kendala->actual_kendala . '</li>';
-                                                                                }
-                                                                                echo '</ul>';
-                                                                            }
-                                                                            @endphp
-                                                                        </ul>
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ isset($tgl_mos->actual_finish) && cek_all_delivery($d->project_id) == cek_all_delivery_finish($d->project_id) ? tgl_indo($tgl_mos->actual_finish) : '-' }}
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ isset($tgl_install_done->actual_finish) && cek_all_installasi($d->project_id) == cek_all_installasi_finish($d->project_id) ? tgl_indo($tgl_install_done->actual_finish) : '-' }}
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ isset($tgl_selesai_ct->actual_finish) ? tgl_indo($tgl_selesai_ct->actual_finish) : '-' }}
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ isset($tgl_selesai_ut->actual_finish) ? tgl_indo($tgl_selesai_ut->actual_finish) : '-' }}
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ isset($tgl_selesai_rekon->actual_finish) ? tgl_indo($tgl_selesai_rekon->actual_finish) : '-' }}
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ isset($tgl_bast1->actual_finish) ? tgl_indo($tgl_bast1->actual_finish) : '-' }}
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ isset($tgl_install_done->actual_finish) && cek_all_installasi($d->project_id) == cek_all_installasi_finish($d->project_id)  ? selisih_hari($tgl_mos->actual_finish, $tgl_install_done->actual_finish) : '-' }}
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ isset($tgl_selesai_ct->actual_finish) ? selisih_hari($tgl_install_done->actual_finish, $tgl_selesai_ct->actual_finish) : '-' }}
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ isset($tgl_selesai_ut->actual_finish) ? selisih_hari($tgl_selesai_ct->actual_finish, $tgl_selesai_ut->actual_finish) : '-' }}
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ isset($tgl_selesai_rekon->actual_finish) ? selisih_hari($tgl_selesai_ut->actual_finish, $tgl_selesai_rekon->actual_finish) : '-' }}
-                                                                    </td>
-                                                                    <td>{{ $d->{'flaging_mitra'} }}</td>
-                                                                    <td>
-                                                                        @if ($d->status_const_app == 'PREPARING' || $d->status_const_app == 'MATERIAL DELIVERY')
-                                                                        PREPARE
-                                                                        @elseif ($d->status_const_app == 'INSTALASI')
-                                                                        INSTALASI
-                                                                        @elseif ($d->status_const_app == 'INSTALL DONE' || $d->status_const_app == 'SELESAI CT' || $d->status_const_app == 'SELESAI UT' || $d->status_const_app == 'INSTALL DONE' || $d->status_const_app == 'BAST-1')
-                                                                        FISIK DONE
-                                                                        @endif
-                                                                    </td>
-                                                                    <td>
-                                                                        @if ($d->status_golive == 'GOLIVE')
-                                                                        GOLIVE
-                                                                        @else
-                                                                        NY
-                                                                        @endif
-                                                                    </td>
-                                                                </tr>
-                                                                @endforeach
+                                            //->whereBetween('activity_id', [3, 9])
+                                            ->where('category_id', 'like', '%002%')
+                                            ->orderBy('actual_finish', 'desc')
+                                            ->first();
+                                        $plan_install_done = App\Models\TranBaseline::where('project_id', $d->project_id)
+                                            ->whereNotNull('plan_finish')
+                                            ->where('plan_finish', '<>', '')
+                                            ->where('category_id', 'like', '%003%')
+                                            ->where('activity_id', '!=', 20)
+                                            ->orderBy('actual_finish', 'desc')
+                                            ->first();
+                                        $tgl_install_done = App\Models\TranBaseline::where('project_id', $d->project_id)
+                                            ->whereNotNull('actual_finish')
+                                            ->where('actual_finish', '<>', '')
+                                            //->whereBetween('activity_id', [10, 19])
+                                            ->where('category_id', 'like', '%003%')
+                                            ->where('activity_id', '!=', 20)
+                                            ->orderBy('actual_finish', 'desc')
+                                            ->first();
+                                        $plan_selesai_ct = App\Models\TranBaseline::where('project_id', $d->project_id)
+                                            ->whereNotNull('plan_finish')
+                                            ->where('plan_finish', '<>', '')
+                                            ->where('activity_id', 20)
+                                            ->first();
+                                        $tgl_selesai_ct = App\Models\TranBaseline::where('project_id', $d->project_id)
+                                            ->whereNotNull('actual_finish')
+                                            ->where('actual_finish', '<>', '')
+                                            ->where('activity_id', 20)
+                                            ->first();
+                                        $tgl_selesai_ut = App\Models\TranBaseline::where('project_id', $d->project_id)
+                                            ->whereNotNull('actual_finish')
+                                            ->where('actual_finish', '<>', '')
+                                            ->where('activity_id', 21)
+                                            ->first();
+                                        $plan_selesai_ut = App\Models\TranBaseline::where('project_id', $d->project_id)
+                                            ->whereNotNull('plan_finish')
+                                            ->where('plan_finish', '<>', '')
+                                            ->where('activity_id', 21)
+                                            ->first();
+                                        $tgl_selesai_rekon = App\Models\TranBaseline::where('project_id', $d->project_id)
+                                            ->whereNotNull('actual_finish')
+                                            ->where('actual_finish', '<>', '')
+                                            ->where('activity_id', 22)
+                                            ->first();
+                                        $tgl_bast1 = App\Models\TranBaseline::where('project_id', $d->project_id)
+                                            ->whereNotNull('actual_finish')
+                                            ->where('actual_finish', '<>', '')
+                                            ->where('activity_id', 23)
+                                            ->first();
+                                    @endphp
+                                    <tr>
+                                        <td>{{ $d->id }}</td>
+                                        <td>{{ $d->{'tematik'} }}</td>
+                                        <td>{{ $d->{'witel'} }}</td>
+                                        <td>{{ $d->{'sto'} }}</td>
+                                        <td>{{ $d->{'project_name'} }}</td>
+                                        <td>{{ $d->{'mitra'} }}</td>
+                                        <td>{{ $d->{'no_sp_telkom'} }}</td>
+                                        <td>{{ $d->{'edc'} }}</td>
+                                        <td>{{ $d->{'toc'} }}</td>
+                                        <td>{{ $d->{'nilai_kontrak'} }}</td>
+                                        <td>{{ $d->{'nilai_bast1_sap'} }}</td>
+                                        <td>{{ $d->{'nilai_bast1_smilley'} }}</td>
+                                        <td>{{ $d->{'plan_port'} }}</td>
+                                        <td>{{ $d->{'real_port'} }}</td>
+                                        <td>{{ $d->{'plan_homepass'} }}</td>
+                                        <td>{{ $d->{'real_homepass'} }}</td>
+                                        <td>{{ $d->{'name_waspang'} }}</td>
+                                        <td>{{ $d->{'name_tim_ut'} }}</td>
+                                        <td>{{ $d->{'status_const_app'} }}</td>
+                                        <td>{{ $d->{'status_const_sap'} }}</td>
+                                        <td>
+                                            <p>
+                                                <a class="btn btn-primary btn-sm" data-toggle="collapse"
+                                                    href="#collapse_{{ $d->id }}" role="button"
+                                                    aria-expanded="false" aria-controls="collapseExample">
+                                                    View Remarks
+                                                </a>
+                                            </p>
+                                            <div class="collapse" id="collapse_{{ $d->id }}">
+                                                <ul class="list-unstyled">
+                                                    @php
+                                                        foreach ($groupedRemarks as $date => $remarks) {
+                                                            echo '<li>' . tgl_indo($date) . '</li>';
+                                                            echo '<ul>';
+                                                            foreach ($remarks as $remark) {
+                                                                echo '<li>' . $remark->actual_message . '</li>';
+                                                            }
+                                                            echo '</ul>';
+                                                        }
+                                                    @endphp
+                                                </ul>
+                                            </div>
+
+                                        </td>
+                                        <td>
+                                            <p>
+                                                <a class="btn btn-primary btn-sm" data-toggle="collapse"
+                                                    href="#collapse_kendala_{{ $d->id }}" role="button"
+                                                    aria-expanded="false" aria-controls="collapseExample">
+                                                    View Kendala
+                                                </a>
+                                            </p>
+                                            <div class="collapse" id="collapse_kendala_{{ $d->id }}">
+                                                <ul class="list-unstyled">
+                                                    @php
+                                                        foreach ($groupedKendala as $date => $kendalas) {
+                                                            echo '<li>' . tgl_indo($date) . '</li>';
+                                                            echo '<ul>';
+                                                            foreach ($kendalas as $kendala) {
+                                                                echo '<li>' . $kendala->actual_kendala . '</li>';
+                                                            }
+                                                            echo '</ul>';
+                                                        }
+                                                    @endphp
+                                                </ul>
+                                            </div>
+
+                                        </td>
+                                        <td>
+                                            {{ isset($tgl_mos->actual_finish) && cek_all_delivery($d->project_id) == cek_all_delivery_finish($d->project_id) ? tgl_indo($tgl_mos->actual_finish) : '-' }}
+                                        </td>
+                                        <td>
+                                            {{ isset($plan_install_done->plan_finish) ? tgl_indo($plan_install_done->plan_finish) : '-' }}
+                                        </td>
+                                        <td>
+                                            {{ isset($tgl_install_done->actual_finish) && cek_all_installasi($d->project_id) == cek_all_installasi_finish($d->project_id) ? tgl_indo($tgl_install_done->actual_finish) : '-' }}
+                                        </td>
+                                        <td>
+                                            {{ isset($plan_selesai_ct->plan_finish) ? tgl_indo($plan_selesai_ct->plan_finish) : '-' }}
+                                        </td>
+                                        <td>
+                                            {{ isset($tgl_selesai_ct->actual_finish) ? tgl_indo($tgl_selesai_ct->actual_finish) : '-' }}
+                                        </td>
+                                        <td>
+                                            {{ isset($plan_selesai_ut->plan_finish) ? tgl_indo($plan_selesai_ut->plan_finish) : '-' }}
+                                        </td>
+                                        <td>
+                                            {{ isset($tgl_selesai_ut->actual_finish) ? tgl_indo($tgl_selesai_ut->actual_finish) : '-' }}
+                                        </td>
+                                        <td>
+                                            {{ isset($tgl_selesai_rekon->actual_finish) ? tgl_indo($tgl_selesai_rekon->actual_finish) : '-' }}
+                                        </td>
+                                        <td>
+                                            {{ isset($tgl_bast1->actual_finish) ? tgl_indo($tgl_bast1->actual_finish) : '-' }}
+                                        </td>
+                                        <td>
+                                            {{ isset($tgl_install_done->actual_finish) && cek_all_installasi($d->project_id) == cek_all_installasi_finish($d->project_id) ? selisih_hari($tgl_mos->actual_finish, $tgl_install_done->actual_finish) : '-' }}
+                                        </td>
+                                        <td>
+                                            {{ isset($tgl_selesai_ct->actual_finish) ? selisih_hari($tgl_install_done->actual_finish, $tgl_selesai_ct->actual_finish) : '-' }}
+                                        </td>
+                                        <td>
+                                            {{ isset($tgl_selesai_ut->actual_finish) ? selisih_hari($tgl_selesai_ct->actual_finish, $tgl_selesai_ut->actual_finish) : '-' }}
+                                        </td>
+                                        <td>
+                                            {{ isset($tgl_selesai_rekon->actual_finish) ? selisih_hari($tgl_selesai_ut->actual_finish, $tgl_selesai_rekon->actual_finish) : '-' }}
+                                        </td>
+                                        <td>{{ $d->{'flaging_mitra'} }}</td>
+                                        <td>
+                                            @if ($d->status_const_app == 'PREPARING' || $d->status_const_app == 'MATERIAL DELIVERY')
+                                                PREPARE
+                                            @elseif ($d->status_const_app == 'INSTALASI')
+                                                INSTALASI
+                                            @elseif (
+                                                $d->status_const_app == 'INSTALL DONE' ||
+                                                    $d->status_const_app == 'SELESAI CT' ||
+                                                    $d->status_const_app == 'SELESAI UT' ||
+                                                    $d->status_const_app == 'INSTALL DONE' ||
+                                                    $d->status_const_app == 'BAST-1')
+                                                FISIK DONE
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if ($d->status_golive == 'GOLIVE')
+                                                GOLIVE
+                                            @else
+                                                NY
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
 

@@ -127,7 +127,7 @@
                         <td class="text-center"> {{ $list->actual_finish ? tgl_indo($list->actual_finish) : '' }} </td>
                         <td class="text-center">
                             @if ($list->actual_task == 'APPROVED')
-                                <span class="badge bg-success {{ $list->pending_item == 'YA' ? 'd-none' :''  }}">{{ $list->actual_task }}</span>
+                                <span class="badge bg-success {{ $list->pending_item == 'YA' && activeGuard() == 'mitra' ? 'd-none' :''  }}">{{ $list->actual_task }}</span>
                             @elseif ($list->actual_task == 'NEED APPROVED')
                                 <span class="badge bg-info">{{ $list->actual_task }}</span>
                             @elseif ($list->actual_task == 'NEED UPDATED')
@@ -135,15 +135,15 @@
                             @else
                                 <span class="badge bg-danger">{{ $list->actual_task }}</span>
                             @endif
-                            @if ($list->pending_item == 'YA' && $list->activity_id == 20 && activeGuard() == 'mitra')                                
+                            @if (($list->pending_item == 'YA' && $list->activity_id == 20 && activeGuard() == 'mitra') && ($list->actual_task != 'NEED APPROVED WASPANG'))
                                 <div class="btn bg-light-info">
-                                    Selesaikan Pending Item untuk lanjut ke Actual selanjutnya 
-                                </div>  
+                                    Selesaikan Pending Item untuk lanjut ke Actual selanjutnya
+                                </div>
                             @endif
-                            @if ($list->pending_item == 'YA' && $list->activity_id == 21 && activeGuard() == 'mitra')                                
+                            @if (($list->pending_item == 'YA' && $list->activity_id == 21 && activeGuard() == 'mitra') && ($list->actual_task != 'NEED APPROVED TIM UT'))
                             <div class="btn bg-light-info">
-                                Selesaikan Pending Item untuk lanjut ke Actual selanjutnya 
-                            </div>  
+                                Selesaikan Pending Item untuk lanjut ke Actual selanjutnya
+                            </div>
                         @endif
                         </td>
                         @if ($supervisi->supervisi_project->status_plan == 1)
@@ -156,33 +156,33 @@
                                 @endif
                             @endif
                             @if ($list->category_id == 003)
-                                
+                            {{-- {{ $cek_all_installasi }} dan {{ $cek_all_installasi_finish }} --}}
                                 @if ($list->actual_status == 'belum' || $list->actual_task == null || $list->actual_task == 'REJECTED' && activeGuard() == 'mitra')
-                                     @if ($cek_all_delivery == $cek_all_delivery_finish && $list->activity_id < 20) 
+                                     @if ($cek_all_delivery == $cek_all_delivery_finish && $list->activity_id < 20)
                                         <a href="{{ route('supervisi.actual.form',  [$list->id, Str::slug($list->list_activity)])  }}" class="btn btn-primary"><i class="fa fa-plus"></i></a>
                                     @endif
                                     @if ($cek_all_installasi == $cek_all_installasi_finish && $list->activity_id == 20 && activeGuard() == 'mitra')
                                         <a href="{{ route('supervisi.actual.form',  [$list->id, Str::slug($list->list_activity)])  }}" class="btn btn-primary"><i class="fa fa-plus"></i></a>
                                         </a>
-                                    @endif                                    
+                                    @endif
                                 @elseif ($list->actual_task != null && $list->actual_task != 'NEED APPROVED WASPANG')
                                     @if ($list->pending_item == 'YA' && $list->activity_id == 20 && activeGuard() == 'mitra')
-                                        <a href="{{ route('supervisi.actual.log',  [$list->id, Str::slug($list->list_activity)])  }}" class="btn btn-warning"><i class="fa fa-edit"></i></a>  
-                                       
+                                        <a href="{{ route('supervisi.actual.log',  [$list->id, Str::slug($list->list_activity)])  }}" class="btn btn-warning"><i class="fa fa-edit"></i></a>
+
                                     @else
-                                    <a href="{{ route('supervisi.actual.log',  [$list->id, Str::slug($list->list_activity)])  }}" class="btn btn-info"><i class="fa fa-search"></i></a>        
+                                    <a href="{{ route('supervisi.actual.log',  [$list->id, Str::slug($list->list_activity)])  }}" class="btn btn-info"><i class="fa fa-search"></i></a>
                                     @endif
-                                        
+
                                 @endif
-                                
-                                @if (activeGuard() == 'waspang')                                     
+
+                                @if (activeGuard() == 'waspang')
                                         @if (cekWaspangAdmin($list->project_id) == 1 && $list->activity_id == 20)
-                                            <a href="{{ route('supervisi.actual.log',  [$list->id, Str::slug($list->list_activity)])  }}" class="btn btn-warning"><i class="fa fa-edit"></i></a>                                               
-                                        @endif                                   
+                                            <a href="{{ route('supervisi.actual.log',  [$list->id, Str::slug($list->list_activity)])  }}" class="btn btn-warning"><i class="fa fa-edit"></i></a>
+                                        @endif
                                 @endif
                              @endif
                              @if ($list->category_id == 004)
-                                    
+
                                 @if (($list->actual_status == 'belum' || $list->actual_task == null || $list->actual_task == 'REJECTED') && (activeGuard() == 'mitra'))
                                     @if ($cek_commisioning_tes == 1 && $list->activity_id == 21 && pendingItemCT($list->project_id) == 0)
                                         <a href="{{ route('supervisi.actual.form',  [$list->id, Str::slug($list->list_activity)])  }}" class="btn btn-primary"><i class="fa fa-plus"></i></a>
@@ -194,31 +194,31 @@
                                     @endif
                                 @elseif ($list->actual_task != null && $list->actual_task != 'NEED APPROVED TIM UT')
                                     @if ($list->pending_item == 'YA' && $list->activity_id == 21 && activeGuard() == 'mitra')
-                                        <a href="{{ route('supervisi.actual.log',  [$list->id, Str::slug($list->list_activity)])  }}" class="btn btn-warning"><i class="fa fa-edit"></i></a>  
-                               
+                                        <a href="{{ route('supervisi.actual.log',  [$list->id, Str::slug($list->list_activity)])  }}" class="btn btn-warning"><i class="fa fa-edit"></i></a>
+
                                     @else
-                                        <a href="{{ route('supervisi.actual.log',  [$list->id, Str::slug($list->list_activity)])  }}" class="btn btn-info"><i class="fa fa-search"></i></a>        
+                                        <a href="{{ route('supervisi.actual.log',  [$list->id, Str::slug($list->list_activity)])  }}" class="btn btn-info"><i class="fa fa-search"></i></a>
                                     @endif
-                                @endif    
-                                @if (activeGuard() == 'tim-ut')                                     
+                                @endif
+                                @if (activeGuard() == 'tim-ut')
                                     @if (cekUtAdmin($list->project_id) == 1 && $list->activity_id == 21)
-                                        <a href="{{ route('supervisi.actual.log',  [$list->id, Str::slug($list->list_activity)])  }}" class="btn btn-warning"><i class="fa fa-edit"></i></a>                                               
-                                    @endif                                   
+                                        <a href="{{ route('supervisi.actual.log',  [$list->id, Str::slug($list->list_activity)])  }}" class="btn btn-warning"><i class="fa fa-edit"></i></a>
+                                    @endif
                                 @endif
 
                                 @if ($cek_rekon == 1 && $list->activity_id == 23)
                                     @if ($list->actual_finish == null || $list->actual_finish == '')
                                         <div class="btn bg-light-info">
-                                            Tanggal penerbitan BAST-1 belum terbit pada smilley, tapi jika sudah BAST, silahkan upload Evident BAST-1 
+                                            Tanggal penerbitan BAST-1 belum terbit pada smilley, tapi jika sudah BAST, silahkan upload Evident BAST-1
                                         </div>
                                     <br>
                                     <a href="{{ route('supervisi.actual.form',  [$list->id, Str::slug($list->list_activity)])  }}" class="btn btn-primary"><i class="fa fa-plus"></i></a>
                                     @endif
-                                
+
                                 @endif
                             @endif
-                        </td>   
-                        @endif                      
+                        </td>
+                        @endif
                     </tr>
                     @endforeach
                 </table>

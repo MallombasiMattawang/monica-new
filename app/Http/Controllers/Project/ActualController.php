@@ -49,25 +49,14 @@ class ActualController extends Controller
             ->where('project_id', $supervisi->project_id)
             ->where('activity_id', 2)
             ->first();
-        $cek_all_delivery = TranBaseline::select('actual_finish')
-            ->where('project_id', $supervisi->project_id)
-            ->whereBetween('activity_id', [3, 9])->count();
+        $cek_all_delivery = cek_all_delivery($supervisi->project_id);
 
-        $cek_all_delivery_finish = TranBaseline::select('actual_finish')
-            ->where('project_id', $supervisi->project_id)
-            ->whereNotNull('actual_finish')
-            ->where('actual_finish', '<>', '')
-            ->whereBetween('activity_id', [3, 9])->count();
 
-        $cek_all_installasi = TranBaseline::select('actual_finish')
-            ->where('project_id', $supervisi->project_id)
-            ->whereBetween('activity_id', [10, 19])->count();
+        $cek_all_delivery_finish = cek_all_delivery_finish($supervisi->project_id);
 
-        $cek_all_installasi_finish = TranBaseline::select('actual_finish')
-            ->where('project_id', $supervisi->project_id)
-            ->whereNotNull('actual_finish')
-            ->where('actual_finish', '<>', '')
-            ->whereBetween('activity_id', [10, 19])->count();
+        $cek_all_installasi = cek_all_installasi($supervisi->project_id);
+
+        $cek_all_installasi_finish = cek_all_installasi_finish($supervisi->project_id);
 
         $cek_commisioning_tes = TranBaseline::select('actual_finish')
             ->where('project_id', $supervisi->project_id)
@@ -236,7 +225,7 @@ class ActualController extends Controller
             $actual_start = date('Y-m-d');
         }
 
-        //CARI STATUS DOC         
+        //CARI STATUS DOC
         if ($request->activity_id >= 1 && $request->activity_id <= 21) {
             $status_doc = 'KONSTRUKSI';
         } else if ($request->activity_id >= 22 && $request->activity_id <= 23) {
@@ -269,7 +258,7 @@ class ActualController extends Controller
         $progress_bobot =  Round($progress_bobot, 1);
 
         // ACTIVITY PREPARING - TERMINASI / JOINTING TIDAK VERIFIKASI WASPANG
-        if ($request->activity_id >= 1 && $request->activity_id <= 19) {
+        if ($request->activity_id >= 0 && $request->activity_id <= 19) {
             $actual_task = 'APPROVED';
             $actual_finish_verifikasi = $actual_finish;
             $actual_durasi_verifikasi = $actual_durasi;
@@ -311,7 +300,7 @@ class ActualController extends Controller
                 'actual_durasi' => $actual_durasi,
             ]);
 
-            // UPDATE ACTUAL DI TRANSBASELINE    
+            // UPDATE ACTUAL DI TRANSBASELINE
             TranBaseline::where("id", $baseline->id)
                 ->update([
                     'actual_status' => $actual_status,
@@ -408,7 +397,7 @@ class ActualController extends Controller
                 'file.max' => 'Ukuran Evident tidak boleh lebih dari 25 MB.',
             ]
         );
-        // menangkap file 
+        // menangkap file
         $file = $request->file('file');
         // membuat nama file unik
         $nama_file = now()->timestamp . '.' . $file->getClientOriginalExtension();

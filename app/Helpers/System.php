@@ -23,11 +23,20 @@ use Illuminate\Support\Facades\Redirect;
 function getProgressActual($project_id, $start_date)
 {
     $sum_bobot_real = TranBaseline::where('project_id', $project_id)
+        ->whereNotIn('activity_id', [20, 21])
         ->whereBetween('actual_start', [$start_date, date('Y-m-d')])
         ->selectRaw('ROUND(SUM(bobot * (actual_progress/100 )), 1) as total')
         ->value('total');
 
-    return ($sum_bobot_real != null) ? $sum_bobot_real : 0;
+    $sum_bobot_ct_ut = TranBaseline::where('project_id', $project_id)
+        ->whereIn('activity_id', [20, 21])
+        ->whereBetween('actual_finish', [$start_date, date('Y-m-d')])
+        ->selectRaw('ROUND(SUM(bobot * (actual_progress/100 )), 1) as total')
+        ->value('total');
+
+    $total = $sum_bobot_real + $sum_bobot_ct_ut;
+
+    return ($total != null) ? $total : 0;
 }
 
 function getProgressPlan($project_id, $start_date)
@@ -154,7 +163,9 @@ function cek_all_delivery($project_id)
 {
     $query = TranBaseline::select('actual_finish')
         ->where('project_id', $project_id)
-        ->whereBetween('activity_id', [3, 9])->count();
+        //->whereBetween('activity_id', [3, 9])->count();
+        ->where('category_id', 'like', '%002%')->count();
+
     return $query;
 }
 function cek_all_delivery_finish($project_id)
@@ -163,14 +174,18 @@ function cek_all_delivery_finish($project_id)
         ->where('project_id', $project_id)
         ->whereNotNull('actual_finish')
         ->where('actual_finish', '<>', '')
-        ->whereBetween('activity_id', [3, 9])->count();
+        //->whereBetween('activity_id', [3, 9])->count();
+        ->where('category_id', 'like', '%002%')->count();
     return $query;
 }
 function cek_all_installasi($project_id)
 {
     $query = TranBaseline::select('actual_finish')
         ->where('project_id', $project_id)
-        ->whereBetween('activity_id', [10, 19])->count();
+        //->whereBetween('activity_id', [10, 19])->count();
+        ->where('category_id', 'like', '%003%')
+        ->where('activity_id', '!=', 20)
+        ->count();
     return $query;
 }
 function cek_all_installasi_finish($project_id)
@@ -179,7 +194,10 @@ function cek_all_installasi_finish($project_id)
         ->where('project_id', $project_id)
         ->whereNotNull('actual_finish')
         ->where('actual_finish', '<>', '')
-        ->whereBetween('activity_id', [10, 19])->count();
+        //->whereBetween('activity_id', [10, 19])->count();
+        ->where('category_id', 'like', '%003%')
+        ->where('activity_id', '!=', 20)
+        ->count();
     return $query;
 }
 
