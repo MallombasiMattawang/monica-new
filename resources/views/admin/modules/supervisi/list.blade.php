@@ -66,8 +66,12 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @php
+                                    $end_today = date('Y-m-d'); //end dihari ini
+                                @endphp
                                 @foreach ($supervisis as $d)
                                     @php
+                                        $project = App\Models\MstProject::where('id', $d->project_id)->first();
                                         // Mendapatkan data transaksi dari model
                                         $remarks = App\Models\LogActual::where('project_id', $d->project_id)
                                             ->whereNotNull('actual_message')
@@ -171,9 +175,104 @@
                                                     View Remarks
                                                 </a>
                                             </p>
-                                            <div class="collapse" id="collapse_{{ $d->id }}">
+                                            <div class="collapse" id="collapse_{{ $d->id }}"
+                                                style="width: 800px !important;">
                                                 <ul class="list-unstyled">
                                                     @php
+                                                        $start_date = strtotime($project->start_date); // konversi tanggal awal ke timestamp
+                                                        $end_date = time(); // timestamp saat ini
+                                                        $current_date = $start_date; // inisialisasi tanggal saat ini
+
+                                                        while ($current_date <= $end_date) {
+                                                            $current_date = strtotime('+1 day', $current_date); // tambahkan satu hari ke tanggal saat ini
+                                                            echo '<li>' . date('d/m/Y', $current_date) . '</li>'; // tampilkan tanggal dalam format Y-m-d
+                                                            //$old_date = strtotime('-1 day', $current_date); // tambahkan satu hari ke tanggal saat ini
+                                                            $remarks_cek = App\Models\LogActual::where('project_id', $d->project_id)
+                                                                ->whereBetween('actual_start', [$project->start_date, date('Y-m-d', $current_date)])
+                                                                ->where('actual_status', 'belum')
+                                                                //->where('actual_status', 'selesai')
+                                                                ->get();
+                                                            // $remarks_selesai = App\Models\LogActual::where('project_id', $d->project_id)
+                                                            //     ->whereBetween('actual_start', [$project->start_date, date('Y-m-d', $current_date)])
+                                                            //     ->where('actual_status', 'selesai')
+                                                            //     ->get();
+                                                            $remarks_selesai = App\Models\LogActual::where('project_id', $d->project_id)
+                                                                ->where('actual_finish', date('Y-m-d', $current_date))
+                                                                ->where('actual_status', 'selesai')
+                                                                ->get();
+                                                            $remarks_belum = App\Models\LogActual::where('project_id', $d->project_id)
+                                                                ->where('actual_start', date('Y-m-d', $current_date))
+                                                                ->where('actual_status', 'belum')
+                                                                ->get();
+                                                            // $remarks_cek = App\Models\LogActual::where('project_id', $d->project_id)
+                                                            //     ->whereBetween('actual_start', [$project->start_date, date('Y-m-d', $current_date)])
+                                                            //     ->where('actual_status', 'belum')
+                                                            //     ->whereNotIn('id', function ($query) use ($d) {
+                                                            //         $query
+                                                            //             ->select('id')
+                                                            //             ->from('log_actual')
+                                                            //             ->where('project_id', $d->project_id)
+                                                            //             ->where('actual_status', 'selesai');
+                                                            //     })
+                                                            //     ->get();
+
+                                                            echo '<ul>';
+
+                                                            // foreach ($remarks_belum as $remark) {
+                                                            //     $activity = App\Models\TranBaseline::where('id', $remark->tran_baseline_id)->first();
+                                                            //     if ($remark->actual_status == 'belum'  ) {
+                                                            //         echo '<li>' . $activity->list_activity . ' = ' . $remark->actual_volume . ' dari ' . $activity->volume . ' ' . $activity->satuan . '</li>';
+                                                            //         echo '<li>' . $activity->list_activity . ' = ' . $remark->actual_message . '</li>';
+                                                            //         //echo '<li>' . $remark->actual_start . ' = ' . $end_today . '</li>';
+                                                            //     }
+                                                            // }
+                                                            foreach ($remarks_selesai as $remark) {
+                                                                $activity = App\Models\TranBaseline::where('id', $remark->tran_baseline_id)->first();
+                                                                // if ($remark->actual_status == 'selesai') {
+                                                                echo '<li>' . $activity->list_activity . ' ' . $remark->actual_volume . ' dari ' . $activity->volume . ' ' . $activity->satuan . ' (DONE) </li>';
+                                                                // } elseif ($remark->actual_status == 'belum') {
+                                                                //     echo '<li>' . $activity->list_activity . ' = ' . $remark->actual_volume . ' dari ' . $activity->volume . ' ' . $activity->satuan . '</li>';
+                                                                //     echo '<li>' . $activity->list_activity . ' = ' . $remark->actual_message . '</li>';
+                                                                // }
+                                                            }
+                                                            foreach ($remarks_belum as $remark) {
+                                                                $activity = App\Models\TranBaseline::where('id', $remark->tran_baseline_id)->first();
+
+                                                                // if ($remark->actual_status == 'selesai') {
+                                                                //     echo '<li>' . $activity->list_activity . ' ' . $remark->actual_volume . ' dari ' . $activity->volume . ' ' . $activity->satuan . ' (DONE) </li>';
+                                                                // } elseif ($remark->actual_status == 'belum') {
+                                                                echo '<li>' . $activity->list_activity . ' = ' . $remark->actual_volume . ' dari ' . $activity->volume . ' ' . $activity->satuan . '</li>';
+                                                                echo '<li>' . $activity->list_activity . ' = ' . $remark->actual_message . '</li>';
+                                                                //}
+                                                            }
+                                                            $activity_2 = App\Models\TranBaseline::where('project_id', $d->project_id)
+                                                                ->where('actual_status', 'belum')
+                                                                ->where('actual_start', '<', date('Y-m-d', $current_date))
+                                                                ->get();
+                                                            foreach ($activity_2 as $a) {
+                                                                echo '<li>' . $a->list_activity . '</li>';
+                                                            }
+                                                            // foreach ($remarks_cek as $remark) {
+                                                            //     $activity = App\Models\TranBaseline::where('id', $remark->tran_baseline_id)->first();
+
+                                                            //     // if ($remark->actual_status == 'selesai') {
+                                                            //     //     echo '<li>' . $activity->list_activity . ' ' . $remark->actual_volume . ' dari ' . $activity->volume . ' ' . $activity->satuan . ' (DONE) </li>';
+                                                            //     // }
+                                                            //     //elseif ($remark->actual_status == 'belum') {
+
+                                                            //     //}
+                                                            // }
+                                                            echo '</ul>';
+                                                        }
+
+                                                    @endphp
+                                                    {{-- @php
+                                                        while (strtotime($project->start_date) <= strtotime($end_today)) {
+
+                                                            echo tgl_indo($project->start_date);
+                                                        }
+                                                    @endphp --}}
+                                                    {{-- @php
                                                         foreach ($groupedRemarks as $date => $remarks) {
                                                             echo '<li>' . tgl_indo($date) . '</li>';
                                                             echo '<ul>';
@@ -182,7 +281,7 @@
                                                             }
                                                             echo '</ul>';
                                                         }
-                                                    @endphp
+                                                    @endphp --}}
                                                 </ul>
                                             </div>
 
