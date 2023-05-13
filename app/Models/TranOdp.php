@@ -12,6 +12,12 @@ class TranOdp extends Model
     protected $table = 'tran_odp';
 
     protected $fillable = [
-        'supervisi_id', 'jenis_odp', 'nama_odp'
+        'supervisi_id',
+        'jenis_odp',
+        'nama_odp',
+        'status_go_live',
+        'kendala',
+        'id_sw',
+        'status_abd'
     ];
 }

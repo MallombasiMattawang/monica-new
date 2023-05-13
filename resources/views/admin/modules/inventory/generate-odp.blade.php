@@ -1,10 +1,9 @@
-<div class="col-md-8">
+<div class="col-md-6">
 
     <div class="box box-danger">
         <div class="box-header with-border">
             {{-- <h3 class="box-title">Generate ODP</h3> --}}
-            <a href="{{ url('ped-panel/tran-inventory/' . $supervisi->id . '/edit') }}"
-                class="btn btn-success pull-right"><i class="fa fa-edit"></i> UPDATE ODP STATUS</a>
+
         </div>
         <form action="" method="get">
             <div class="box-body">
@@ -36,6 +35,8 @@
             </div>
             <div class="box-footer">
                 <button type="submit" class="btn btn-danger">Generate ODP Name</button>
+                <a href="{{ url('ped-panel/tran-inventory/' . $supervisi->id . '/edit') }}"
+                    class="btn btn-success pull-right"><i class="fa fa-edit"></i> UPDATE ODP STATUS</a>
 
             </div>
         </form>
@@ -73,9 +74,8 @@
                                     <option value="ODP 16">ODP 16</option>
                                 </select>
                             </div>
-                            @else
+                        @else
                             {{ $kode_odp }}/{{ $formatted_i }} Sudah ada,
-
                         @endif
                     @endfor
 
@@ -94,34 +94,76 @@
 
 </div>
 
-<div class="col-md-4">
+<div class="col-md-6">
 
 
     <div class="box box-danger">
         <div class="box-header with-border">
             <h3 class="box-title">List Inventory ODP </h3>
         </div>
-        <div class="box-body" style="height: 400px; overflow-y: scroll;">
-            <table class="table table-bordered">
-                <tr>
-                    <th>Nama ODP</th>
-                    <th>Jenis ODP</th>
-                </tr>
-
-                @forelse ($listOdp as $d)
+        <div class="box-body bg-primary" style="height: 400px; overflow-y: scroll;">
+            <form action="" method="post">
+                <table class="table table-bordered">
                     <tr>
-                        <td>{{ $d->nama_odp }}</td>
-                        <td>{{ $d->jenis_odp }}</td>
+                        <th>Nama ODP</th>
+                        <th>Jenis ODP</th>
+                        <th>STATUS GOLIVE</th>
+                        <th>KENDALA</th>
+                        <th>STATUS ABD</th>
                     </tr>
-                @empty
-                    <tr>
-                        <td colspan="2"> ODP Masih Kosong </td>
-                    </tr>
-                @endforelse
 
-            </table>
+                    @forelse ($listOdp as $d)
+                        <tr>
+                            <td>{{ $d->nama_odp }}</td>
+                            <td>{{ $d->jenis_odp }}</td>
+                            <td>
+                                <select class="form-control" style="width: 100%;" name="namaOdp[][status_go_live]"
+                                    data-value="NO DATA">
+                                    <option value=""></option>
+                                    <option value="NO DATA" selected="">NO DATA</option>
+                                    <option value="VALIDASI ABD">VALIDASI ABD</option>
+                                    <option value="DRAWING">DRAWING</option>
+                                    <option value="INVENTORY">INVENTORY</option>
+                                    <option value="TERMINASI UIM">TERMINASI UIM</option>
+                                    <option value="GOLIVE">GOLIVE</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="form-control" style="width: 100%;" name="namaOdp[][kendala]">
+                                    <option value=""></option>
+                                    <option value="Need Port OLT">Need Port OLT</option>
+                                    <option value="Need Mini OLT">Need Mini OLT</option>
+                                    <option value="Core Feeder Unspec">Core Feeder Unspec</option>
+                                    <option value="Core Feeder Habis">Core Feeder Habis</option>
+                                    <option value="Mancore Not Valid">Mancore Not Valid</option>
+                                    <option value="Belum CT">Belum CT</option>
+                                    <option value="Belum Valins">Belum Valins</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="form-control" style="width: 100%;" name="namaOdp[][status_abd]"
+                                    data-value="NO ABD">
+                                    <option value=""></option>
+                                    <option value="NO ABD" selected="">NO ABD</option>
+                                    <option value="TIDAK VALID">TIDAK VALID</option>
+                                    <option value="VALID-4">VALID-4</option>
+                                    <option value="BA VALID">BA VALID</option>
+                                </select>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="2"> ODP Masih Kosong </td>
+                        </tr>
+                    @endforelse
+                </table>
+
+            </form>
         </div>
         <!-- /.box-body -->
+        <div class="box-footer">
+            <button class="btn btn-sm btn-success">Save</button>
+        </div>
     </div><!-- /.box -->
 
     <div class="box box-danger">

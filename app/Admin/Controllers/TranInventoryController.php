@@ -42,7 +42,7 @@ class TranInventoryController extends AdminController
         $grid->actions(function ($actions) {
 
             $actions->add(new Odp);
-            $actions->disableEdit();
+            //$actions->disableEdit();
             $actions->disableDelete();
             $actions->disableView();
         });
@@ -190,12 +190,11 @@ class TranInventoryController extends AdminController
     protected function form()
     {
         $form = new Form(new TranSupervisi());
-        $form->tools(function (Form\Tools$tools) {
+        $form->tools(function (Form\Tools$tools) use ($form) {
             $tools->disableDelete();
+            //$tools->add('<a href="/ped-panel/tran-inventory/' . $form->id . '" class="btn btn-sm btn-success"><i class="fa fa-cogs"></i>&nbsp;&nbsp;Generate ODP</a>');
 
-            // $tools->append('<a href="' . $form->id . '/edit" class="btn btn-warning ">VERIFIKASI DOKUMEN</a>');
-
-            //$tools->disableView();
+            $tools->disableView();
             //$tools->disableList();
 
         });
@@ -209,12 +208,10 @@ class TranInventoryController extends AdminController
                     'DRAWING' => 'DRAWING',
                     'INVENTORY' => 'INVENTORY',
                     'TERMINASI UIM' => 'TERMINASI UIM',
-                    'GOLIVE PARSIAL' => 'GOLIVE PARSIAL',
                     'GOLIVE' => 'GOLIVE',
-                    'KENDALA' => 'KENDALA',
                 ])->default('NO DATA');
-            $form->textarea('ket_gl_sdi', __('KET GL SDI'))->help('(JIKA STATUS GL nya : KENDALA)');
-            //$form->text('status_abd', __('STATUS ABD'));
+            $form->textarea('ket_gl_sdi', __('KET GL SDI')); //->help('(JIKA STATUS GL nya : KENDALA)');
+
             $form->select('status_abd', __('STATUS ABD'))
                 ->options([
                     'NO ABD' => 'NO ABD',
@@ -225,14 +222,41 @@ class TranInventoryController extends AdminController
                 ])->default('NO ABD');
             $form->text('id_sw', __('ID SW'));
             $form->text('id_imon', __('ID IMON'));
-            //$form->text('odp_port', __('ODP PORT'));
 
             $form->date('plan_golive', __('PLAN GOLIVE'));
-            //$form->date('real_golive', __('REAL GOLIVE'));
+            $form->date('real_golive', __('REAL GOLIVE'))->readonly()->help('(Tanggal GOLIVE diambil dari "STATUS GL SDI diupdate menjadi GOLIVE")');
+
         })->tab('Registrasi ODP', function (Form $form) {
-            $form->hasMany('namaOdp', 'Nama ODP', function (Form\NestedForm$form) {
+            $form->hasMany('namaOdp', 'Daftar ODP Inventory', function (Form\NestedForm$form) {
                 $form->text('nama_odp', 'Nama ODP');
                 $form->select('jenis_odp', 'Jenis ODP')->options(['ODP 8' => 'ODP 8', 'ODP 16' => 'ODP 16']);
+                $form->select('status_go_live', __('STATUS GOLIVE ODP'))
+                    ->options([
+                        'NO DATA' => 'NO DATA',
+                        'VALIDASI ABD' => 'VALIDASI ABD',
+                        'DRAWING' => 'DRAWING',
+                        'INVENTORY' => 'INVENTORY',
+                        'TERMINASI UIM' => 'TERMINASI UIM',
+                        'GOLIVE' => 'GOLIVE',
+                    ])->default('NO DATA');
+                $form->select('kendala', __('KENDALA'))
+                    ->options([
+                        'Need Port OLT' => 'Need Port OLT',
+                        'Need Mini OLT' => 'Need Mini OLT',
+                        'Core Feeder Unspec' => 'Core Feeder Unspec',
+                        'Core Feeder Habis' => 'Core Feeder Habis',
+                        'Mancore Not Valid' => 'Mancore Not Valid',
+                        'Belum CT' => 'Belum CT',
+                        'Belum Valins' => 'Belum Valins',
+                    ]);
+                $form->select('status_abd', __('STATUS ABD'))
+                    ->options([
+                        'NO ABD' => 'NO ABD',
+                        'TIDAK VALID' => 'TIDAK VALID',
+                        'VALID-4' => 'VALID-4',
+                        'BA VALID' => 'BA VALID',
+
+                    ])->default('NO ABD');
             });
         });
 
@@ -243,8 +267,10 @@ class TranInventoryController extends AdminController
             $rumusOdp8 = $countOdp8 * 8;
             $rumusOdp16 = $countOdp16 * 16;
             $real_golive = null;
-            if ($form->status_gl_sdi == 'GOLIVE' || $form->status_gl_sdi == 'GOLIVE PARSIAL') {
+            if ($form->status_gl_sdi == 'GOLIVE') {
                 $real_golive = date('Y-m-d');
+            } else {
+                $real_golive = null;
             }
             TranSupervisi::where("id", $form->id)
                 ->update([
@@ -254,7 +280,12 @@ class TranInventoryController extends AdminController
                     'real_port' => $rumusOdp8 + $rumusOdp16,
                     'real_golive' => $real_golive,
                 ]);
+            admin_success('Inventory ' .$form->status_gl_sdi. ' Updated');
+            admin_toastr('Inventory ' .$form->status_gl_sdi. ' Updated', 'success');
+            return redirect('/ped-panel/tran-inventory/' . $form->id . '/edit');
         });
+
+        $form->confirm('Anda akan melakukan update inventory ini ?', 'edit');
 
         return $form;
     }
@@ -276,7 +307,6 @@ class TranInventoryController extends AdminController
             ]);
             $odp->save();
         }
-
 
         $countOdp8 = TranOdp::where("supervisi_id", $request->supervisi_id)->where('jenis_odp', '=', 'ODP 8')->count();
         $countOdp16 = TranOdp::where("supervisi_id", $request->supervisi_id)->where('jenis_odp', '=', 'ODP 16')->count();
