@@ -1,18 +1,27 @@
 <div class="col-md-8">
-    
+
     <div class="box box-danger">
         <div class="box-header with-border">
             {{-- <h3 class="box-title">Generate ODP</h3> --}}
-            <a href="{{ url('ped-panel/tran-inventory/'.$supervisi->id.'/edit') }}" class="btn btn-success pull-right"><i class="fa fa-edit"></i>  UPDATE ODP STATUS</a>
+            <a href="{{ url('ped-panel/tran-inventory/' . $supervisi->id . '/edit') }}"
+                class="btn btn-success pull-right"><i class="fa fa-edit"></i> UPDATE ODP STATUS</a>
         </div>
         <form action="" method="get">
             <div class="box-body">
-               
+
                 <div class="row">
-                    
+
                     <div class="col-xs-6">
-                        <label for="">Kode ODP (Contoh : ODP-MAT-FBS/)</label>
-                        <input type="text" class="form-control" name="kode_odp" placeholder="ODP-MAT-FBS/" required>
+                        <label for="">Kode ODP (Contoh : ODP-MAT-FBS)</label>
+                        @php
+                            $string = $supervisi->supervisi_project->catuan_nama;
+
+                            if (!empty($string) && strpos($string, 'ODC') !== false) {
+                                $string = str_replace('ODC', 'ODP', $string);
+                            }
+                        @endphp
+                        <input type="text" class="form-control" name="kode_odp" placeholder="ODP-MAT-FBS"
+                            value="{{ $string }}" required>
                     </div>
                     <div class="col-xs-3">
                         <label for="">Nomor awal ODP</label>
@@ -27,7 +36,7 @@
             </div>
             <div class="box-footer">
                 <button type="submit" class="btn btn-danger">Generate ODP Name</button>
-               
+
             </div>
         </form>
         <!-- /.box-body -->
@@ -45,20 +54,31 @@
                 <input type="hidden" name="finish" value="{{ $finish }}">
                 <div class="box-body" style="height: 550px; overflow-y: scroll;">
                     @for ($i = $start; $i <= $finish; $i++)
-                        <div class="col-xs-9">
-                            <label for="">Kode ODP</label>
-                            <input type="text" class="form-control" name="kode_odp_in[]" placeholder="KODE ODP"
-                                value="{{ $kode_odp }}{{ $i }}" required>
-                        </div>
+                        @php
+                            $formatted_i = str_pad($i, 2, '0', STR_PAD_LEFT);
+                            $cek_odp = App\Models\TranOdp::where('nama_odp', $kode_odp . '/' . $formatted_i)->exists();
+                        @endphp
+                        @if ($cek_odp == 0)
+                            <div class="col-xs-9">
+                                <label for="">Kode ODP </label>
 
-                        <div class="col-xs-3">
-                            <label for="">JENIS ODP</label>
-                            <select name="jenis_odp_in[]" class="form-control">
-                                <option value="ODP 8" selected>ODP 8</option>
-                                <option value="ODP 16">ODP 16</option>
-                            </select>
-                        </div>
+                                <input type="text" class="form-control" name="kode_odp_in[]" placeholder="KODE ODP"
+                                    value="{{ $kode_odp }}/{{ $formatted_i }}" required>
+                            </div>
+
+                            <div class="col-xs-3">
+                                <label for="">JENIS ODP</label>
+                                <select name="jenis_odp_in[]" class="form-control">
+                                    <option value="ODP 8" selected>ODP 8</option>
+                                    <option value="ODP 16">ODP 16</option>
+                                </select>
+                            </div>
+                            @else
+                            {{ $kode_odp }}/{{ $formatted_i }} Sudah ada,
+
+                        @endif
                     @endfor
+
 
                 </div>
                 <div class="box-footer">
@@ -75,7 +95,7 @@
 </div>
 
 <div class="col-md-4">
-   
+
 
     <div class="box box-danger">
         <div class="box-header with-border">
@@ -87,12 +107,12 @@
                     <th>Nama ODP</th>
                     <th>Jenis ODP</th>
                 </tr>
-                
-                @forelse ( $listOdp as $d )
-                <tr>
-                    <td>{{ $d->nama_odp }}</td>
-                    <td>{{ $d->jenis_odp }}</td>
-                </tr>
+
+                @forelse ($listOdp as $d)
+                    <tr>
+                        <td>{{ $d->nama_odp }}</td>
+                        <td>{{ $d->jenis_odp }}</td>
+                    </tr>
                 @empty
                     <tr>
                         <td colspan="2"> ODP Masih Kosong </td>
@@ -114,6 +134,15 @@
                 <tr>
                     <th>Field</th>
                     <th>Value</th>
+                </tr>
+
+                <tr>
+                    <td>PROJECT NAME</td>
+                    <td> {{ $supervisi->supervisi_project->lop_site_id }} </td>
+                </tr>
+                <tr>
+                    <td>Catuan Nama</td>
+                    <td> {{ $supervisi->supervisi_project->catuan_nama }} </td>
                 </tr>
                 <tr>
                     <td>Status GL SDI</td>

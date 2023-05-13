@@ -2,28 +2,19 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Project\Odp;
+use App\Models\MstMitra;
+use App\Models\MstWitel;
+use App\Models\TranOdp;
+use App\Models\TranSupervisi;
+//use Illuminate\Support\Facades\Request;
+use Encore\Admin\Controllers\AdminController;
+use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
-use App\Models\TranOdp;
-use App\Models\MstMitra;
-use App\Models\MstWitel;
-use App\Models\MstProject;
-use App\Models\MstWaspangUt;
-use App\Models\TranBaseline;
-use Illuminate\Http\Request;
-use App\Models\TranInventory;
-use App\Models\TranSupervisi;
-use Encore\Admin\Facades\Admin;
-//use Illuminate\Support\Facades\Request;
 use Encore\Admin\Widgets\Table;
-use Encore\Admin\Layout\Content;
-use App\Admin\Actions\Project\Odp;
-use App\Admin\Actions\Project\Plan;
-use App\Admin\Actions\Project\Actual;
-use App\Admin\Actions\Project\Baseline;
-use App\Admin\Extensions\Tools\GridView;
-use Encore\Admin\Controllers\AdminController;
+use Illuminate\Http\Request;
 
 class TranInventoryController extends AdminController
 {
@@ -68,7 +59,7 @@ class TranInventoryController extends AdminController
                 );
                 $filter->in('mitra_id', 'MITRA')->multipleSelect(
                     MstMitra::pluck('nama_mitra', 'id')
-                );                
+                );
                 $filter->in('status_gl_sdi', 'STATUS GL SDI')->multipleSelect([
                     'NO DATA' => 'NO DATA',
                     'VALIDASI ABD' => 'VALIDASI ABD',
@@ -94,7 +85,6 @@ class TranInventoryController extends AdminController
         $grid->column('project_name', __('LOP/SITE ID'))->limit(30);
         //$grid->column('status_gl_sdi', __('Status gl sdi'));
         $grid->column('status_gl_sdi', 'Status gl sdi')->display(function ($status_gl_sdi, $column) {
-
 
             if ($this->status_gl_sdi != null) {
                 return $status_gl_sdi;
@@ -180,6 +170,7 @@ class TranInventoryController extends AdminController
         }
 
         //$data = MstProject::findOrFail($id);
+
         $supervisi = TranSupervisi::where('id', $id)->first();
         $listOdp = TranOdp::where('supervisi_id', $id)->get();
         return view('admin.modules.inventory.generate-odp', [
@@ -199,7 +190,7 @@ class TranInventoryController extends AdminController
     protected function form()
     {
         $form = new Form(new TranSupervisi());
-        $form->tools(function (Form\Tools $tools) {
+        $form->tools(function (Form\Tools$tools) {
             $tools->disableDelete();
 
             // $tools->append('<a href="' . $form->id . '/edit" class="btn btn-warning ">VERIFIKASI DOKUMEN</a>');
@@ -239,7 +230,7 @@ class TranInventoryController extends AdminController
             $form->date('plan_golive', __('PLAN GOLIVE'));
             //$form->date('real_golive', __('REAL GOLIVE'));
         })->tab('Registrasi ODP', function (Form $form) {
-            $form->hasMany('namaOdp', 'Nama ODP', function (Form\NestedForm $form) {
+            $form->hasMany('namaOdp', 'Nama ODP', function (Form\NestedForm$form) {
                 $form->text('nama_odp', 'Nama ODP');
                 $form->select('jenis_odp', 'Jenis ODP')->options(['ODP 8' => 'ODP 8', 'ODP 16' => 'ODP 16']);
             });
@@ -265,21 +256,19 @@ class TranInventoryController extends AdminController
                 ]);
         });
 
-
-
         return $form;
     }
 
     public function generateOdp(Request $request)
     {
-        //print_r($_POST);
+        // print_r($_POST);
         // echo $request->supervisi_id;
-        //die();
-        $cek = -1;
-        for ($i = $request->start; $i <= $request->finish; $i++) {
-            $cek++;
-            echo $i;
-            echo '<br>';
+
+        // die();
+
+        $kode_odp_in = $request->input('kode_odp_in'); // Mengambil nilai input sebagai array
+
+        foreach ($kode_odp_in as $cek => $kode_odp) {
             $odp = TranOdp::create([
                 'supervisi_id' => $request->supervisi_id,
                 'jenis_odp' => $_POST['jenis_odp_in'][$cek],
@@ -288,11 +277,12 @@ class TranInventoryController extends AdminController
             $odp->save();
         }
 
-        $countOdp8 = TranOdp::where("supervisi_id",  $request->supervisi_id)->where('jenis_odp', '=', 'ODP 8')->count();
-        $countOdp16 = TranOdp::where("supervisi_id",  $request->supervisi_id)->where('jenis_odp', '=', 'ODP 16')->count();
+
+        $countOdp8 = TranOdp::where("supervisi_id", $request->supervisi_id)->where('jenis_odp', '=', 'ODP 8')->count();
+        $countOdp16 = TranOdp::where("supervisi_id", $request->supervisi_id)->where('jenis_odp', '=', 'ODP 16')->count();
         $rumusOdp8 = $countOdp8 * 8;
         $rumusOdp16 = $countOdp16 * 16;
-        TranSupervisi::where("id",  $request->supervisi_id)
+        TranSupervisi::where("id", $request->supervisi_id)
             ->update([
                 'odp_8' => $countOdp8,
                 'odp_16' => $countOdp16,
