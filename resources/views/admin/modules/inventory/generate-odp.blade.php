@@ -96,13 +96,13 @@
 
 <div class="col-md-6">
 
+    <form action="" method="post">
+        <div class="box box-danger">
+            <div class="box-header with-border">
+                <h3 class="box-title">List ODP Terdaftar </h3>
+            </div>
+            <div class="box-body bg-primary" style="height: 400px; overflow-y: scroll;">
 
-    <div class="box box-danger">
-        <div class="box-header with-border">
-            <h3 class="box-title">List Inventory ODP </h3>
-        </div>
-        <div class="box-body bg-primary" style="height: 400px; overflow-y: scroll;">
-            <form action="" method="post">
                 <table class="table table-bordered">
                     <tr>
                         <th>Nama ODP</th>
@@ -110,6 +110,7 @@
                         <th>STATUS GOLIVE</th>
                         <th>KENDALA</th>
                         <th>STATUS ABD</th>
+                        <th>REAL GOLIVE</th>
                     </tr>
 
                     @forelse ($listOdp as $d)
@@ -150,6 +151,9 @@
                                     <option value="BA VALID">BA VALID</option>
                                 </select>
                             </td>
+                            <td>
+                                <input type="date" class="form-control" name="real_golive">
+                            </td>
                         </tr>
                     @empty
                         <tr>
@@ -158,27 +162,84 @@
                     @endforelse
                 </table>
 
-            </form>
-        </div>
-        <!-- /.box-body -->
-        <div class="box-footer">
-            <button class="btn btn-sm btn-success">Save</button>
-        </div>
-    </div><!-- /.box -->
+
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer">
+                <button class="btn btn-success pull-right">Update status per-ODP</button>
+            </div>
+        </div><!-- /.box -->
+    </form>
 
     <div class="box box-danger">
         <div class="box-header with-border">
-            <h3 class="box-title">Detail</h3>
+            <h3 class="box-title">Update Inventory</h3>
         </div>
 
         <div class="box-body" style="height: 400px; overflow-y: scroll;">
             <table class="table table-striped">
                 <tr>
-                    <th>Field</th>
-                    <th>Value</th>
+                    <td>STATUS GL SDI </td>
+                    <td>
+                        <select class="form-control" style="width: 100%;" name="namaOdp[][status_go_live]"
+                            data-value="NO DATA">
+                            <option value=""></option>
+                            <option value="NO DATA" selected="">NO DATA</option>
+                            <option value="VALIDASI ABD">VALIDASI ABD</option>
+                            <option value="DRAWING">DRAWING</option>
+                            <option value="INVENTORY">INVENTORY</option>
+                            <option value="TERMINASI UIM">TERMINASI UIM</option>
+                            <option value="GOLIVE">GOLIVE</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        KET GL SDI
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" name="ket_gl_sdi">
+                    </td>
+                </tr>
+                <tr>
+                    <td>STATUS ABD </td>
+                    <td>
+                        <select class="form-control" style="width: 100%;" name="namaOdp[][status_abd]"
+                            data-value="NO ABD">
+                            <option value=""></option>
+                            <option value="NO ABD" selected="">NO ABD</option>
+                            <option value="TIDAK VALID">TIDAK VALID</option>
+                            <option value="VALID-4">VALID-4</option>
+                            <option value="BA VALID">BA VALID</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>ID SW</td>
+                    <td>
+                        <input type="text" class="form-control" name="id_sw">
+                    </td>
+                </tr>
+                <tr>
+                    <td>ID IMON</td>
+                    <td>
+                        <input type="text" class="form-control" name="id_imon">
+                    </td>
+                </tr>
+                <tr>
+                    <td>PLAN GOLIVE</td>
+                    <td>
+                        <input type="text" class="form-control" name="plan_golive" value="{{ $supervisi->plan_golive }}">
+                    </td>
+                </tr>
+                <tr>
+                    <td>REAL GOLIVE</td>
+                    <td>
+                        <input type="text" class="form-control" name="real_golive" value="{{ $supervisi->real_golive }}" readonly>
+                    </td>
                 </tr>
 
-                <tr>
+                {{-- <tr>
                     <td>PROJECT NAME</td>
                     <td> {{ $supervisi->supervisi_project->lop_site_id }} </td>
                 </tr>
@@ -222,14 +283,14 @@
                         <td>ODP NAME</td>
                         <td> {{ $supervisi->nama_odp }}  </td>
                     </tr> --}}
-                <tr>
+                {{-- <tr>
                     <td>Plan GOLIVE</td>
                     <td> {{ $supervisi->plan_golive }} </td>
                 </tr>
                 <tr>
                     <td>Real GOLIVE</td>
                     <td> {{ $supervisi->real_golive }} </td>
-                </tr>
+                </tr> --}}
 
             </table>
         </div>

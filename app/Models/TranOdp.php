@@ -18,6 +18,7 @@ class TranOdp extends Model
         'status_go_live',
         'kendala',
         'id_sw',
-        'status_abd'
+        'status_abd',
+        'real_golive'
     ];
 }
