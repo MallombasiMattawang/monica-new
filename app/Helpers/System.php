@@ -20,6 +20,21 @@ use App\Models\RefKualifikasiUsaha;
 use Illuminate\Support\Facades\Redirect;
 
 
+function trimActivity($text)
+{
+    $string = $text;
+    $delimiter = ']';
+
+    if (strpos($string, $delimiter) !== false) {
+        $parts = explode($delimiter, $string);
+        $result = trim($parts[1]);
+        return $result;
+    } else {
+        return $text;
+    }
+}
+
+
 function getProgressActual($project_id, $start_date)
 {
     $sum_bobot_real = TranBaseline::where('project_id', $project_id)

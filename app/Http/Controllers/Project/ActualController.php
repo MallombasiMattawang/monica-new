@@ -164,7 +164,7 @@ class ActualController extends Controller
     {
         $request->validate(
             [
-                'file.*' => 'required|mimes:jpg,png,zip,rar,pdf,doc,docx,xlsx,csv|max:25000',
+                'file.*' => 'required|mimes:jpg,png,zip,rar,pdf,doc,docx,xlsx,csv,mp4,webm|max:25000',
                 'actual_volume' => 'required',
                 'actual_status' => 'required',
                 'pending_item' => $request->filled('pending_item') ? 'required' : '',

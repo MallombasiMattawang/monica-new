@@ -64,17 +64,17 @@ Route::group([
         $router->get('form-import-smilley', 'MstSmilleyController@formImport');
         $router->post('submit-import-smilley', 'MstSmilleyController@submitImport');
     });
-    
+
 
     /**Supervisi */
     $router->get('add-waspang', 'TranSupervisiController@addWaspang');
     $router->get('add-ut', 'TranSupervisiController@addUt');
-    $router->get('actual-generate/{id}', 'TranSupervisiController@actualActivity');   
-    $router->get('log-generate/{id}', 'TranSupervisiController@actualActivityLog');   
+    $router->get('actual-generate/{id}', 'TranSupervisiController@actualActivity');
+    $router->get('log-generate/{id}', 'TranSupervisiController@actualActivityLog');
     $router->post('approve-waspang', 'TranSupervisiController@actualActivityWaspang');
     $router->post('approve-ut', 'TranSupervisiController@actualActivityUt');
-    
-    
+
+
     /**Create & update Baseline */
     $router->get('form-baseline/{id}', 'TranSupervisiController@formBaseline');
     $router->post('create-baseline', 'TranSupervisiController@createBaseline');
@@ -110,7 +110,11 @@ Route::group([
     /**SUPERVISI VIEW */
     $router->get('list-supervisis', 'ViewSupervisiController@list');
     $router->get('export-supervisis', 'ViewSupervisiController@export')->name('admin.export.supervisi');
-    
+
+    /**INVENTORY VIEW */
+    $router->get('list-inventory', 'ViewInventoryController@list');
+    $router->get('export-inventory', 'ViewInventoryController@export')->name('admin.export.inventory');
+
 
     /**Kurva S */
     $router->get('api/kurva_s/{id?}', 'TranSupervisiController@kurvaS');
