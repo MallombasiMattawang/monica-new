@@ -47,28 +47,42 @@
                             </thead>
                             <tbody>
                                 @forelse ($supervisis as $d)
-                                <tr>
-                                    <td>{{ $d->id }}</td>
-                                    <td>{{ $d->supervisi_project->tematik }}</td>
-                                    <td>{{ $d->supervisi_project->witel_id }}</td>
-                                    <td>{{ $d->supervisi_project->sto_id }}</td>
-                                    <td>{{ $d->supervisi_project->lop_site_id }}</td>
-                                    <td>{{ $d->supervisi_mitra->nama_mitra }}</td>
-                                    <td>{{ $d->supervisi_sap ? $d->supervisi_sap->kontrak : '-' }}</td>
-                                    <td>-</td>
-                                    <td>{{ $d->supervisi_project->catuan_nama }}</td>
-                                    <td>{{ $d->status_gl_sdi }}</td>
-                                    <td>-</td>
-                                    <td>{{$d->status_abd}}</td>
-                                    <td>{{$d->id_sw}}</td>
-                                    <td>{{$d->id_imon}}</td>
-                                    <td>{{$d->odp_port}}</td>
-                                    <td>{{$d->plan_golive}}</td>
-                                    <td>{{$d->real_golive}}</td>
-                                    <td>{{$d->tgl_bast_1}}</td>
+                                    <tr>
+                                        <td>{{ $d->id }}</td>
+                                        <td>{{ $d->supervisi->supervisi_project->tematik }}</td>
+                                        <td>{{ $d->supervisi->supervisi_project->witel_id }}</td>
+                                        <td>{{ $d->supervisi->supervisi_project->sto_id }}</td>
+                                        <td>{{ $d->supervisi->supervisi_project->lop_site_id }}</td>
+                                        <td>{{ $d->supervisi->supervisi_mitra->nama_mitra }}</td>
+                                        <td>{{ $d->supervisi->supervisi_sap ? $d->supervisi_sap->kontrak : '-' }}</td>
+                                        <td>
+                                            @if ($d->supervisi->status_const == 'PREPARING' || $d->supervisi->status_const == 'MATERIAL DELIVERY')
+                                                PREPARE
+                                            @elseif ($d->supervisi->status_const == 'INSTALASI')
+                                                INSTALASI
+                                            @elseif (
+                                                $d->supervisi->status_const == 'INSTALL DONE' ||
+                                                    $d->supervisi->status_const == 'SELESAI CT' ||
+                                                    $d->supervisi->status_const == 'SELESAI UT' ||
+                                                    $d->supervisi->status_const == 'INSTALL DONE' ||
+                                                    $d->supervisi->status_const == 'BAST-1')
+                                                FISIK DONE
+                                            @endif
+                                        </td>
+
+                                        <td>{{ $d->nama_odp }}</td>
+                                        <td>{{ $d->supervisi->status_gl_sdi }}</td>
+                                        <td>-</td>
+                                        <td>{{ $d->status_abd }}</td>
+                                        <td>{{ $d->supervisi->id_sw }}</td>
+                                        <td>{{ $d->supervisi->id_imon }}</td>
+                                        <td>{{ str_replace('ODP ', '', $d->jenis_odp) }}</td>
+                                        <td>{{ $d->plan_golive }}</td>
+                                        <td>{{ $d->real_golive }}</td>
+                                        <td>{{ $d->supervisi->tgl_bast_1 }}</td>
 
 
-                                </tr>
+                                    </tr>
                                 @empty
                                     <tr>
                                         <td colspan="18"> Belum ada inventory</td>

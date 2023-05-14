@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Exports\SupervisiExport;
+use App\Models\TranOdp;
 use App\Models\TranSupervisi;
 use App\Models\ViewSupervisi;
 use Encore\Admin\Controllers\AdminController;
@@ -69,7 +70,7 @@ class ViewInventoryController extends AdminController
 
     function list(Request $request) {
         return Admin::content(function (Content $content) use ($request) {
-            $query = TranSupervisi::query();
+            $query = TranOdp::query();
 
             // Filter data berdasarkan keyword pencarian
             $search = $request->input('search');
@@ -81,8 +82,7 @@ class ViewInventoryController extends AdminController
             }
 
             // Ambil data dengan pagination
-            $supervisis = $query->whereIn('status_const', ['INSTALL DONE', 'SELESAI UT', 'SELESAI CT', 'REKON', 'SELESAI REKON', 'BAST-1'])
-                ->paginate(20);
+            $supervisis = $query->paginate(20);
             $content->body(view('admin.modules.inventory.list', [
                 'supervisis' => $supervisis,
                 'search' => $search,
@@ -90,6 +90,31 @@ class ViewInventoryController extends AdminController
             ]));
         });
     }
+
+    //////////////////// PER SUPERVISI ///////////////////////////////
+    // function list(Request $request) {
+    //     return Admin::content(function (Content $content) use ($request) {
+    //         $query = TranSupervisi::query();
+
+    //         // Filter data berdasarkan keyword pencarian
+    //         $search = $request->input('search');
+    //         if (!empty($search)) {
+    //             $query->where(function ($q) use ($search) {
+    //                 $q->where('project_name', 'like', "%$search%")
+    //                     ->orWhere('project_name', 'like', "%$search%");
+    //             });
+    //         }
+
+    //         // Ambil data dengan pagination
+    //         $supervisis = $query->whereIn('status_const', ['INSTALL DONE', 'SELESAI UT', 'SELESAI CT', 'REKON', 'SELESAI REKON', 'BAST-1'])
+    //             ->paginate(20);
+    //         $content->body(view('admin.modules.inventory.list', [
+    //             'supervisis' => $supervisis,
+    //             'search' => $search,
+
+    //         ]));
+    //     });
+    // }
 
     public function export()
     {

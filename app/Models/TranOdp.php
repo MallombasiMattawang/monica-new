@@ -21,4 +21,10 @@ class TranOdp extends Model
         'status_abd',
         'real_golive'
     ];
+
+    public function supervisi()
+    {
+        return $this->hasOne(TranSupervisi::class, 'id', 'supervisi_id');
+
+    }
 }

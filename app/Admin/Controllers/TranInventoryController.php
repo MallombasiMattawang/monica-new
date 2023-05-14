@@ -42,7 +42,7 @@ class TranInventoryController extends AdminController
         $grid->actions(function ($actions) {
 
             $actions->add(new Odp);
-            //$actions->disableEdit();
+            $actions->disableEdit();
             $actions->disableDelete();
             $actions->disableView();
         });
@@ -280,8 +280,8 @@ class TranInventoryController extends AdminController
                     'real_port' => $rumusOdp8 + $rumusOdp16,
                     'real_golive' => $real_golive,
                 ]);
-            admin_success('Inventory ' .$form->status_gl_sdi. ' Updated');
-            admin_toastr('Inventory ' .$form->status_gl_sdi. ' Updated', 'success');
+            admin_success('Inventory ' . $form->status_gl_sdi . ' Updated');
+            admin_toastr('Inventory ' . $form->status_gl_sdi . ' Updated', 'success');
             return redirect('/ped-panel/tran-inventory/' . $form->id . '/edit');
         });
 
@@ -294,9 +294,7 @@ class TranInventoryController extends AdminController
     {
         // print_r($_POST);
         // echo $request->supervisi_id;
-
         // die();
-
         $kode_odp_in = $request->input('kode_odp_in'); // Mengambil nilai input sebagai array
 
         foreach ($kode_odp_in as $cek => $kode_odp) {
@@ -322,6 +320,48 @@ class TranInventoryController extends AdminController
 
         admin_success('ODP Updated');
         admin_toastr('ODP Project Updated', 'success');
+        //return back();
+        return redirect('/ped-panel/tran-inventory/' . $request->supervisi_id);
+    }
+
+    public function updateOdp(Request $request)
+    {
+        //print_r($_POST);
+        $status_go_live = $request->input('status_go_live'); // Mengambil nilai input sebagai array
+        foreach ($status_go_live as $i => $status_odp) {
+            TranOdp::where("id", $_POST['odp_id'][$i])
+                ->update([
+                    'status_go_live' => $_POST['status_go_live'][$i],
+                    'kendala' => $_POST['kendala'][$i],
+                    'status_abd' => $_POST['status_abd'][$i],
+                    'real_golive' => $_POST['real_golive'][$i],
+                ]);
+
+        }
+        admin_success('ODP Updated');
+        admin_toastr('ODP Updated', 'success');
+        //return back();
+        return redirect('/ped-panel/tran-inventory/' . $request->supervisi_id);
+    }
+
+    public function updateInventory(Request $request)
+    {
+        $real_golive = null;
+        if ($request->status_gl_sdi == 'GOLIVE') {
+            $real_golive = date('Y-m-d');
+        }
+        TranSupervisi::where("id", $request->supervisi_id)
+            ->update([
+                'status_gl_sdi' => $request->status_gl_sdi,
+                'ket_gl_sdi' => $request->ket_gl_sdi,
+                'status_abd' => $request->status_abd,
+                'id_sw' => $request->id_sw,
+                'id_imon' => $request->id_imon,
+                'real_golive' => $real_golive,
+            ]);
+
+        admin_success('Inventory Updated');
+        admin_toastr('Inventory Project Updated', 'success');
         //return back();
         return redirect('/ped-panel/tran-inventory/' . $request->supervisi_id);
     }

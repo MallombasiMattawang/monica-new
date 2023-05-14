@@ -104,6 +104,8 @@ Route::group([
 
     /**iNVENTORY */
     $router->post('generate-odp{id?}', 'TranInventoryController@generateOdp');
+    $router->post('update-odp{id?}', 'TranInventoryController@updateOdp');
+    $router->post('update-inventory{id?}', 'TranInventoryController@updateInventory');
 
     $router->resource('view-supervisis', ViewSupervisiController::class);
 

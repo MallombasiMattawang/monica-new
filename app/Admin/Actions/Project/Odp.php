@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Odp extends RowAction
 {
-    public $name = 'Generate ODP';
+    public $name = 'Update ODP & Inventory';
 
     public function handle(Model $model)
     {
