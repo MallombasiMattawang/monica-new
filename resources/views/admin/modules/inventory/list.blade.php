@@ -55,6 +55,7 @@
                                         <td>{{ $d->supervisi->supervisi_project->lop_site_id }}</td>
                                         <td>{{ $d->supervisi->supervisi_mitra->nama_mitra }}</td>
                                         {{-- <td>{{ $d->supervisi->supervisi_sap->kontrak ? $d->supervisi_sap->kontrak : '-' }}</td> --}}
+                                        <td> - </td>
                                         <td>
                                             @if ($d->supervisi->status_const == 'PREPARING' || $d->supervisi->status_const == 'MATERIAL DELIVERY')
                                                 PREPARE
