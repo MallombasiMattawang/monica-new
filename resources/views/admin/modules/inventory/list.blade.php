@@ -3,7 +3,7 @@
         <div class="col-md-12">
             <div class="row">
                 <div class="col-md-6">
-                    <form action="{{ url('ped-panel/list-supervisis') }}" method="GET">
+                    {{-- <form action="{{ url('ped-panel/list-inventory') }}" method="GET">
                         <div class="input-group">
                             <input type="text" name="search" class="form-control"
                                 placeholder="Cari berdasarkan Project Name" value="{{ $search }}">
@@ -11,11 +11,11 @@
                                 <button class="btn btn-primary" type="submit">Cari</button>
                             </span>
                         </div>
-                    </form>
+                    </form> --}}
                 </div>
                 <div class="col-md-6">
-                    <a href="{{ route('ped-panel.admin.export.supervisi') }}" target="_blank" class="btn btn-primary"><i
-                            class="fa fa-file-excel-o"></i> Eksports</a>
+                    {{-- <a href="{{ route('ped-panel.admin.export.supervisi') }}" target="_blank" class="btn btn-primary"><i
+                            class="fa fa-file-excel-o"></i> Eksports</a> --}}
                 </div>
             </div>
             <hr>
@@ -55,7 +55,11 @@
                                         <td>{{ $d->supervisi->supervisi_project->lop_site_id }}</td>
                                         <td>{{ $d->supervisi->supervisi_mitra->nama_mitra }}</td>
                                         {{-- <td>{{ $d->supervisi->supervisi_sap->kontrak ? $d->supervisi_sap->kontrak : '-' }}</td> --}}
-                                        <td> - </td>
+                                        @php
+                                            $kontrak = App\Models\MstSap::where('name', $d->supervisi->supervisi_project->lop_site_id)
+                                                ->first();
+                                        @endphp
+                                        <td> {{ $kontrak->kontrak }} </td>
                                         <td>
                                             @if ($d->supervisi->status_const == 'PREPARING' || $d->supervisi->status_const == 'MATERIAL DELIVERY')
                                                 PREPARE
@@ -73,12 +77,12 @@
 
                                         <td>{{ $d->nama_odp }}</td>
                                         <td>{{ $d->supervisi->status_gl_sdi }}</td>
-                                        <td>-</td>
-                                        <td>{{ $d->status_abd }}</td>
+                                        <td>{{ $d->supervisi->kendala_sdi }}</td>
+                                        <td>{{ $d->supervisi->status_abd }}</td>
                                         <td>{{ $d->supervisi->id_sw }}</td>
                                         <td>{{ $d->supervisi->id_imon }}</td>
                                         <td>{{ str_replace('ODP ', '', $d->jenis_odp) }}</td>
-                                        <td>{{ $d->plan_golive }}</td>
+                                        <td>{{ $d->supervisi->plan_golive }}</td>
                                         <td>{{ $d->real_golive }}</td>
                                         <td>{{ $d->supervisi->tgl_bast_1 }}</td>
 
