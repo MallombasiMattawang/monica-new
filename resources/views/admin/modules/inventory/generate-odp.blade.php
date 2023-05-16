@@ -108,9 +108,9 @@
                     <tr>
                         <th>Nama ODP</th>
                         <th>Jenis ODP</th>
-                        <th>STATUS GOLIVE</th>
+                        {{-- <th>STATUS GOLIVE</th>
                         <th>KENDALA</th>
-                        <th>STATUS ABD</th>
+                        <th>STATUS ABD</th> --}}
                         <th>REAL GOLIVE</th>
                     </tr>
 
@@ -119,7 +119,7 @@
                         <tr>
                             <td>{{ $d->nama_odp }}</td>
                             <td>{{ $d->jenis_odp }}</td>
-                            <td>
+                            {{-- <td>
                                 <select class="form-control" style="width: 100%;" name="status_go_live[]"
                                     data-value="NO DATA">
                                     <option value="NO DATA" {{ $d->status_go_live == 'NO DATA' ? 'SELECTED' : '' }}>NO DATA</option>
@@ -151,7 +151,7 @@
                                     <option value="VALID-4" {{ $d->status_abd == 'VALID-4' ? 'SELECTED' : '' }}>VALID-4</option>
                                     <option value="BA VALID" {{ $d->status_abd == 'BA VALID' ? 'SELECTED' : '' }}>BA VALID</option>
                                 </select>
-                            </td>
+                            </td> --}}
                             <td>
                                 <input type="date" class="form-control" name="real_golive[]" value="{{ $d->real_golive }}">
                             </td>
@@ -179,7 +179,7 @@
                 <h3 class="box-title">Update Inventory</h3>
             </div>
 
-            <div class="box-body" style="height: 400px; overflow-y: scroll;">
+            <div class="box-body" style="height: 500px; overflow-y: scroll;">
                 <table class="table table-striped">
                     <tr>
                         <td>STATUS GL SDI </td>
@@ -212,6 +212,21 @@
                                 <option value="TIDAK VALID" {{ $supervisi->status_abd == 'TIDAK VALID' ? 'SELECTED' : '' }}>TIDAK VALID</option>
                                 <option value="VALID-4" {{ $supervisi->status_abd == 'VALID-4' ? 'SELECTED' : '' }}>VALID-4</option>
                                 <option value="BA VALID" {{ $supervisi->status_abd == 'BA VALID' ? 'SELECTED' : '' }}>BA VALID</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>KENDALA</td>
+                        <td>
+                            <select class="form-control" style="width: 100%;" name="kendala_sdi">
+                                <option value=""></option>
+                                <option value="Need Port OLT" {{ $supervisi->kendala == 'Need Port OLT' ? 'SELECTED' : '' }}>Need Port OLT</option>
+                                <option value="Need Mini OLT" {{ $supervisi->kendala == 'Need Mini OLT' ? 'SELECTED' : '' }}>Need Mini OLT</option>
+                                <option value="Core Feeder Unspec" {{ $supervisi->kendala == 'Core Feeder Unspec' ? 'SELECTED' : '' }}>Core Feeder Unspec</option>
+                                <option value="Core Feeder Habis" {{ $supervisi->kendala == 'Core Feeder Habis' ? 'SELECTED' : '' }}>Core Feeder Habis</option>
+                                <option value="Mancore Not Valid" {{ $supervisi->kendala == 'Mancore Not Valid' ? 'SELECTED' : '' }}>Mancore Not Valid</option>
+                                <option value="Belum CT" {{ $supervisi->kendala == 'Belum CT' ? 'SELECTED' : '' }}>Belum CT</option>
+                                <option value="Belum Valins" {{ $supervisi->kendala == 'Belum Valins' ? 'SELECTED' : '' }}>Belum Valins</option>
                             </select>
                         </td>
                     </tr>

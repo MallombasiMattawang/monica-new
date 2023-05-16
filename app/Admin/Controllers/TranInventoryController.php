@@ -327,13 +327,13 @@ class TranInventoryController extends AdminController
     public function updateOdp(Request $request)
     {
         //print_r($_POST);
-        $status_go_live = $request->input('status_go_live'); // Mengambil nilai input sebagai array
-        foreach ($status_go_live as $i => $status_odp) {
+        $real_golive = $request->input('real_golive'); // Mengambil nilai input sebagai array
+        foreach ($real_golive as $i => $real_golive) {
             TranOdp::where("id", $_POST['odp_id'][$i])
                 ->update([
-                    'status_go_live' => $_POST['status_go_live'][$i],
-                    'kendala' => $_POST['kendala'][$i],
-                    'status_abd' => $_POST['status_abd'][$i],
+                    // 'status_go_live' => $_POST['status_go_live'][$i],
+                    // 'kendala' => $_POST['kendala'][$i],
+                    // 'status_abd' => $_POST['status_abd'][$i],
                     'real_golive' => $_POST['real_golive'][$i],
                 ]);
 
@@ -357,6 +357,7 @@ class TranInventoryController extends AdminController
                 'status_abd' => $request->status_abd,
                 'id_sw' => $request->id_sw,
                 'id_imon' => $request->id_imon,
+                'kendala_sdi' => $request->kendala_sdi,
                 'real_golive' => $real_golive,
             ]);
 

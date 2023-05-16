@@ -63,44 +63,45 @@ class TranSupervisi extends Model
         'real_nilai',
         'plan_port',
         'real_port',
-        
-        
+        'kendala_sdi',
+
+
     ];
 
     public function supervisi_sap()
     {
         return $this->hasOne(MstSap::class, 'name', 'project_name');
-        
+
     }
 
     public function supervisi_project()
     {
         return $this->hasOne(MstProject::class, 'id', 'project_id');
-        
+
     }
 
     public function supervisi_witel()
     {
         return $this->hasOne(MstWitel::class, 'id', 'witel_id');
-        
+
     }
 
     public function supervisi_mitra()
     {
         return $this->hasOne(MstMitra::class, 'id', 'mitra_id');
-        
+
     }
 
     public function supervisi_waspang()
     {
         return $this->hasOne(User::class, 'id', 'waspang_id');
-        
+
     }
 
     public function supervisi_tim_ut()
     {
         return $this->hasOne(User::class, 'id', 'tim_ut_id');
-        
+
     }
 
     public function namaOdp()
