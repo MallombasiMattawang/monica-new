@@ -19,7 +19,8 @@ class TranOdp extends Model
         'kendala',
         'id_sw',
         'status_abd',
-        'real_golive'
+        'real_golive',
+        'id_imon'
     ];
 
     public function supervisi()

@@ -60,22 +60,22 @@ class TranInventoryController extends AdminController
                 $filter->in('mitra_id', 'MITRA')->multipleSelect(
                     MstMitra::pluck('nama_mitra', 'id')
                 );
-                $filter->in('status_gl_sdi', 'STATUS GL SDI')->multipleSelect([
-                    'NO DATA' => 'NO DATA',
-                    'VALIDASI ABD' => 'VALIDASI ABD',
-                    'DRAWING' => 'DRAWING',
-                    'INVENTORY' => 'INVENTORY',
-                    'TERMINASI UIM' => 'TERMINASI UIM',
-                    'GOLIVE PARSIAL' => 'GOLIVE PARSIAL',
-                    'GOLIVE' => 'GOLIVE',
-                    'KENDALA' => 'KENDALA',
-                ]);
+                // $filter->in('status_gl_sdi', 'STATUS GL SDI')->multipleSelect([
+                //     'NO DATA' => 'NO DATA',
+                //     'VALIDASI ABD' => 'VALIDASI ABD',
+                //     'DRAWING' => 'DRAWING',
+                //     'INVENTORY' => 'INVENTORY',
+                //     'TERMINASI UIM' => 'TERMINASI UIM',
+                //     'GOLIVE PARSIAL' => 'GOLIVE PARSIAL',
+                //     'GOLIVE' => 'GOLIVE',
+                //     'KENDALA' => 'KENDALA',
+                // ]);
             });
 
             $filter->column(1 / 2, function ($filter) {
 
-                $filter->between('plan_golive', 'PLAN GOLIVE')->date();
-                $filter->between('real_golive', 'REAL GOLIVE')->date();
+                // $filter->between('plan_golive', 'PLAN GOLIVE')->date();
+                // $filter->between('real_golive', 'REAL GOLIVE')->date();
             });
         });
         // $grid->fixColumns(2, -1);
@@ -84,19 +84,19 @@ class TranInventoryController extends AdminController
         $grid->column('supervisi_project.sto_id', __('STO'));
         $grid->column('project_name', __('LOP/SITE ID'))->limit(30);
         //$grid->column('status_gl_sdi', __('Status gl sdi'));
-        $grid->column('status_gl_sdi', 'Status gl sdi')->display(function ($status_gl_sdi, $column) {
+        // $grid->column('status_gl_sdi', 'Status gl sdi')->display(function ($status_gl_sdi, $column) {
 
-            if ($this->status_gl_sdi != null) {
-                return $status_gl_sdi;
-            } else {
-                return "NO DATA";
-            }
-        });
-        $grid->column('ket_gl_sdi', __('KET GL SDI'));
-        $grid->column('status_abd', __('STATUS ABD'));
-        $grid->column('id_sw', __('ID SW'));
-        $grid->column('id_imon', __('ID IMON'));
-        // $grid->column('odp_8', __('Odp 8'));
+        //     if ($this->status_gl_sdi != null) {
+        //         return $status_gl_sdi;
+        //     } else {
+        //         return "NO DATA";
+        //     }
+        // });
+        // $grid->column('ket_gl_sdi', __('KET GL SDI'));
+        // $grid->column('status_abd', __('STATUS ABD'));
+        // $grid->column('id_sw', __('ID SW'));
+        // $grid->column('id_imon', __('ID IMON'));
+
         $grid->column('odp_8', 'ODP 8')->modal(function ($model) {
 
             $comments = $model->namaOdp()->where('jenis_odp', 'ODP 8')->take(100)->get()->map(function ($comment) {
@@ -117,7 +117,7 @@ class TranInventoryController extends AdminController
         $grid->column('odp_port', __('Odp port'));
 
         $grid->column('plan_golive', __('Plan golive'));
-        $grid->column('real_golive', __('Real golive'));
+     //   $grid->column('real_golive', __('Real golive'));
 
         Admin::style('.table {
             #background: #ee99a0;
@@ -302,6 +302,8 @@ class TranInventoryController extends AdminController
                 'supervisi_id' => $request->supervisi_id,
                 'jenis_odp' => $_POST['jenis_odp_in'][$cek],
                 'nama_odp' => $_POST['kode_odp_in'][$cek],
+                'id_sw' => $_POST['id_sw'][$cek],
+                'id_imon' => $_POST['id_imon'][$cek],
             ]);
             $odp->save();
         }
@@ -331,9 +333,13 @@ class TranInventoryController extends AdminController
         foreach ($real_golive as $i => $real_golive) {
             TranOdp::where("id", $_POST['odp_id'][$i])
                 ->update([
-                    // 'status_go_live' => $_POST['status_go_live'][$i],
-                    // 'kendala' => $_POST['kendala'][$i],
-                    // 'status_abd' => $_POST['status_abd'][$i],
+                    'jenis_odp' => $_POST['jenis_odp'][$i],
+                    'status_go_live' => $_POST['status_go_live'][$i],
+                    'kendala' => $_POST['kendala'][$i],
+                    'status_abd' => $_POST['status_abd'][$i],
+                    'id_sw' => $_POST['id_sw'][$i],
+                    'id_imon' => $_POST['id_imon'][$i],
+                    //'plan_golive' => $_POST['plan_golive'][$i],
                     'real_golive' => $_POST['real_golive'][$i],
                 ]);
 

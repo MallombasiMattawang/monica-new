@@ -76,11 +76,11 @@
                                         </td>
 
                                         <td>{{ $d->nama_odp }}</td>
-                                        <td>{{ $d->supervisi->status_gl_sdi }}</td>
-                                        <td>{{ $d->supervisi->kendala_sdi }}</td>
-                                        <td>{{ $d->supervisi->status_abd }}</td>
-                                        <td>{{ $d->supervisi->id_sw }}</td>
-                                        <td>{{ $d->supervisi->id_imon }}</td>
+                                        <td>{{ $d->status_go_live }}</td>
+                                        <td>{{ $d->kendala }}</td>
+                                        <td>{{ $d->status_abd }}</td>
+                                        <td>{{ $d->id_sw }}</td>
+                                        <td>{{ $d->id_imon }}</td>
                                         <td>{{ str_replace('ODP ', '', $d->jenis_odp) }}</td>
                                         <td>{{ $d->supervisi->plan_golive }}</td>
                                         <td>{{ $d->real_golive }}</td>
