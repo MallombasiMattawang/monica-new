@@ -7,6 +7,10 @@ use App\Models\LogActual;
 use App\Models\TranBaseline;
 use App\Models\ViewSupervisi;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Cell;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Events\AfterSheet;
+use PhpOffice\PhpSpreadsheet\Exception;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -15,14 +19,18 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class SupervisiExport implements FromQuery, WithHeadings, WithMapping
+class SupervisiExport implements FromQuery, WithHeadings, WithMapping, WithEvents
 {
     public function query()
     {
 
 
-
         return ViewSupervisi::query();
+    }
+
+    public function create()
+    {
+
     }
 
     public function map($row): array
@@ -38,7 +46,7 @@ class SupervisiExport implements FromQuery, WithHeadings, WithMapping
         $groupedRemarks = $remarks->groupBy(function ($remark) {
             return $remark->created_at->format('Y-m-d');
         });
-        $row_remark = '';
+        $row_remark = (!$remarks->last()) ?: sprintf("%s | ", $remarks->last()->actual_message);
         foreach ($groupedRemarks as $date => $remarks) {
             $row_remark .= tgl_indo($date) . ": \n";
 
@@ -56,7 +64,7 @@ class SupervisiExport implements FromQuery, WithHeadings, WithMapping
         $groupedKendala = $kendala->groupBy(function ($kendala) {
             return $kendala->created_at->format('Y-m-d');
         });
-        $row_kendala = '';
+        $row_kendala = (!$kendala->last()) ?: sprintf("%s | ", $kendala->last()->actual_kendala);
         foreach ($groupedKendala as $date => $kendalas) {
             $row_kendala .= tgl_indo($date) . ": \n";
 
@@ -195,11 +203,69 @@ class SupervisiExport implements FromQuery, WithHeadings, WithMapping
     }
 
     // Implement WithHeadings
-   
+
 
     // Implement WithStyles
-    public function styles(Worksheet $sheet)
+    public function styles(Worksheet $sheet): void
     {
         $sheet->getStyle('A1:AI1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FF0000FF');
     }
+
+
+    public function registerEvents(): array
+    {
+        return [
+            AfterSheet::class => [self::class, 'afterSheet']
+        ];
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function afterSheet(AfterSheet $sheet): void
+    {
+        $column = $sheet->getDelegate()->getHighestRow();
+
+        $sheet->sheet->autoSize();
+        for ($i = 2; $i <= $column; $i++) {
+            if (strpos($sheet->getDelegate()->getCell(sprintf("U%s", $i))->getValue(), "\n") > 0) {
+                $value = $sheet->getDelegate()->getCell(sprintf("U%s", $i))->getValue();
+
+                $array = explode(" | ", $value);
+                $sheet->getDelegate()->getCell(sprintf("U%s", $i))->setValue(reset($array));
+
+
+                $sheet->sheet
+                    ->getDelegate()
+                    ->getComment(sprintf("U%s", $i))
+                    ->setHeight("650px")
+                    ->setWidth("450px")
+                    ->getText()
+                    ->createTextRun(end($array));
+            } else {
+                $sheet->getDelegate()->getCell(sprintf("U%s", $i))->setValue("");
+
+            }
+
+            if (strpos($sheet->getDelegate()->getCell(sprintf("V%s", $i))->getValue(), "\n") > 0) {
+                $value = $sheet->getDelegate()->getCell(sprintf("V%s", $i))->getValue();
+
+                $array = explode(" | ", $value);
+                $sheet->getDelegate()->getCell(sprintf("V%s", $i))->setValue(reset($array));
+
+
+                $sheet->sheet
+                    ->getDelegate()
+                    ->getComment(sprintf("V%s", $i))
+                    ->setHeight("650px")
+                    ->setWidth("450px")
+                    ->getText()
+                    ->createTextRun(end($array));
+            } else {
+                $sheet->getDelegate()->getCell(sprintf("V%s", $i))->setValue("");
+
+            }
+        }
+    }
 }
+
