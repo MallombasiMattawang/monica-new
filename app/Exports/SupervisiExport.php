@@ -51,10 +51,14 @@ class SupervisiExport implements FromQuery, WithHeadings, WithMapping, WithEvent
             $row_remark .= tgl_indo($date) . ": \n";
 
             foreach ($remarks as $remark) {
-                $row_remark .= "-" . $remark->actual_message . "\n";
+                $row_remark .= "-" . trimActivity($remark->tran_baseline->list_activity) . " = " .$remark->actual_volume. " dari " .$remark->tran_baseline->volume. " " .$remark->tran_baseline->satuan.  " (" .$remark->actual_status. ") " . "\n";
             }
         }
         $row_remark .= "\n";
+
+
+
+
 
         $kendala = LogActual::where('project_id', $row->project_id)
             ->whereNotNull('actual_kendala')
