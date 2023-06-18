@@ -88,7 +88,7 @@
                         <td colspan="15"> <b>20</b> </td>
                     </tr>
                     @endif
-                    @if ($list->activity_id == 3)
+                    @if ($list->activity_id == $minActivityDelivery)
                     <tr class="bg-light ">
                         <td>
                             <b>[002] MATERIAL DELIVERY
@@ -97,7 +97,7 @@
                         <td colspan="15"> <b>30</b> </td>
                     </tr>
                     @endif
-                    @if ($list->activity_id == 10)
+                    @if ($list->activity_id == $minActivityInstalasi)
                     <tr class="bg-light ">
                         <td>
                             <b>[003] INSTALASI & TES COMM

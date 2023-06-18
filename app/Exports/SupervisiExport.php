@@ -30,7 +30,6 @@ class SupervisiExport implements FromQuery, WithHeadings, WithMapping, WithEvent
 
     public function create()
     {
-
     }
 
     public function map($row): array
@@ -51,7 +50,7 @@ class SupervisiExport implements FromQuery, WithHeadings, WithMapping, WithEvent
             $row_remark .= tgl_indo($date) . ": \n";
 
             foreach ($remarks as $remark) {
-                $row_remark .= "-" . trimActivity($remark->tran_baseline->list_activity) . " = " .$remark->actual_volume. " dari " .$remark->tran_baseline->volume. " " .$remark->tran_baseline->satuan.  " (" .$remark->actual_status. ") " . "\n";
+                $row_remark .= "-" . trimActivity($remark->tran_baseline->list_activity) . " = " . $remark->actual_volume . " dari " . $remark->tran_baseline->volume . " " . $remark->tran_baseline->satuan .  " (" . $remark->actual_status . ")\n Catatan: " . $remark->actual_message . "\n";
             }
         }
         $row_remark .= "\n";
@@ -248,7 +247,6 @@ class SupervisiExport implements FromQuery, WithHeadings, WithMapping, WithEvent
                     ->createTextRun(end($array));
             } else {
                 $sheet->getDelegate()->getCell(sprintf("U%s", $i))->setValue("");
-
             }
 
             if (strpos($sheet->getDelegate()->getCell(sprintf("V%s", $i))->getValue(), "\n") > 0) {
@@ -267,9 +265,7 @@ class SupervisiExport implements FromQuery, WithHeadings, WithMapping, WithEvent
                     ->createTextRun(end($array));
             } else {
                 $sheet->getDelegate()->getCell(sprintf("V%s", $i))->setValue("");
-
             }
         }
     }
 }
-

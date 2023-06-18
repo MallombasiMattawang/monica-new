@@ -26,11 +26,11 @@ class SapImport implements OnEachRow, WithStartRow, WithMultipleSheets, WithCalc
             ->update([
                 'status_project' => $row[31]
             ]);
-        TranSupervisi::where("project_name", $row[14])
-            ->update([
-                'real_nilai' => $row[22],
-                //'real_port' => $row[31],
-            ]);
+        // TranSupervisi::where("project_name", $row[14])
+        //     ->update([
+        //         'real_nilai' => $row[22],
+        //         //'real_port' => $row[31],
+        //     ]);
 
         $rowIndex = $row->getIndex();
         $row      = $row->toArray();
@@ -42,7 +42,7 @@ class SapImport implements OnEachRow, WithStartRow, WithMultipleSheets, WithCalc
         if ($row[27] != null && gettype($row[27]) == 'integer') {
             $debit_date = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[27])->format('Y-m-d');
         }
-        
+
 
         MstSap::updateOrCreate(
             [

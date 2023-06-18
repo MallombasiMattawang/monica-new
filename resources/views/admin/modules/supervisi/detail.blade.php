@@ -4,7 +4,8 @@
             <div class="box-header with-border">
                 <h3 class="box-title">Detail Supervisi</h3>
                 <div class="box-tools pull-right">
-                    <a href="{{ url('/ped-panel/tran-supervisis') }}" class="btn btn-default"><i class="fa fa-arrow-left"></i> Back </a>
+                    <a href="{{ url('/ped-panel/tran-supervisis') }}" class="btn btn-default"><i
+                            class="fa fa-arrow-left"></i> Back </a>
                 </div>
             </div>
             <div class="box-body no-padding">
@@ -20,8 +21,8 @@
                     <div class="tab-content">
                         <!-- /.tab-pane -->
                         <div class="tab-pane active" id="tab_actual">
-                            
-                            
+
+
                             <table class="table table-bordered">
                                 <tr>
                                     <td>Status Project </td>
@@ -29,17 +30,20 @@
                                 </tr>
                                 <tr>
                                     <td>Start-Finish</td>
-                                    <td> <b>{{ ($data->start_date) ? tgl_indo($data->start_date) : '-' }} </b> - <b>{{ ($data->end_date) ? tgl_indo($data->end_date) : '-' }} </b> </td>
+                                    <td> <b>{{ $data->start_date ? tgl_indo($data->start_date) : '-' }} </b> -
+                                        <b>{{ $data->end_date ? tgl_indo($data->end_date) : '-' }} </b> </td>
                                 </tr>
                                 <tr>
                                     <td>Waspang</td>
-                                    <td> {{ ($supervisi->supervisi_waspang) ? $supervisi->supervisi_waspang->name : '-' }} </td>
+                                    <td> {{ $supervisi->supervisi_waspang ? $supervisi->supervisi_waspang->name : '-' }}
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>Tim UT</td>
-                                    <td> {{ ($supervisi->supervisi_tim_ut) ? $supervisi->supervisi_tim_ut->name : '-' }} </td>
+                                    <td> {{ $supervisi->supervisi_tim_ut ? $supervisi->supervisi_tim_ut->name : '-' }}
+                                    </td>
                                 </tr>
-                               
+
 
 
                             </table>
@@ -113,27 +117,27 @@
                                 </tr>
                                 <tr>
                                     <td>Tanggal Selesai CT</td>
-                                    <td> {{ ($tgl_ct) ? tgl_indo($tgl_ct->actual_finish) : '-' }} </td>
+                                    <td> {{ $tgl_ct ? tgl_indo($tgl_ct->actual_finish) : '-' }} </td>
                                 </tr>
                                 <tr>
                                     <td>Tanggal Selesai UT</td>
-                                    <td> {{ ($tgl_ut) ? tgl_indo($tgl_ct->actual_finish) : '-' }} </td>
+                                    <td> {{ $tgl_ut ? tgl_indo($tgl_ct->actual_finish) : '-' }} </td>
                                 </tr>
                                 <tr>
                                     <td>Tanggal Rekonsiliasi</td>
-                                    <td> {{ ($tgl_rekon) ? tgl_indo($tgl_ct->actual_finish) : '-' }} </td>
+                                    <td> {{ $tgl_rekon ? tgl_indo($tgl_ct->actual_finish) : '-' }} </td>
                                 </tr>
                                 <tr>
                                     <td>Tanggal BAST</td>
-                                    <td> {{ ($smilley) ? tgl_indo($smilley->actual_finish) : '-' }} </td>
+                                    <td> {{ $smilley ? tgl_indo($smilley->actual_finish) : '-' }} </td>
                                 </tr>
                                 <tr>
                                     <td>Durasi CT</td>
-                                    <td> {{ ($tgl_ct) ? $tgl_ct->actual_durasi : '-' }}</td>
+                                    <td> {{ $tgl_ct ? $tgl_ct->actual_durasi : '-' }}</td>
                                 </tr>
                                 <tr>
                                     <td>Durasi Rekonsiliasi</td>
-                                    <td> {{ ($tgl_rekon) ? $tgl_ct->actual_durasi : '-' }}</td>
+                                    <td> {{ $tgl_rekon ? $tgl_ct->actual_durasi : '-' }}</td>
                                 </tr>
 
                             </table>
@@ -187,24 +191,26 @@
 
             </div>
             <!-- /.box-body -->
-            @if ($data->status_project != 'DROP' )
-            <div class="box-footer">
-                <div class="box-tools pull-right">
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-success">Action Supervisi</button>
-                        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                            <span class="caret"></span>
-                            <span class="sr-only">Toggle Dropdown</span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="{{url('ped-panel/form-baseline/'.$data->id)}}">Baseline Activity</a></li>
-                        </ul>
-                    </div>
+            @if ($data->status_project != 'DROP')
+                <div class="box-footer">
+                    <div class="box-tools pull-right">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-success">Action Supervisi</button>
+                            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown"
+                                aria-expanded="false">
+                                <span class="caret"></span>
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="{{ url('ped-panel/form-baseline/' . $data->id) }}">Baseline Activity</a>
+                                </li>
+                            </ul>
+                        </div>
 
+                    </div>
                 </div>
-            </div>
             @endif
-            
+
         </div>
         <!-- /. box -->
 
@@ -482,341 +488,338 @@
                         </div>
                         <div class="tab-pane" id="sap">
                             <table class="table table-striped">
-                                @if($sap == 0)
-                                <td> Tidak ditemukan data SAP</td>
+                                @if (!$sap)
+                                    <td> Tidak ditemukan data SAP</td>
                                 @else
-                                <tr>
-                                    <td> baru_co</td>
-                                    <td> <b>{{ $sap->baru_co }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td> cfu</td>
-                                    <td> <b>{{ $sap->cfu }}</b> </td>
-                                </tr>
+                                    <tr>
+                                        <td> baru co</td>
+                                        <td> <b>{{ $sap->baru_co }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td> cfu</td>
+                                        <td> <b>{{ $sap->cfu }}</b> </td>
+                                    </tr>
 
-                                <tr>
-                                    <td>flag </td>
-                                    <td> <b>{{ $sap->flag }}</b> </td>
-                                </tr>
+                                    <tr>
+                                        <td>flag </td>
+                                        <td> <b>{{ $sap->flag }}</b> </td>
+                                    </tr>
 
-                                <tr>
-                                    <td> uraian_wbs</td>
-                                    <td> <b>{{ $sap->uraian_wbs }}</b> </td>
-                                </tr>
+                                    <tr>
+                                        <td> uraian wbs</td>
+                                        <td> <b>{{ $sap->uraian_wbs }}</b> </td>
+                                    </tr>
 
-                                <tr>
-                                    <td>comm_release </td>
-                                    <td> <b>{{ $sap->comm_release }}</b> </td>
-                                </tr>
+                                    <tr>
+                                        <td>comm release </td>
+                                        <td> <b>{{ $sap->comm_release }}</b> </td>
+                                    </tr>
 
-                                <tr>
-                                    <td> pay_release</td>
-                                    <td> <b>{{ $sap->pay_release }}</b> </td>
-                                </tr>
+                                    <tr>
+                                        <td> pay release</td>
+                                        <td> <b>{{ $sap->pay_release }}</b> </td>
+                                    </tr>
 
-                                <tr>
-                                    <td> wbs_element</td>
-                                    <td> <b>{{ $sap->wbs_element }}</b> </td>
-                                </tr>
+                                    <tr>
+                                        <td> wbs element</td>
+                                        <td> <b>{{ $sap->wbs_element }}</b> </td>
+                                    </tr>
 
-                                <tr>
-                                    <td> purchasing_doc</td>
-                                    <td> <b>{{ $sap->purchasing_doc }}</b> </td>
-                                </tr>
+                                    <tr>
+                                        <td> purchasing doc</td>
+                                        <td> <b>{{ $sap->purchasing_doc }}</b> </td>
+                                    </tr>
 
-                                <tr>
-                                    <td> kontrak</td>
-                                    <td> <b>{{ $sap->kontrak }}</b> </td>
-                                </tr>
+                                    <tr>
+                                        <td> kontrak</td>
+                                        <td> <b>{{ $sap->kontrak }}</b> </td>
+                                    </tr>
 
-                                <tr>
-                                    <td> proses</td>
-                                    <td> <b>{{ $sap->proses }}</b> </td>
-                                </tr>
+                                    <tr>
+                                        <td> proses</td>
+                                        <td> <b>{{ $sap->proses }}</b> </td>
+                                    </tr>
 
-                                <tr>
-                                    <td> ref_doc_no</td>
-                                    <td> <b>{{ $sap->ref_doc_no }}</b> </td>
-                                </tr>
+                                    <tr>
+                                        <td> ref doc no</td>
+                                        <td> <b>{{ $sap->ref_doc_no }}</b> </td>
+                                    </tr>
 
-                                <tr>
-                                    <td> item</td>
-                                    <td> <b>{{ $sap->item }}</b> </td>
-                                </tr>
+                                    <tr>
+                                        <td> item</td>
+                                        <td> <b>{{ $sap->item }}</b> </td>
+                                    </tr>
 
-                                <tr>
-                                    <td> cost_elem</td>
-                                    <td> <b>{{ $sap->cost_elem }}</b> </td>
-                                </tr>
+                                    <tr>
+                                        <td> cost elem</td>
+                                        <td> <b>{{ $sap->cost_elem }}</b> </td>
+                                    </tr>
 
-                                <tr>
-                                    <td> name</td>
-                                    <td> <b>{{ $sap->name }}</b> </td>
-                                </tr>
+                                    <tr>
+                                        <td> name</td>
+                                        <td> <b>{{ $sap->name }}</b> </td>
+                                    </tr>
 
-                                <tr>
-                                    <td> ses_pelimpahan</td>
-                                    <td> <b>{{ $sap->ses_pelimpahan }}</b> </td>
-                                </tr>
+                                    <tr>
+                                        <td> ses pelimpahan</td>
+                                        <td> <b>{{ $sap->ses_pelimpahan }}</b> </td>
+                                    </tr>
 
-                                <tr>
-                                    <td> witel</td>
-                                    <td> <b>{{ $sap->witel }}</b> </td>
-                                </tr>
+                                    <tr>
+                                        <td> witel</td>
+                                        <td> <b>{{ $sap->witel }}</b> </td>
+                                    </tr>
 
-                                <tr>
-                                    <td>id_vendor </td>
-                                    <td> <b>{{ $sap->id_vendor }}</b> </td>
-                                </tr>
+                                    <tr>
+                                        <td>id vendor </td>
+                                        <td> <b>{{ $sap->id_vendor }}</b> </td>
+                                    </tr>
 
-                                <tr>
-                                    <td> vendor</td>
-                                    <td> <b>{{ $sap->vendor }}</b> </td>
-                                </tr>
+                                    <tr>
+                                        <td> vendor</td>
+                                        <td> <b>{{ $sap->vendor }}</b> </td>
+                                    </tr>
 
-                                <tr>
-                                    <td> ta_non_ta</td>
-                                    <td> <b>{{ $sap->ta_non_ta }}</b> </td>
-                                </tr>
+                                    <tr>
+                                        <td> ta non ta</td>
+                                        <td> <b>{{ $sap->ta_non_ta }}</b> </td>
+                                    </tr>
 
-                                <tr>
-                                    <td> user</td>
-                                    <td> <b>{{ $sap->user }}</b> </td>
-                                </tr>
+                                    <tr>
+                                        <td> user</td>
+                                        <td> <b>{{ $sap->user }}</b> </td>
+                                    </tr>
 
-                                <tr>
-                                    <td>doc_date </td>
-                                    <td> <b>{{ $sap->doc_date }}</b> </td>
-                                </tr>
+                                    <tr>
+                                        <td>doc date </td>
+                                        <td> <b>{{ $sap->doc_date }}</b> </td>
+                                    </tr>
 
-                                <tr>
-                                    <td> nilai_pr_po_gr</td>
-                                    <td> <b>{{ $sap->nilai_pr_po_gr }}</b> </td>
-                                </tr>
+                                    <tr>
+                                        <td> nilai pr po gr</td>
+                                        <td> <b>{{ $sap->nilai_pr_po_gr }}</b> </td>
+                                    </tr>
 
-                                <tr>
-                                    <td> value_tcur</td>
-                                    <td> <b>{{ $sap->value_tcur }}</b> </td>
-                                </tr>
+                                    <tr>
+                                        <td> value tcur</td>
+                                        <td> <b>{{ $sap->value_tcur }}</b> </td>
+                                    </tr>
 
-                                <tr>
-                                    <td> status_pr</td>
-                                    <td> <b>{{ $sap->status_pr }}</b> </td>
-                                </tr>
+                                    <tr>
+                                        <td> status pr</td>
+                                        <td> <b>{{ $sap->status_pr }}</b> </td>
+                                    </tr>
 
-                                <tr>
-                                    <td> status_po</td>
-                                    <td> <b>{{ $sap->status_po }}</b> </td>
-                                </tr>
+                                    <tr>
+                                        <td> status po</td>
+                                        <td> <b>{{ $sap->status_po }}</b> </td>
+                                    </tr>
 
-                                <tr>
-                                    <td>status_gr </td>
-                                    <td> <b>{{ $sap->status_gr }}</b> </td>
-                                </tr>
+                                    <tr>
+                                        <td>status_gr </td>
+                                        <td> <b>{{ $sap->status_gr }}</b> </td>
+                                    </tr>
 
-                                <tr>
-                                    <td>debit_date </td>
-                                    <td> <b>{{ $sap->debit_date }}</b> </td>
-                                </tr>
+                                    <tr>
+                                        <td>debit date </td>
+                                        <td> <b>{{ $sap->debit_date }}</b> </td>
+                                    </tr>
 
-                                <tr>
-                                    <td>keterangan </td>
-                                    <td> <b>{{ $sap->keterangan }}</b> </td>
-                                </tr>
+                                    <tr>
+                                        <td>keterangan </td>
+                                        <td> <b>{{ $sap->keterangan }}</b> </td>
+                                    </tr>
 
-                                <tr>
-                                    <td>achv_progi </td>
-                                    <td> <b>{{ $sap->achv_progi }}</b> </td>
-                                </tr>
+                                    <tr>
+                                        <td>achv progi </td>
+                                        <td> <b>{{ $sap->achv_progi }}</b> </td>
+                                    </tr>
 
-                                <tr>
-                                    <td>tematik </td>
-                                    <td> <b>{{ $sap->tematik }}</b> </td>
-                                </tr>
+                                    <tr>
+                                        <td>tematik </td>
+                                        <td> <b>{{ $sap->tematik }}</b> </td>
+                                    </tr>
 
-                                <tr>
-                                    <td>status_sap </td>
-                                    <td> <b>{{ $sap->status_sap }}</b> </td>
-                                </tr>
-
-
+                                    <tr>
+                                        <td>status sap </td>
+                                        <td> <b>{{ $sap->status_sap }}</b> </td>
+                                    </tr>
                                 @endif
                             </table>
                         </div>
                         <div class="tab-pane" id="smilley">
                             <table class="table table-striped">
-                                @if($smilley == 0)
-                                <td> Tidak ditemukan data smilley</td>
+                                @if (!$smilley)
+                                    <td> Tidak ditemukan data smilley</td>
                                 @else
-                                <tr>
-                                    <td>kd_kontrak </td>
-                                    <td> <b>{{ $sap->kd_kontrak }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>no_amdke </td>
-                                    <td> <b>{{ $sap->no_amdke }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>kd_wbs </td>
-                                    <td> <b>{{ $sap->kd_wbs }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>kd_sgrup </td>
-                                    <td> <b>{{ $sap->kd_sgrup }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>pk_owner </td>
-                                    <td> <b>{{ $sap->pk_owner }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>kd_lokasi1 </td>
-                                    <td> <b>{{ $sap->kd_lokasi1 }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>ubis_waslak </td>
-                                    <td> <b>{{ $sap->ubis_waslak }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>unit_waslak </td>
-                                    <td> <b>{{ $sap->unit_waslak }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>waslak_har </td>
-                                    <td> <b>{{ $sap->waslak_har }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>ubis_owner </td>
-                                    <td> <b>{{ $sap->ubis_owner }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>no_kontrak </td>
-                                    <td> <b>{{ $sap->no_kontrak }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>nm_proyek </td>
-                                    <td> <b>{{ $sap->nm_proyek }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>tg_edc </td>
-                                    <td> <b>{{ $sap->tg_edc }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>tg_toc </td>
-                                    <td> <b>{{ $sap->tg_toc }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>nm_tematik </td>
-                                    <td> <b>{{ $sap->nm_tematik }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>nm_witel </td>
-                                    <td> <b>{{ $sap->nm_witel }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>nm_lokasi1 </td>
-                                    <td> <b>{{ $sap->nm_lokasi1 }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>project_site_id </td>
-                                    <td> <b>{{ $sap->project_site_id }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>kt_lokasi </td>
-                                    <td> <b>{{ $sap->kt_lokasi }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>site_alamat </td>
-                                    <td> <b>{{ $sap->site_alamat }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>pro_plan </td>
-                                    <td> <b>{{ $sap->pro_plan }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>pro_actual </td>
-                                    <td> <b>{{ $sap->pro_actual }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>pro_bast </td>
-                                    <td> <b>{{ $sap->pro_bast }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>status </td>
-                                    <td> <b>{{ $sap->status }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>tg_plan_start </td>
-                                    <td> <b>{{ $sap->tg_plan_start }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>tg_plan_finish </td>
-                                    <td> <b>{{ $sap->tg_plan_finish }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>tg_actual_start </td>
-                                    <td> <b>{{ $sap->tg_actual_start }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>no_ut </td>
-                                    <td> <b>{{ $sap->no_ut }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>tg_ut </td>
-                                    <td> <b>{{ $sap->tg_ut }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>no_bast1 </td>
-                                    <td> <b>{{ $sap->no_bast1 }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>tg_baut </td>
-                                    <td> <b>{{ $sap->tg_baut }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>ni_barang </td>
-                                    <td> <b>{{ $sap->ni_barang }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>ni_jasa </td>
-                                    <td> <b>{{ $sap->ni_jasa }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>ni_kontrak </td>
-                                    <td> <b>{{ $sap->ni_kontrak }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>ni_bast1 </td>
-                                    <td> <b>{{ $sap->ni_bast1 }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>no_po1 </td>
-                                    <td> <b>{{ $sap->no_po1 }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>no_po2 </td>
-                                    <td> <b>{{ $sap->no_po2 }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>no_po3 </td>
-                                    <td> <b>{{ $sap->no_po3 }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>no_po4 </td>
-                                    <td> <b>{{ $sap->no_po4 }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>no_po5 </td>
-                                    <td> <b>{{ $sap->no_po5 }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>nm_vendor </td>
-                                    <td> <b>{{ $sap->nm_vendor }}</b> </td>
-                                </tr>
-                                <tr>
-                                    <td>tg_bast1 </td>
-                                    <td> <b>{{ $sap->tg_bast1 }}</b> </td>
-
-                                    @endif
+                                    <tr>
+                                        <td>kd kontrak </td>
+                                        <td> <b>{{ $sap->kd_kontrak }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>no amdke </td>
+                                        <td> <b>{{ $sap->no_amdke }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>kd wbs </td>
+                                        <td> <b>{{ $sap->kd_wbs }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>kd sgrup </td>
+                                        <td> <b>{{ $sap->kd_sgrup }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>pk owner </td>
+                                        <td> <b>{{ $sap->pk_owner }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>kd lokasi1 </td>
+                                        <td> <b>{{ $sap->kd_lokasi1 }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>ubis waslak </td>
+                                        <td> <b>{{ $sap->ubis_waslak }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>unit waslak </td>
+                                        <td> <b>{{ $sap->unit_waslak }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>waslak har </td>
+                                        <td> <b>{{ $sap->waslak_har }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>ubis owner </td>
+                                        <td> <b>{{ $sap->ubis_owner }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>no kontrak </td>
+                                        <td> <b>{{ $sap->no_kontrak }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>nm proyek </td>
+                                        <td> <b>{{ $sap->nm_proyek }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>tg edc </td>
+                                        <td> <b>{{ $sap->tg_edc }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>tg toc </td>
+                                        <td> <b>{{ $sap->tg_toc }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>nm tematik </td>
+                                        <td> <b>{{ $sap->nm_tematik }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>nm witel </td>
+                                        <td> <b>{{ $sap->nm_witel }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>nm lokasi1 </td>
+                                        <td> <b>{{ $sap->nm_lokasi1 }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>project site id </td>
+                                        <td> <b>{{ $sap->project_site_id }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>kt lokasi </td>
+                                        <td> <b>{{ $sap->kt_lokasi }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>site alamat </td>
+                                        <td> <b>{{ $sap->site_alamat }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>pro plan </td>
+                                        <td> <b>{{ $sap->pro_plan }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>pro actual </td>
+                                        <td> <b>{{ $sap->pro_actual }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>pro bast </td>
+                                        <td> <b>{{ $sap->pro_bast }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>status </td>
+                                        <td> <b>{{ $sap->status }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>tg plan start </td>
+                                        <td> <b>{{ $sap->tg_plan_start }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>tg plan finish </td>
+                                        <td> <b>{{ $sap->tg_plan_finish }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>tg actual start </td>
+                                        <td> <b>{{ $sap->tg_actual_start }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>no ut </td>
+                                        <td> <b>{{ $sap->no_ut }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>tg ut </td>
+                                        <td> <b>{{ $sap->tg_ut }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>no bast1 </td>
+                                        <td> <b>{{ $sap->no_bast1 }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>tg baut </td>
+                                        <td> <b>{{ $sap->tg_baut }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>ni barang </td>
+                                        <td> <b>{{ $sap->ni_barang }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>ni jasa </td>
+                                        <td> <b>{{ $sap->ni_jasa }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>ni kontrak </td>
+                                        <td> <b>{{ $sap->ni_kontrak }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>ni bast1 </td>
+                                        <td> <b>{{ $sap->ni_bast1 }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>no po1 </td>
+                                        <td> <b>{{ $sap->no_po1 }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>no po2 </td>
+                                        <td> <b>{{ $sap->no_po2 }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>no po3 </td>
+                                        <td> <b>{{ $sap->no_po3 }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>no po4 </td>
+                                        <td> <b>{{ $sap->no_po4 }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>no po5 </td>
+                                        <td> <b>{{ $sap->no_po5 }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>nm vendor </td>
+                                        <td> <b>{{ $sap->nm_vendor }}</b> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>tg bast1 </td>
+                                        <td> <b>{{ $sap->tg_bast1 }}</b> </td>
+                                @endif
                             </table>
                         </div>
                     </div>
@@ -905,7 +908,7 @@
 </div> --}}
 
 
-<!-- /.col -->
+    <!-- /.col -->
 </div>
 
 <script>
@@ -970,7 +973,7 @@
                                 autoSkip: true
                             }
                         }],
-                        
+
                         yAxes: [{
                             display: true,
                             scaleLabel: {
@@ -991,13 +994,13 @@
         //Fetch Data from API
 
         async function getDummyData() {
-            const apiUrl = "{{ url('/ped-panel/api/kurva_s/'.$supervisi->project_id) }}"
+            const apiUrl = "{{ url('/ped-panel/api/kurva_s/' . $supervisi->project_id) }}"
 
             const response = await fetch(apiUrl)
             const barChatData = await response.json()
 
             const actual = barChatData.data.map((x) => x.bobot_real)
-           // console.log(salary)
+            // console.log(salary)
             const plan = barChatData.data.map((x) => x.bobot_plan)
             const date = barChatData.data.map((x) => x.date)
 

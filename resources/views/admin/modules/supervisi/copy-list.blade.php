@@ -35,7 +35,8 @@
                                     <th>edc</th>
                                     <th>toc</th>
                                     <th>nilai kontrak</th>
-                                    <th>nilai bast1</th>
+                                    <th>nilai bast1 sap</th>
+                                    <th>nilai bast1 smilley</th>
                                     <th>plan port</th>
                                     <th>real port</th>
                                     <th>plan homepass</th>
@@ -71,6 +72,26 @@
                                 @foreach ($supervisis as $d)
                                     @php
                                         $project = App\Models\MstProject::where('id', $d->project_id)->first();
+                                        // Mendapatkan data transaksi dari model
+                                        $remarks = App\Models\LogActual::where('project_id', $d->project_id)
+                                            ->whereNotNull('actual_message')
+                                            ->where('actual_message', '<>', '')
+                                            ->get();
+
+                                        // Mengelompokkan transaksi berdasarkan tanggal
+                                        $groupedRemarks = $remarks->groupBy(function ($remark) {
+                                            return $remark->created_at->format('Y-m-d');
+                                        });
+
+                                        $kendala = App\Models\LogActual::where('project_id', $d->project_id)
+                                            ->whereNotNull('actual_kendala')
+                                            ->where('actual_kendala', '<>', '')
+                                            ->get();
+
+                                        // Mengelompokkan transaksi berdasarkan tanggal
+                                        $groupedKendala = $kendala->groupBy(function ($kendala) {
+                                            return $kendala->created_at->format('Y-m-d');
+                                        });
 
                                         $tgl_mos = App\Models\TranBaseline::where('project_id', $d->project_id)
                                             ->whereNotNull('actual_finish')
@@ -127,48 +148,113 @@
                                     @endphp
                                     <tr>
                                         <td>{{ $d->id }}</td>
-                                        <td>{{ $d->tematik }}</td>
-                                        <td>{{ $d->witel }}</td>
-                                        <td>{{ $d->sto }}</td>
-                                        <td>{{ $d->project_name }}</td>
-                                        <td>{{ $d->mitra }}</td>
-                                        <td>{{ $d->no_sp_telkom }}</td>
-                                        <td>{{ $d->edc }}</td>
-                                        <td>{{ $d->toc }}</td>
-                                        <td>{{ $d->nilai_kontrak }}</td>
+                                        <td>{{ $d->{'tematik'} }}</td>
+                                        <td>{{ $d->{'witel'} }}</td>
+                                        <td>{{ $d->{'sto'} }}</td>
+                                        <td>{{ $d->{'project_name'} }}</td>
+                                        <td>{{ $d->{'mitra'} }}</td>
+                                        <td>{{ $d->{'no_sp_telkom'} }}</td>
+                                        <td>{{ $d->{'edc'} }}</td>
+                                        <td>{{ $d->{'toc'} }}</td>
+                                        <td>{{ $d->{'nilai_kontrak'} }}</td>
+                                        <td>{{ $d->{'nilai_bast1_sap'} }}</td>
+                                        <td>{{ $d->{'nilai_bast1_smilley'} }}</td>
+                                        <td>{{ $d->{'plan_port'} }}</td>
+                                        <td>{{ $d->{'real_port'} }}</td>
+                                        <td>{{ $d->{'plan_homepass'} }}</td>
+                                        <td>{{ $d->{'real_homepass'} }}</td>
+                                        <td>{{ $d->{'name_waspang'} }}</td>
+                                        <td>{{ $d->{'name_tim_ut'} }}</td>
+                                        <td>{{ $d->{'status_const_app'} }}</td>
+                                        <td>{{ $d->{'status_const_sap'} }}</td>
                                         <td>
-                                            @if ($d->status_const_app == 'BAST-1')
-                                                {{ $d->nilai_bast1_smilley ? $d->nilai_bast1_smilley : $d->nilai_bast1_sap }}
-                                            @endif
+                                            <p>
+                                                <a class="btn btn-primary btn-sm" data-toggle="collapse"
+                                                    href="#collapse_{{ $d->id }}" role="button"
+                                                    aria-expanded="false" aria-controls="collapseExample">
+                                                    View Remarks
+                                                </a>
+                                            </p>
+                                            <div class="collapse" id="collapse_{{ $d->id }}"
+                                                style="width: 800px !important;">
+                                                <ul class="list-unstyled">
+                                                    @php
+                                                        $today = date('Y-m-d');
+                                                        $start_date = strtotime($project->start_date); // konversi tanggal awal ke timestamp
+                                                        $end_date = time(); // timestamp saat ini
+                                                        $current_date = $start_date; // inisialisasi tanggal saat ini
+                                                        echo '<li>' . date('d/m/Y', $current_date) . '</li>'; // tampilkan tanggal dalam format Y-m-d
+                                                        while ($current_date <= $end_date) {
+                                                            $current_date = strtotime('+1 day', $current_date); // tambahkan satu hari ke tanggal saat ini
+                                                            if ($current_date <= strtotime($today)) {
+                                                                echo '<li>' . date('d/m/Y', $current_date) . '</li>'; // tampilkan tanggal dalam format Y-m-d
+                                                                $remarks_cek = App\Models\LogActual::where('project_id', $d->project_id)
+                                                                    ->whereBetween('actual_start', [$project->start_date, date('Y-m-d', $current_date)])
+                                                                    ->where('actual_status', 'belum')
+                                                                    ->get();
+                                                                $remarks_selesai = App\Models\LogActual::where('project_id', $d->project_id)
+                                                                    ->where('actual_finish', date('Y-m-d', $current_date))
+                                                                    ->where('actual_status', 'selesai')
+                                                                    ->get();
+                                                                $remarks_belum = App\Models\LogActual::where('project_id', $d->project_id)
+                                                                    ->where('actual_start', date('Y-m-d', $current_date))
+                                                                    ->where('actual_status', 'belum')
+                                                                    ->get();
+
+                                                                echo '<ul>';
+
+                                                                foreach ($remarks_selesai as $remark) {
+                                                                    $activity = App\Models\TranBaseline::where('id', $remark->tran_baseline_id)->first();
+                                                                    echo '<li>' . trimActivity($activity->list_activity) . ' ' . $remark->actual_volume . ' dari ' . $activity->volume . ' ' . $activity->satuan . ' (DONE) </li>';
+                                                                }
+                                                                foreach ($remarks_belum as $remark) {
+                                                                    $activity = App\Models\TranBaseline::where('id', $remark->tran_baseline_id)->first();
+                                                                    echo '<li>' . trimActivity($activity->list_activity) . ' = ' . $remark->actual_volume . ' dari ' . $activity->volume . ' ' . $activity->satuan . '</li>';
+                                                                    echo '<li>' . trimActivity($activity->list_activity) . ' = ' . $remark->actual_message . '</li>';
+                                                                }
+                                                                $activity_2 = App\Models\TranBaseline::where('project_id', $d->project_id)
+                                                                    ->where('actual_status', 'belum')
+                                                                    ->where('actual_start', '<', date('Y-m-d', $current_date))
+                                                                    ->get();
+                                                                foreach ($activity_2 as $a) {
+                                                                    $remarks_today = App\Models\LogActual::where('tran_baseline_id', $a->id)
+                                                                        ->where('actual_status', 'belum')
+                                                                        ->first();
+                                                                    echo '<li>' . trimActivity($a->list_activity) . ' = ' . $remarks_today->actual_volume . ' dari ' . $a->volume . ' ' . $a->satuan . '</li>';
+                                                                }
+                                                                echo '</ul>';
+                                                            }
+                                                        }
+
+                                                    @endphp
+
+                                                </ul>
+                                            </div>
 
                                         </td>
-                                        <td>{{ $d->plan_port }}</td>
                                         <td>
-                                            @php
-                                                $real_port = App\Models\TranOdp::where('supervisi_id', $d->id)
-                                                    ->where('status_go_live', 'GOLIVE')
-                                                    ->exists();
-                                            @endphp
-                                            @if ($real_port == 1)
-                                                {{ $d->real_port }}
-                                            @endif
-                                        </td>
-                                        <td>{{ $d->plan_homepass }}</td>
-                                        <td>{{ $d->real_homepass }}</td>
-                                        <td>{{ $d->name_waspang }}</td>
-                                        <td>{{ $d->name_tim_ut }}</td>
-                                        <td>{{ $d->status_const_app }}</td>
-                                        <td>{{ $d->status_const_sap }}</td>
-                                        <td>
-                                            <button class="btn btn-default" data-toggle="modal"
-                                                data-target="#modal-remark" data-project_id="{{ $d->project_id }}">View
-                                                Remarks</button>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-default" data-toggle="modal"
-                                                data-target="#modal-kendala"
-                                                data-project_id="{{ $d->project_id }}">View
-                                                Kendala</button>
+                                            <p>
+                                                <a class="btn btn-primary btn-sm" data-toggle="collapse"
+                                                    href="#collapse_kendala_{{ $d->id }}" role="button"
+                                                    aria-expanded="false" aria-controls="collapseExample">
+                                                    View Kendala
+                                                </a>
+                                            </p>
+                                            <div class="collapse" id="collapse_kendala_{{ $d->id }}">
+                                                <ul class="list-unstyled">
+                                                    @php
+                                                        foreach ($groupedKendala as $date => $kendalas) {
+                                                            echo '<li>' . tgl_indo($date) . '</li>';
+                                                            echo '<ul>';
+                                                            foreach ($kendalas as $kendala) {
+                                                                echo '<li>' . $kendala->actual_kendala . '</li>';
+                                                            }
+                                                            echo '</ul>';
+                                                        }
+                                                    @endphp
+                                                </ul>
+                                            </div>
+
                                         </td>
                                         <td>
                                             {{ isset($tgl_mos->actual_finish) && cek_all_delivery($d->project_id) == cek_all_delivery_finish($d->project_id) ? tgl_indo($tgl_mos->actual_finish) : '-' }}
@@ -209,7 +295,7 @@
                                         <td>
                                             {{ isset($tgl_selesai_rekon->actual_finish) ? selisih_hari($tgl_selesai_ut->actual_finish, $tgl_selesai_rekon->actual_finish) : '-' }}
                                         </td>
-                                        <td>{{ $d->flaging_mitra }}</td>
+                                        <td>{{ $d->{'flaging_mitra'} }}</td>
                                         <td>
                                             @if ($d->status_const_app == 'PREPARING' || $d->status_const_app == 'MATERIAL DELIVERY')
                                                 PREPARE
@@ -225,12 +311,11 @@
                                             @endif
                                         </td>
                                         <td>
-                                            @if ($real_port == 1)
+                                            @if ($d->status_golive == 'GOLIVE')
                                                 GOLIVE
                                             @else
                                                 NY
                                             @endif
-
                                         </td>
                                     </tr>
                                 @endforeach
@@ -247,88 +332,3 @@
         </div>
     </div>
 </div>
-
-<!-- Modal -->
-<div id="modal-remark" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg">
-        <!-- Konten modal -->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Remarks</h4>
-            </div>
-            <div class="modal-body">
-                <!-- Konten modal disini -->
-                <div id="modalContent"></div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="modal-kendala" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg">
-        <!-- Konten modal -->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Kendala</h4>
-            </div>
-            <div class="modal-body">
-                <!-- Konten modal disini -->
-                <div id="modalContentKendala"></div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    $(document).ready(function() {
-        $('#modal-remark').on('show.bs.modal', function(e) {
-            // Mendapatkan nilai ID dari tombol modal
-            var project_id = $(e.relatedTarget).data('project_id');
-
-            // Menampilkan nilai ID di dalam modal
-            $('#modalId').text(project_id);
-            // Melakukan permintaan AJAX untuk query berdasarkan ID
-            $.ajax({
-                url: '{{ route('ped-panel.admin.remark.supervisi') }}',
-                method: 'GET',
-                data: {
-                    project_id: project_id
-                },
-                success: function(response) {
-                    // Menampilkan hasil query di dalam modal
-                    $('#modalContent').html(response);
-                }
-            });
-        });
-    });
-
-    $(document).ready(function() {
-        $('#modal-kendala').on('show.bs.modal', function(e) {
-            // Mendapatkan nilai ID dari tombol modal
-            var project_id = $(e.relatedTarget).data('project_id');
-
-            // Menampilkan nilai ID di dalam modal
-            $('#modalId').text(project_id);
-            // Melakukan permintaan AJAX untuk query berdasarkan ID
-            $.ajax({
-                url: '{{ route('ped-panel.admin.kendala.supervisi') }}',
-                method: 'GET',
-                data: {
-                    project_id: project_id
-                },
-                success: function(response) {
-                    // Menampilkan hasil query di dalam modal
-                    $('#modalContentKendala').html(response);
-                }
-            });
-        });
-    });
-</script>

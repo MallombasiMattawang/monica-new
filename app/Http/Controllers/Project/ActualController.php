@@ -49,6 +49,20 @@ class ActualController extends Controller
             ->where('project_id', $supervisi->project_id)
             ->where('activity_id', 2)
             ->first();
+        $minActivityDelivery = TranBaseline::where('category_id', ' 002 ')
+            ->where('project_id', $supervisi->project_id)
+            ->min('activity_id');
+
+        $maxActivityDelivery = TranBaseline::where('category_id', ' 002 ')
+            ->where('project_id', $supervisi->project_id)
+            ->max('activity_id');
+        $minActivityInstalasi = TranBaseline::where('category_id', ' 003 ')
+            ->where('project_id', $supervisi->project_id)
+            ->min('activity_id');
+
+        $maxActivityInstalasi = TranBaseline::where('category_id', ' 003 ')
+            ->where('project_id', $supervisi->project_id)
+            ->max('activity_id');
         $cek_all_delivery = cek_all_delivery($supervisi->project_id);
 
 
@@ -108,6 +122,10 @@ class ActualController extends Controller
                 'sum_belum',
                 'end_date_plan',
                 'end_date_actual',
+                'minActivityDelivery',
+                'maxActivityDelivery',
+                'minActivityInstalasi',
+                'maxActivityInstalasi',
             )
         );
     }
@@ -132,6 +150,16 @@ class ActualController extends Controller
     public function actualActivityForm($id, $slug)
     {
         $baseline = TranBaseline::findOrFail($id);
+
+
+
+        $remark = LogActual::where('tran_baseline_id', $baseline->id)
+            ->whereNotNull('actual_message')
+            //->where('actual_message', '<>', '')
+            ->orderBy('id', 'desc')
+            ->first();
+
+
         $actual_volume_old = 0;
         $action = 'adddate';
         if ($baseline->activity_id == 23) {
@@ -156,7 +184,7 @@ class ActualController extends Controller
         ];
         return view(
             'pengguna.pages.supervisi.form-actual',
-            compact('pageTitle', 'baseline', 'actual_volume_old', 'breadcrumb', 'action')
+            compact('pageTitle', 'baseline', 'actual_volume_old', 'breadcrumb', 'action', 'remark')
         );
     }
 
@@ -500,7 +528,7 @@ class ActualController extends Controller
                     'status_doc' => 'KONSTRUKSI',
                     'progress_const' => $actual_progress_const,
                     'tgl_selesai_ct' => date('Y-m-d'),
-                    'task' => 'Appoval Waspang, status: "SELESAI CT", '. $task .', '
+                    'task' => 'Appoval Waspang, status: "SELESAI CT", ' . $task . ', '
                 ]);
         }
         $supervisi = TranSupervisi::where("project_id", $baseline->project_id)->first();
@@ -588,7 +616,7 @@ class ActualController extends Controller
                     'status_doc' => 'ADMINISTRASI',
                     'progress_const' => $actual_progress_const,
                     'tgl_selesai_ut' => date('Y-m-d'),
-                    'task' => 'Appoval TIM UT, status: "SELESAI UT" , '.$task.' '
+                    'task' => 'Appoval TIM UT, status: "SELESAI UT" , ' . $task . ' '
                 ]);
             TranAdministrasi::where("project_id", $baseline->project_id)
                 ->update([

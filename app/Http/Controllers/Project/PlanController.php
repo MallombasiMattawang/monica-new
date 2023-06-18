@@ -54,8 +54,10 @@ class PlanController extends Controller
             ->first();
         $cek_material = TranBaseline::select(['id', 'plan_finish', 'plan_start'])
             ->where('project_id', $supervisi->project_id)
-            ->where('activity_id', 9)
+            ->where('category_id', ' 002 ')
+            ->orderBy('activity_id', 'desc')
             ->first();
+
         $cek_jointing = TranBaseline::select(['id', 'plan_finish', 'plan_start'])
             ->where('project_id', $supervisi->project_id)
             ->where('activity_id', 19)
@@ -76,23 +78,41 @@ class PlanController extends Controller
             ->where('project_id', $supervisi->project_id)
             ->where('activity_id', 23)
             ->first();
+        $minActivityDelivery = TranBaseline::where('category_id', ' 002 ')
+            ->where('project_id', $supervisi->project_id)
+            ->min('activity_id');
+
+        $maxActivityDelivery = TranBaseline::where('category_id', ' 002 ')
+            ->where('project_id', $supervisi->project_id)
+            ->max('activity_id');
+
         $cek_all_delivery = TranBaseline::select('plan_finish')
             ->where('project_id', $supervisi->project_id)
-            ->whereBetween('activity_id', [3, 9])->count();
+            ->whereBetween('activity_id', [$minActivityDelivery, $maxActivityDelivery])
+            ->count();
 
         $cek_all_delivery_finish = TranBaseline::select('plan_finish')
             ->where('project_id', $supervisi->project_id)
             ->whereNotNull('plan_finish')
-            ->whereBetween('activity_id', [3, 9])->count();
+            ->whereBetween('activity_id', [$minActivityDelivery, $maxActivityDelivery])
+            ->count();
+
+        $minActivityInstalasi = TranBaseline::where('category_id', ' 003 ')
+            ->where('project_id', $supervisi->project_id)
+            ->min('activity_id');
+
+        $maxActivityInstalasi = TranBaseline::where('category_id', ' 003 ')
+            ->where('project_id', $supervisi->project_id)
+            ->max('activity_id');
 
         $cek_all_installasi = TranBaseline::select('plan_finish')
             ->where('project_id', $supervisi->project_id)
-            ->whereBetween('activity_id', [10, 19])->count();
+            ->whereBetween('activity_id', [$minActivityInstalasi, 19])->count();
 
         $cek_all_installasi_finish = TranBaseline::select('plan_finish')
             ->where('project_id', $supervisi->project_id)
             ->whereNotNull('plan_finish')
-            ->whereBetween('activity_id', [10, 19])->count();
+            ->whereBetween('activity_id', [$minActivityInstalasi, 19])->count();
 
         $pageTitle  = $supervisi->project_name;
 
@@ -117,7 +137,11 @@ class PlanController extends Controller
                 'cek_all_delivery_finish',
                 'cek_all_installasi',
                 'cek_all_installasi_finish',
-                'plan_durasi'
+                'plan_durasi',
+                'minActivityDelivery',
+                'maxActivityDelivery',
+                'minActivityInstalasi',
+                'maxActivityInstalasi',
             )
         );
     }

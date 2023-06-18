@@ -111,6 +111,8 @@ Route::group([
 
     /**SUPERVISI VIEW */
     $router->get('list-supervisis', 'ViewSupervisiController@list');
+    $router->get('list-remaks', 'ViewSupervisiController@getRemark')->name('admin.remark.supervisi');
+    $router->get('list-kendala', 'ViewSupervisiController@getKendala')->name('admin.kendala.supervisi');
     $router->get('export-supervisis', 'ViewSupervisiController@export')->name('admin.export.supervisi');
 
     /**INVENTORY VIEW */
