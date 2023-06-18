@@ -90,7 +90,7 @@ class ViewSupervisiController extends AdminController
             }
 
             // Ambil data dengan pagination
-            $supervisis = $query->paginate(5);
+            $supervisis = $query->paginate(10);
             $content->body(view('admin.modules.supervisi.list', [
                 'supervisis' => $supervisis,
                 'search' => $search
