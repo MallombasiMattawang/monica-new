@@ -65,18 +65,18 @@ class MstProjectController extends AdminController
             $grid->model()->where('witel_id', '=', Admin::user()->username);
             $grid->disableRowSelector();
         }
-        
-       
+
+
 
         $grid->tools(function ($tools) {
             $tools->batch(function ($batch) {
                 $batch->disableDelete();
                 /** pakai custom delete */
-                 if (\request('_scope_') != 'trashed') {                    
+                 if (\request('_scope_') != 'trashed') {
                      $batch->add(new BacthDeleteProject());
-                 } 
-                
-                
+                 }
+
+
             });
             $tools->append('<a href="/ped-panel/form-import-project" class="btn btn-default btn-sm"><i class="fa fa-download"></i>  Import Project</a>');
         });
@@ -85,7 +85,7 @@ class MstProjectController extends AdminController
             if (\request('_scope_') == 'trashed') {
                 $batch->add(new BacthDeleteProjectPermanen());
                 $batch->add(new BatchRestore());
-               
+
             }
         });
         $grid->actions(function ($actions) {
@@ -95,21 +95,32 @@ class MstProjectController extends AdminController
                 $actions->add(new DeleteProject());
             }
             if (\request('_scope_') == 'trashed') {
-                $actions->add(new Restore());          
-                $actions->add(new DeleteProjectPermanen());     
+                $actions->add(new Restore());
+                $actions->add(new DeleteProjectPermanen());
 
             }
         });
-        $grid->filter(function ($filter) {
+
+        $tematiks = MstProject::select('tematik')
+            ->groupBy('tematik')
+            ->get()
+        ;
+
+        $tematik = [];
+        foreach ($tematiks as $item) {
+            $tematik[$item->tematik] = $item->tematik;
+        }
+
+        $grid->filter(function ($filter) use ($tematik) {
             $filter->disableIdFilter();
             if (Admin::user()->inRoles(['administrator'])) {
                 $filter->scope('trashed', 'Recycle Bin')->onlyTrashed();
             }
 
-            $filter->column(1 / 2, function ($filter) {
+            $filter->column(1 / 2, function ($filter) use ($tematik) {
                 $filter->like('lop_site_id', 'LOP / SITE ID');
                 $filter->in('status_project', 'STATUS PROJECT')->multipleSelect(['USULAN' => 'USULAN', 'DONE DRM' => 'DONE DRM', 'PELIMPAHAN' => 'PELIMPAHAN', 'PO' => 'PO/SP', 'DROP' => 'DROP']);
-                $filter->in('tematik', 'TEMATIK')->multipleSelect(['PT3' => 'PT3', 'PT2' => 'PT2', 'NODE-B' => 'NODE-B', 'OLO' => 'OLO', 'HEM' => 'HEM', 'ISP' => 'ISP', 'FTTH 2022' => 'FTTH 2022']);               
+                $filter->in('tematik', 'TEMATIK')->multipleSelect($tematik);
                 $filter->in('witel_id', 'WITEL')->multipleSelect(
                     MstWitel::join('admin_role_users', 'admin_users.id', '=', 'admin_role_users.user_id')
                     ->where('admin_role_users.role_id', '2')->pluck('name', 'kode_user')
@@ -156,10 +167,10 @@ class MstProjectController extends AdminController
         $grid->column('end_date', __('END DATE'))->sortable();
 
 
-        Admin::style('                
+        Admin::style('
           .table th {
             text-transform: uppercase;
-            background-color: #ee99a0;            
+            background-color: #ee99a0;
           }');
 
         return $grid;
@@ -214,7 +225,7 @@ class MstProjectController extends AdminController
             $form->text('perihal_nde', __('Perihal nde'));
             $form->date('tgl_nde', __('Tgl nde'));
             $form->currency('nilai_permintaan', __('Nilai permintaan'))->symbol('Rp.');
-            
+
             if ($form->isEditing()) {
                 $form->display('mitra_id', __('Mitra'));
             }

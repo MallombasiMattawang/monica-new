@@ -59,7 +59,7 @@
                                             $kontrak = App\Models\MstSap::where('name', $d->supervisi->supervisi_project->lop_site_id)
                                                 ->first();
                                         @endphp
-                                        <td> {{ $kontrak->kontrak }} </td>
+                                        <td> {{ $kontrak !== null ? $kontrak->$kontrak : '' }} </td>
                                         <td>
                                             @if ($d->supervisi->status_const == 'PREPARING' || $d->supervisi->status_const == 'MATERIAL DELIVERY')
                                                 PREPARE

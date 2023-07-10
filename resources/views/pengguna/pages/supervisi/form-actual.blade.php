@@ -147,7 +147,7 @@
                                 <div class="col-md-6">
                                     <label for="actual_message" class="form-label">Remarks</label>
                                     <textarea name="actual_message" rows="5" class="form-control">{{ old('actual_message') }}@if ($remark)
-{{ trimActivity($remark->tran_baseline->list_activity) . " = " . $remark->actual_volume . " dari " . $remark->tran_baseline->volume . " " . $remark->tran_baseline->satuan }},
+{{--{{ trimActivity($remark->tran_baseline->list_activity) . " = " . $remark->actual_volume . " dari " . $remark->tran_baseline->volume . " " . $remark->tran_baseline->satuan }},--}}
 {{ $remark->actual_message }}
 @endif
                                 </textarea>

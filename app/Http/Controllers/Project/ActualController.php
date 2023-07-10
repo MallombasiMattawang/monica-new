@@ -211,22 +211,24 @@ class ActualController extends Controller
 
         // Create an array to store file names
         $filenames = [];
+        $filesString = '';
+        if  ($files !== null) {
+            // Loop through each uploaded file
+            foreach ($files as $file) {
 
-        // Loop through each uploaded file
-        foreach ($files as $file) {
+                // Generate unique name for file
+                $filename = uniqid() . '.' . $file->getClientOriginalExtension();
 
-            // Generate unique name for file
-            $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                // Move the uploaded file to storage
+                $file->move('uploads/evident', $filename);
 
-            // Move the uploaded file to storage
-            $file->move('uploads/evident', $filename);
-
-            // Add the filename to array
-            $filenames[] = $filename;
+                // Add the filename to array
+                $filenames[] = $filename;
+            }
+            $filesString = implode(',', $filenames);
         }
 
         // Join all filenames with comma as delimiter
-        $filesString = implode(',', $filenames);
 
         //INITIAL VARIABEL REQUEST
         $baseline_id =  $request->baseline_id;
